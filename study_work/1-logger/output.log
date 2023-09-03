@@ -1,0 +1,12 @@
+2022-08-08 11:20:43,341 - __main__ - INFO - This is a log info
+2022-08-08 11:20:43,342 - __main__ - WARNING - Warning exists
+2022-08-08 11:20:43,342 - __main__ - INFO - Finish
+2022-08-08 11:23:50,296 - __main__ - INFO - This is a log info
+2022-08-08 11:23:50,296 - __main__ - WARNING - Warning exists
+2022-08-08 11:23:50,296 - __main__ - INFO - Finish
+2023-02-03 15:02:31,222 - __main__ - INFO - This is a log info
+2023-02-03 15:02:31,222 - __main__ - WARNING - Warning exists
+2023-02-03 15:02:31,223 - __main__ - INFO - Finish
+2023-02-03 15:04:55,050 - feiwu - INFO - This is a log info
+2023-02-03 15:04:55,053 - feiwu - WARNING - Warning exists
+2023-02-03 15:04:55,053 - feiwu - INFO - Finish

@@ -4,10 +4,14 @@
 import json, re
 import requests
 from urllib.parse import urlencode
+from sobot_online.common.file_dealing import *
+hk_config = load_yaml_file(filepath=r"\config_file\serice_data.yml")["HK"]
 
 
 class Customer:
     def __init__(self):
+        self.host = hk_config["HOST"]
+        self.bno = hk_config["SYSNUM"]
         self.session = requests.session()
 
     # 1、获取用户信息配置
@@ -27,11 +31,11 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "qnmd"):
-        url = "https://hk.sobot.com/chat-visit/user/init.action"
+    def customer_info_init(self, partnerid: str = "nnnd"):
+        url = self.host + "/chat-visit/user/init.action"
         data = {
             "ack": "1",
-            "sysNum": "913d909e3a194598ba61cf904b5dc12a",
+            "sysNum": self.bno,
             "source": "0",
             "chooseAdminId": "",
             "tranFlag": "0",
@@ -39,7 +43,7 @@ class Customer:
             "partnerId": partnerid,
             "tel": "",
             "email": "",
-            "uname": partnerid + "猜猜我是谁",
+            "uname": partnerid + "--猜猜我是谁",
             "visitTitle": "",
             "visitUrl": "",
             "face": "",
@@ -67,7 +71,7 @@ class Customer:
         }
 
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
         response = self.session.post( url, headers=headers, data=data)
@@ -79,7 +83,7 @@ class Customer:
 
     # 3.1、与机器人发送消息
     def send_message_to_robot(self,uid,cid):
-        url = "https://hk.sobot.com/chat-web/user/robotsend/v2.action"
+        url = self.host + "/chat-web/user/robotsend/v2.action"
         data = urlencode({
             "requestText": "纯文本",
             "question": "纯文本",
@@ -101,7 +105,7 @@ class Customer:
             "inputType": "sendArea"
         })
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
         response = self.session.post(url, headers=headers, data=data)
@@ -109,9 +113,9 @@ class Customer:
 
     # 3.2、通过初始化得到的uid，cid 与工作台建立链接，获取puid，并通过这三个参数与工作台进行会话
     def chat_connection(self,uid, cid):
-        url = "http://hk.sobot.com/chat-web/user/chatconnect.action"
+        url = self.host + "/chat-web/user/chatconnect.action"
         data = {
-            "sysNum": "913d909e3a194598ba61cf904b5dc12a",
+            "sysNum": self.bno,
             "uid": str(uid),
             "cid": str(cid),
             "chooseAdminId": "",
@@ -134,7 +138,7 @@ class Customer:
             "flowGroupId": ""
         }
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
         response = self.session.post(url, headers=headers, data=data)
@@ -174,8 +178,8 @@ class Customer:
 if __name__ == '__main__':
     pass
     # obj01 = get_config()
-    obj02 = Customer().customer_info_init()
+    uid,cid = Customer().customer_info_init()
     # obj03 = Customer().msg()
     # obj03 = Customer().send_message()
-    # obj03 = Customer().chat_connection()
+    obj03 = Customer().chat_connection(uid,cid)
     # print(Customer().uid)

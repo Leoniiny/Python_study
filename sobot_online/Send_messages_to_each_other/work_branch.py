@@ -4,14 +4,20 @@
 import requests, re, json, base64
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
+hk_config = load_yaml_file(filepath=r"\config_file\serice_data.yml")["HK"]
+
 
 class WorkBranch:
     def __init__(self):
+        loginPwd = hk_config["PWD"]
+        loginUser = hk_config["EMAIL"]
+        self.host = hk_config["HOST"]
+        self.bno = hk_config["SYSNUM"]
         self.session = requests.session()
-        url = "http://hk.sobot.com/basic-login/serviceLogin/4"
+        url = self.host + "/basic-login/serviceLogin/4"
         data = urlencode({
-            "loginUser": "lyp@hk.com",
-            "loginPwd": "SGsxMjM0NTY=",
+            "loginUser": loginUser,
+            "loginPwd": loginPwd,
             "randomKey": "",
             "loginFlag": "1",
             "terminalCode": ""
@@ -21,40 +27,22 @@ class WorkBranch:
         }
         response = self.session.post(url, headers=headers, data=data)
         self.tempid = json.loads(response.text).get("item")
-
-    # 客服登录
-    def service_login(self):
-        url = "http://hk.sobot.com/basic-login/serviceLogin/4"
-        data = urlencode({
-            "loginUser": "lyp@hk.com",
-            "loginPwd": "SGsxMjM0NTY=",
-            "randomKey": "",
-            "loginFlag": "1",
-            "terminalCode": ""
-        })
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-        response = self.session.post(url, headers=headers, data=data)
-        self.tempid = json.loads(response.text).get("item")
-        return self.tempid
 
     # 获取客服信息配置
     def service_menus(self):
-        url = "http://hk.sobot.com/basic-config-service/consoleAuth/queryAgentMenus?language=zh"
-        payload = {}
+        url = self.host + "/basic-config-service/consoleAuth/queryAgentMenus?language=zh"
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': self.bno,
             'temp-id': self.tempid
         }
-        response = requests.request("GET", url, headers=headers, data=payload)
+        response = self.session.get(url, headers=headers)
         serviceId = json.loads(response.text).get("item").get("serviceId")
         print(f"serviceId  的值：{serviceId}")
         return serviceId
 
     # 获取工作台tid
     def get_tid(self):
-        url = "https://hk.sobot.com/chat-web/webchat/toChat.action"
+        url = self.host + "/chat-web/webchat/toChat.action"
         serviceId = self.service_menus()
         params = {
             "uid": str(serviceId),
@@ -69,7 +57,7 @@ class WorkBranch:
 
     # 发送消息到访客端
     def send_msg_to_customer(self,uid,cid):
-        url = "https://hk.sobot.com/chat-kwb/message/send.action"
+        url = self.host + "/chat-kwb/message/send.action"
         tid = self.get_tid()
         payload = {
             "tid": tid,
@@ -97,7 +85,8 @@ class WorkBranch:
 if __name__ == '__main__':
     pass
     # obj = WorkBranch().service_login()
-    obj = WorkBranch().service_menus()
-    # obj = WorkBranch().get_tid()
+    # obj = WorkBranch().service_menus()
+    obj = WorkBranch().get_tid()
+
 
 

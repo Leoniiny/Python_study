@@ -41,7 +41,8 @@ class WorkBranch:
         return serviceId
 
     # 获取工作台tid
-    def get_tid(self,serviceId):
+    def get_tid(self):
+        serviceId = self.service_menus()
         url = self.host + "/chat-web/webchat/toChat.action"
         params = {
             "uid": str(serviceId),
@@ -55,7 +56,8 @@ class WorkBranch:
         return str(tid)
 
     # 发送消息到访客端
-    def send_msg_to_customer(self,tid,uid,cid,content=str("工作台：随便发送点啥都行")):
+    def send_msg_to_customer(self,uid,cid,content=str("工作台：随便发送点啥都行")):
+        tid = self.get_tid()
         url = self.host + "/chat-kwb/message/send.action"
         payload = {
             "tid": tid,
@@ -94,8 +96,8 @@ class WorkBranch:
 if __name__ == '__main__':
     pass
     serviceId = WorkBranch().service_menus()
-    tid= WorkBranch().get_tid(serviceId=serviceId)
-    WorkBranch().send_msg_to_customer(tid,uid="0de6619dcfdf451b934ca4ce754b7763",cid="8a8e772d7a754ff8a0cf1d9bc857c10c")
+    tid= WorkBranch().get_tid()
+    WorkBranch().send_msg_to_customer(uid="0de6619dcfdf451b934ca4ce754b7763",cid="8a8e772d7a754ff8a0cf1d9bc857c10c")
     WorkBranch().service_out(tid)
 
 

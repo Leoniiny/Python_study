@@ -127,7 +127,7 @@ class Customer:
             "queueFlag": "",
             "transferType": "0",
             "transferAction": "",
-            "adminHelloWord": "<p><span+style='color:#f39c12'>【人工客服欢迎语】---您好，请问有什么可以帮您的？</span></p>",
+            "adminHelloWord": "",
             "activeTransfer": "1",
             "unknownQuestion": "",
             "docId": "",
@@ -143,7 +143,7 @@ class Customer:
         }
         response = self.session.post(url, headers=headers, data=data)
         puid = json.loads(response.text).get("puid")
-        print(f"response.text>>>：{response.text}")
+        print(f"chat_connection   中的 response.text>>>：{response.text}")
         return puid
 
     # 4、 离线动作
@@ -198,10 +198,8 @@ if __name__ == '__main__':
     pass
     # obj01 = get_config()
     uid, cid = Customer().customer_info_init()
-    # obj03 = Customer().msg()
-    # obj03 = Customer().send_message()
     puid = Customer().chat_connection(uid, cid)
     print(f"puid >>>>：{puid}")
-    Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid)
+
 
 

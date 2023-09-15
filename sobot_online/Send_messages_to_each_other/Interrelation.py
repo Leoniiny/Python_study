@@ -19,7 +19,6 @@ class Interrelation:
         while True:
             if j <= 2:
                 partnerid = "Admin" + str(random.randint(10000, 99999))
-                print(f"partnerid 的值为>>>>：{partnerid}")
                 uid, cid = Customer().customer_info_init(partnerid=partnerid)
                 puid = Customer().chat_connection(uid, cid)
                 while True:

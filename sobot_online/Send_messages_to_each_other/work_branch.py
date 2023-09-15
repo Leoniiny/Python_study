@@ -4,7 +4,7 @@
 import requests, re, json, base64
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
-hk_config = load_yaml_file(filepath=r"\config_file\serice_data.yml")["HK"]
+hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["HK"]
 
 
 class WorkBranch:
@@ -41,9 +41,8 @@ class WorkBranch:
         return serviceId
 
     # 获取工作台tid
-    def get_tid(self):
+    def get_tid(self,serviceId):
         url = self.host + "/chat-web/webchat/toChat.action"
-        serviceId = self.service_menus()
         params = {
             "uid": str(serviceId),
             "status": "1",
@@ -52,19 +51,18 @@ class WorkBranch:
         }
         response = self.session.get(url, params=params, allow_redirects=False)
         tid = re.findall("id=(.*?)&lt", json.dumps(str(response.headers)))[0]
-        print(tid)
+        print(f"tid 的值为：{tid}")
         return str(tid)
 
     # 发送消息到访客端
-    def send_msg_to_customer(self,uid,cid):
+    def send_msg_to_customer(self,tid,uid,cid,content=str("工作台：随便发送点啥都行")):
         url = self.host + "/chat-kwb/message/send.action"
-        tid = self.get_tid()
         payload = {
             "tid": tid,
             "cid": cid,
             "uid": uid,
             "msgType": "0",
-            "content": "情话",
+            "content": content,
             "objMsgType": "",
             "docId": "",
             "replyId": "",
@@ -74,19 +72,31 @@ class WorkBranch:
             "answerId": "'"
         }
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': str(self.bno),
             'content-type': 'application/x-www-form-urlencoded'
         }
         response = self.session.post(url, headers=headers, data=payload)
-        print(response.text)
-        print("self.tid >>>:",tid)
+        print(f"工作台返回数据response.text>>>:{response.text}")
+
+    # 调用离线接口
+    def service_out(self,uid):
+        url = self.host + "/chat-kwb/admin/out.action"
+        data = {
+            "uid":uid
+        }
+        headers = {
+            "Content - Type": "application / x - www - form - urlencoded"
+        }
+        response = self.session.post(url, headers=headers, data=data)
+        print(f"response 的值为：{response.text}")
 
 
 if __name__ == '__main__':
     pass
-    # obj = WorkBranch().service_login()
-    # obj = WorkBranch().service_menus()
-    obj = WorkBranch().get_tid()
+    serviceId = WorkBranch().service_menus()
+    tid= WorkBranch().get_tid(serviceId=serviceId)
+    WorkBranch().send_msg_to_customer(tid,uid="0de6619dcfdf451b934ca4ce754b7763",cid="8a8e772d7a754ff8a0cf1d9bc857c10c")
+    WorkBranch().service_out(tid)
 
 
 

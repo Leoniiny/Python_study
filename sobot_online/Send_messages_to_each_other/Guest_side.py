@@ -5,7 +5,8 @@ import json, re
 import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
-hk_config = load_yaml_file(filepath=r"\config_file\serice_data.yml")["HK"]
+
+hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["HK"]
 
 
 class Customer:
@@ -18,13 +19,13 @@ class Customer:
     def get_config(self):
         url = "https://hk.sobot.com/chat-visit/user/config.action"
         payload = {
-            "sysNum": "913d909e3a194598ba61cf904b5dc12a",
+            "sysNum": str(self.bno),
             "source": 0,
             "robotFlag": None,
             "channelFlag": None,
             "faqId": None, }
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': str(self.bno),
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
         response = requests.request("POST", url, headers=headers, data=payload)
@@ -69,20 +70,19 @@ class Customer:
             "isJs": "0",
             "joinType": ""
         }
-
         headers = {
             'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
-        response = self.session.post( url, headers=headers, data=data)
+        response = self.session.post(url, headers=headers, data=data)
         rest = json.loads(response.text)
         uid = rest["uid"]
         cid = rest["cid"]
-        print(response.text, uid, cid, sep='\n')
+        print(f"uid>>>：{uid}, cid>>>：{cid}")
         return uid, cid
 
     # 3.1、与机器人发送消息
-    def send_message_to_robot(self,uid,cid):
+    def send_message_to_robot(self, uid, cid):
         url = self.host + "/chat-web/user/robotsend/v2.action"
         data = urlencode({
             "requestText": "纯文本",
@@ -111,13 +111,13 @@ class Customer:
         response = self.session.post(url, headers=headers, data=data)
         print(response.text, sep="\n")
 
-    # 3.2、通过初始化得到的uid，cid 与工作台建立链接，获取puid，并通过这三个参数与工作台进行会话
-    def chat_connection(self,uid, cid):
+    # 3.2、转人工。通过初始化得到的uid，cid 与工作台建立链接，获取puid，并通过这三个参数与工作台进行会话
+    def chat_connection(self, uid, cid):
         url = self.host + "/chat-web/user/chatconnect.action"
         data = {
             "sysNum": self.bno,
-            "uid": str(uid),
-            "cid": str(cid),
+            "uid": uid,
+            "cid": cid,
             "chooseAdminId": "",
             "tranFlag": "0",
             "current": "false",
@@ -127,7 +127,7 @@ class Customer:
             "queueFlag": "",
             "transferType": "0",
             "transferAction": "",
-            "adminHelloWord": "",
+            "adminHelloWord": "<p><span+style='color:#f39c12'>【人工客服欢迎语】---您好，请问有什么可以帮您的？</span></p>",
             "activeTransfer": "1",
             "unknownQuestion": "",
             "docId": "",
@@ -142,17 +142,16 @@ class Customer:
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
         response = self.session.post(url, headers=headers, data=data)
-        # print(response.text)
         puid = json.loads(response.text).get("puid")
-        print(puid, cid, uid, sep="\n")
+        print(f"response.text>>>：{response.text}")
         return puid
 
     # 4、 离线动作
-    def out_action(self):
-        url = "http://hk.sobot.com/chat-web/user/out.action"
-        data = {"uid": "e26b9ec6eeaf1d491470315b98e55810"}
+    def out_action(self,uid):
+        url = self.host + "/chat-web/user/out.action"
+        data = {"uid": uid}
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
         response = self.session.post(url, headers=headers, data=data)
@@ -174,12 +173,35 @@ class Customer:
         response = self.session.post(url, headers=headers, data=data)
         print(response.text)
 
+    # 6、给工作台发送消息
+    def send_message_to_workbranch(self, puid, cid, uid,content=str("访客端：随便发送点啥都行")):
+        url = self.host + "/chat-web/message/user/send.action"
+        data = urlencode({
+            "puid": str(puid),
+            "cid": str(cid),
+            "uid": str(uid),
+            "content": content,
+            "objMsgType": "",
+            "msgType": "0",
+            "fileName": "undefined"
+        })
+        headers = {
+            'bno': self.bno,
+            'content-type': 'application/x-www-form-urlencoded',
+        }
+        response = self.session.post(url, headers=headers, data=data)
+        print(f"puid>>>：{puid}, uid>>>:{uid}, cid>>>:{cid}")
+        print(f"访客端返回数据response.text>>>:{response.text}")
+
 
 if __name__ == '__main__':
     pass
     # obj01 = get_config()
-    uid,cid = Customer().customer_info_init()
+    uid, cid = Customer().customer_info_init()
     # obj03 = Customer().msg()
     # obj03 = Customer().send_message()
-    obj03 = Customer().chat_connection(uid,cid)
-    # print(Customer().uid)
+    puid = Customer().chat_connection(uid, cid)
+    print(f"puid >>>>：{puid}")
+    Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid)
+
+

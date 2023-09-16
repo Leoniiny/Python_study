@@ -82,11 +82,11 @@ class Customer:
         return uid, cid
 
     # 3.1、与机器人发送消息
-    def send_message_to_robot(self, uid, cid):
+    def send_message_to_robot(self, uid, cid,requestText):
         url = self.host + "/chat-web/user/robotsend/v2.action"
         data = urlencode({
-            "requestText": "纯文本",
-            "question": "纯文本",
+            "requestText": requestText,
+            "question": requestText,
             "uid": str(uid),
             "cid": str(cid),
             "source": "0",
@@ -143,8 +143,9 @@ class Customer:
         }
         response = self.session.post(url, headers=headers, data=data)
         puid = json.loads(response.text).get("puid")
+        status = json.loads(response.text).get("status")
         print(f"chat_connection   中的 response.text>>>：{response.text}")
-        return puid
+        return puid,status
 
     # 4、 离线动作
     def out_action(self,uid):
@@ -198,8 +199,10 @@ if __name__ == '__main__':
     pass
     # obj01 = get_config()
     uid, cid = Customer().customer_info_init()
-    puid = Customer().chat_connection(uid, cid)
+    puid,status = Customer().chat_connection(uid=uid, cid=cid)
     print(f"puid >>>>：{puid}")
+    print(f"status >>>>：{status}")
+    # Customer().send_message_to_workbranch(puid,uid=uid, cid=cid)
 
 
 

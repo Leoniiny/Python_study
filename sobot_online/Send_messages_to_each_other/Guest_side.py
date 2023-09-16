@@ -6,7 +6,7 @@ import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
-hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["HK"]
+hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["TX"]
 
 
 class Customer:
@@ -34,6 +34,7 @@ class Customer:
     # 2、获取访客信息配置，获取cid，uid
     def customer_info_init(self, partnerid: str = "nnnd"):
         url = self.host + "/chat-visit/user/init.action"
+        print(f"url >>> ： {url}")
         data = {
             "ack": "1",
             "sysNum": self.bno,
@@ -108,7 +109,7 @@ class Customer:
             'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
-        response = self.session.post(url, headers=headers, data=data)
+        response = self.session.post(url, headers=headers, data=data,verify=False)
         print(response.text, sep="\n")
 
     # 3.2、转人工。通过初始化得到的uid，cid 与工作台建立链接，获取puid，并通过这三个参数与工作台进行会话

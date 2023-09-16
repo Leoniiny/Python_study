@@ -1,7 +1,6 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：客服-客户相互联系
-import time
 from faker import Faker
 
 from sobot_online.Send_messages_to_each_other.Guest_side import *

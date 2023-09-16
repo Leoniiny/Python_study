@@ -4,29 +4,47 @@
 import requests, re, json, base64
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
-hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["HK"]
+config = load_yaml_file(filepath=r"\config_file\service_data.yml")["AL"]
 
 
 class WorkBranch:
     def __init__(self):
-        loginPwd = hk_config["PWD"]
-        loginUser = hk_config["EMAIL"]
-        self.host = hk_config["HOST"]
-        self.bno = hk_config["SYSNUM"]
+        loginPwd = config["PWD"]
+        loginUser = config["EMAIL"]
+        self.host = config["HOST"]
+        self.bno = config["SYSNUM"]
+        self.sb = config["Sysbol"]
         self.session = requests.session()
-        url = self.host + "/basic-login/serviceLogin/4"
-        data = urlencode({
-            "loginUser": loginUser,
-            "loginPwd": loginPwd,
-            "randomKey": "",
-            "loginFlag": "1",
-            "terminalCode": ""
-        })
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
+        if self.sb == "HK":
+            url = self.host + "/basic-login/serviceLogin/4"
+            data = {
+                "loginUser": loginUser,
+                "loginPwd": loginPwd,
+                "randomKey": "",
+                "loginFlag": "1",
+                "terminalCode": ""
+            }
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        if self.sb == "TX" or "AL":
+            url = self.host + "/basic-login/account/consoleLogin/4"
+            data = json.dumps({
+                "loginUser": loginUser,
+                "loginPwd": str(loginPwd),
+                "randomKey": "",
+                "loginFlag": "1",
+                "terminalCode": ""
+            })
+            headers = {
+                'Content-Type': 'application/json',
+            }
         response = self.session.post(url, headers=headers, data=data)
         self.tempid = json.loads(response.text).get("item")
+        print(f"self.tempid >>>  ：{self.tempid}")
+        print(f"loginPwd >>>  ：{loginPwd}")
+        print(f"loginUser >>>  ：{loginUser}")
+        print(f"self.host >>>  ：{self.host}")
 
     # 获取客服信息配置
     def service_menus(self):
@@ -96,9 +114,9 @@ class WorkBranch:
 if __name__ == '__main__':
     pass
     serviceId = WorkBranch().service_menus()
-    tid= WorkBranch().get_tid()
-    WorkBranch().send_msg_to_customer(uid="0de6619dcfdf451b934ca4ce754b7763",cid="8a8e772d7a754ff8a0cf1d9bc857c10c")
-    WorkBranch().service_out(tid)
+    # tid= WorkBranch().get_tid()
+    # WorkBranch().send_msg_to_customer(uid="0de6619dcfdf451b934ca4ce754b7763",cid="8a8e772d7a754ff8a0cf1d9bc857c10c")
+    # WorkBranch().service_out(tid)
 
 
 

@@ -86,6 +86,7 @@ class Interrelation:
 
 
 if __name__ == '__main__':
+    # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     obj01 = Interrelation()
     obj01.interrelation()

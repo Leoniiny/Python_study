@@ -4,7 +4,7 @@
 import requests, re, json, base64
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
-config = load_yaml_file(filepath=r"\config_file\service_data.yml")["AL"]
+config = load_yaml_file(filepath=r"\config_file\service_data.yml")["TX"]
 
 
 class WorkBranch:
@@ -41,10 +41,10 @@ class WorkBranch:
             }
         response = self.session.post(url, headers=headers, data=data)
         self.tempid = json.loads(response.text).get("item")
-        print(f"self.tempid >>>  ：{self.tempid}")
-        print(f"loginPwd >>>  ：{loginPwd}")
-        print(f"loginUser >>>  ：{loginUser}")
-        print(f"self.host >>>  ：{self.host}")
+        # print(f"self.tempid >>>  ：{self.tempid}")
+        # print(f"loginPwd >>>  ：{loginPwd}")
+        # print(f"loginUser >>>  ：{loginUser}")
+        # print(f"self.host >>>  ：{self.host}")
 
     # 获取客服信息配置
     def service_menus(self):
@@ -55,7 +55,7 @@ class WorkBranch:
         }
         response = self.session.get(url, headers=headers)
         serviceId = json.loads(response.text).get("item").get("serviceId")
-        print(f"serviceId  的值：{serviceId}")
+        # print(f"serviceId  的值：{serviceId}")
         return serviceId
 
     # 获取工作台tid
@@ -70,12 +70,13 @@ class WorkBranch:
         }
         response = self.session.get(url, params=params, allow_redirects=False)
         tid = re.findall("id=(.*?)&lt", json.dumps(str(response.headers)))[0]
-        print(f"tid 的值为：{tid}")
+        # print(f"tid 的值为：{tid}")
         return str(tid)
 
     # 发送消息到访客端
     def send_msg_to_customer(self,uid,cid,content=str("工作台：随便发送点啥都行")):
         tid = self.get_tid()
+        # tid = "UXpRM2TWy+f1F38hfGISwqBtjjX8YdfyDu/QQAPpy+UYW1u4KZXp90sdBegyJt+T"
         url = self.host + "/chat-kwb/message/send.action"
         payload = {
             "tid": tid,
@@ -115,7 +116,7 @@ if __name__ == '__main__':
     pass
     serviceId = WorkBranch().service_menus()
     # tid= WorkBranch().get_tid()
-    # WorkBranch().send_msg_to_customer(uid="0de6619dcfdf451b934ca4ce754b7763",cid="8a8e772d7a754ff8a0cf1d9bc857c10c")
+    WorkBranch().send_msg_to_customer(uid="6eb46e889bd648bd935f37415b1ae85c",cid="f3d31d758f54445fb12d96540b9a40b9")
     # WorkBranch().service_out(tid)
 
 

@@ -21,6 +21,7 @@ class Interrelation:
                 rest = Customer().chat_connection(uid=uid, cid=cid)
                 puid = rest.get("puid")
                 status = rest.get("status")
+                print(f"走分支前的：puid >>>>：{puid},status >>>>：{status}")
                 if status == 1:
                     i = 1
                     print(f"走的是status == 1 的分支")
@@ -51,7 +52,7 @@ class Interrelation:
                     print(f"最先走的是status == 6 的分支！！！")
                     groupId = rest.get("groupList")[0].get("groupId")
                     rest = Customer().chat_connection(uid=uid, cid=cid,groupId=groupId)
-                    puid = rest.get("puid")
+                    # puid = rest.get("puid")
                     status = rest.get("status")
                     print(f"puid >>>>：{puid},status >>>>：{status}")
                     if status == 1:

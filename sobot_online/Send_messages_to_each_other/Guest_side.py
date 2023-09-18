@@ -201,7 +201,9 @@ if __name__ == '__main__':
     pass
     # obj01 = get_config()
     uid, cid = Customer().customer_info_init()
-    puid,status = Customer().chat_connection(uid=uid, cid=cid)
+    rest = Customer().chat_connection(uid=uid, cid=cid)
+    puid = rest.get("puid")
+    status = rest.get("status")
     print(f"puid >>>>：{puid}")
     print(f"status >>>>：{status}")
     # Customer().send_message_to_workbranch(puid,uid=uid, cid=cid)

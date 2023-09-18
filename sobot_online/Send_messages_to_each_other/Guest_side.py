@@ -113,7 +113,7 @@ class Customer:
         print(response.text, sep="\n")
 
     # 3.2、转人工。通过初始化得到的uid，cid 与工作台建立链接，获取puid，并通过这三个参数与工作台进行会话
-    def chat_connection(self, uid, cid):
+    def chat_connection(self, uid, cid,groupId=None):
         url = self.host + "/chat-web/user/chatconnect.action"
         data = {
             "sysNum": self.bno,
@@ -122,7 +122,7 @@ class Customer:
             "chooseAdminId": "",
             "tranFlag": "0",
             "current": "false",
-            "groupId": "",
+            "groupId": groupId,
             "keyword": "",
             "keywordId": "",
             "queueFlag": "",
@@ -146,7 +146,8 @@ class Customer:
         puid = json.loads(response.text).get("puid")
         status = json.loads(response.text).get("status")
         print(f"chat_connection   中的 response.text>>>：{response.text}")
-        return puid,status
+        rest = json.loads(response.text)
+        return rest
 
     # 4、 离线动作
     def out_action(self,uid):

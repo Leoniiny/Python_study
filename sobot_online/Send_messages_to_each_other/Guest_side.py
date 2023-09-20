@@ -146,6 +146,8 @@ class Customer:
         puid = json.loads(response.text).get("puid")
         status = json.loads(response.text).get("status")
         print(f"chat_connection   中的 response.text>>>：{response.text}")
+        print(f"chat_connection   中的 puid>>>：{puid}")
+        print(f"chat_connection   中的 status>>>：{status}")
         rest = json.loads(response.text)
         return rest
 
@@ -206,7 +208,7 @@ if __name__ == '__main__':
     status = rest.get("status")
     print(f"puid >>>>：{puid}")
     print(f"status >>>>：{status}")
-    # Customer().send_message_to_workbranch(puid,uid=uid, cid=cid)
+    Customer().send_message_to_workbranch(puid,uid=uid, cid=cid)
 
 
 

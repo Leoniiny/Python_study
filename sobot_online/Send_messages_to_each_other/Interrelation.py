@@ -13,10 +13,10 @@ class Interrelation:
         self.WK = WorkBranch()
         self.serviceId = self.WK.service_menus()
         self.tid = self.WK.get_tid(self.serviceId)
-        # 登录客服工作台
+        # 登录客服工作台，保持客服在线
         self.WK.login_workbranche(self.tid)
-        print(f"self.serviceId >>>>：{self.serviceId}")
-        print(f"self.tid >>>>：{self.tid}")
+        # print(f"self.serviceId >>>>：{self.serviceId}")
+        # print(f"self.tid >>>>：{self.tid}")
 
     def interrelation(self):
         j = m = 0
@@ -59,7 +59,6 @@ class Interrelation:
                     print(f"最先走的是status == 6 的分支！！！")
                     groupId = rest.get("groupList")[0].get("groupId")
                     rest = Customer().chat_connection(uid=uid, cid=cid,groupId=groupId)
-                    # puid = rest.get("puid")
                     status = rest.get("status")
                     print(f"puid >>>>：{puid},status >>>>：{status}")
                     if status == 1:

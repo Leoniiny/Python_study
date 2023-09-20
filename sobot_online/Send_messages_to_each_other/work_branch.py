@@ -4,6 +4,7 @@
 import requests, re, json, base64
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
+
 config = load_yaml_file(filepath=r"\config_file\service_data.yml")["TX"]
 
 
@@ -59,8 +60,8 @@ class WorkBranch:
         return serviceId
 
     # 获取工作台tid
-    def get_tid(self):
-        serviceId = self.service_menus()
+    def get_tid(self,serviceId):
+        # serviceId = self.service_menus()
         url = self.host + "/chat-web/webchat/toChat.action"
         params = {
             "uid": str(serviceId),
@@ -70,12 +71,30 @@ class WorkBranch:
         }
         response = self.session.get(url, params=params, allow_redirects=False)
         tid = re.findall("id=(.*?)&lt", json.dumps(str(response.headers)))[0]
-        # print(f"tid 的值为：{tid}")
+        print(f"tid 的值为：{tid}")
         return str(tid)
 
+    # 登录客服工作台
+    def login_workbranche(self,tid,st="1"):
+        url = self.host + "/chat-kwb/admin/aci.action"
+        data = {
+            "uid": tid,
+            "way": "1",
+            "st": st,
+            "lt": "",
+            "token": self.tempid,
+            "ack": "1",
+            "isNew": "1"
+        }
+        headers = {
+            'bno': self.bno,
+            'content-type': 'application/x-www-form-urlencoded',
+        }
+        response = self.session.post(url=url, headers=headers, data=data)
+        print(response.text)
+
     # 发送消息到访客端
-    def send_msg_to_customer(self,uid,cid,content=str("工作台：随便发送点啥都行")):
-        tid = self.get_tid()
+    def send_msg_to_customer(self, tid,uid, cid, content=str("工作台：随便发送点啥都行")):
         # tid = "UXpRM2TWy+f1F38hfGISwqBtjjX8YdfyDu/QQAPpy+UYW1u4KZXp90sdBegyJt+T"
         url = self.host + "/chat-kwb/message/send.action"
         payload = {
@@ -100,10 +119,10 @@ class WorkBranch:
         print(f"工作台返回数据response.text>>>:{response.text}")
 
     # 调用离线接口
-    def service_out(self,uid):
+    def service_out(self, uid):
         url = self.host + "/chat-kwb/admin/out.action"
         data = {
-            "uid":uid
+            "uid": uid
         }
         headers = {
             "Content - Type": "application / x - www - form - urlencoded"
@@ -114,10 +133,8 @@ class WorkBranch:
 
 if __name__ == '__main__':
     pass
-    serviceId = WorkBranch().service_menus()
-    # tid= WorkBranch().get_tid()
-    WorkBranch().send_msg_to_customer(uid="6eb46e889bd648bd935f37415b1ae85c",cid="f3d31d758f54445fb12d96540b9a40b9")
-    # WorkBranch().service_out(tid)
-
-
-
+    obj = WorkBranch()
+    serviceId = obj.service_menus()
+    tid= obj.get_tid(serviceId=serviceId)
+    obj.login_workbranche(tid=tid)
+    obj.send_msg_to_customer(tid=tid,uid="",cid="")

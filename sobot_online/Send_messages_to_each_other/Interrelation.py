@@ -10,6 +10,13 @@ from sobot_online.Send_messages_to_each_other.work_branch import *
 class Interrelation:
     def __init__(self):
         self.Fk = Faker(locale="zh_CN")
+        self.WK = WorkBranch()
+        self.serviceId = self.WK.service_menus()
+        self.tid = self.WK.get_tid(self.serviceId)
+        # 登录客服工作台
+        self.WK.login_workbranche(self.tid)
+        print(f"self.serviceId >>>>：{self.serviceId}")
+        print(f"self.tid >>>>：{self.tid}")
 
     def interrelation(self):
         j = m = 0
@@ -31,7 +38,7 @@ class Interrelation:
                             customer_content = self.Fk.text()
                             workbranch_content = self.Fk.paragraph()
                             Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid, content=customer_content)
-                            WorkBranch().send_msg_to_customer(uid=uid, cid=cid, content=workbranch_content)
+                            WorkBranch().send_msg_to_customer(tid=self.tid,uid=uid, cid=cid, content=workbranch_content)
                             i += 1
                         else:
                             Customer().out_action(uid=uid)
@@ -64,7 +71,7 @@ class Interrelation:
                                 customer_content = self.Fk.text()
                                 workbranch_content = self.Fk.paragraph()
                                 Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid, content=customer_content)
-                                WorkBranch().send_msg_to_customer(uid=uid, cid=cid, content=workbranch_content)
+                                WorkBranch().send_msg_to_customer(tid=self.tid,uid=uid, cid=cid, content=workbranch_content)
                                 i += 1
                             else:
                                 Customer().out_action(uid=uid)

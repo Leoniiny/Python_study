@@ -21,7 +21,7 @@ def translate_str_to_dic(string: str):
 
 if __name__ == '__main__':
     pass
-    str ='first=&puid=35b54f925ca94714b5353474159736ef&uid=9201b2fe6c2b410e913d37dd3ac712e4&token='
+    str = ""
     params_str = translate_str_to_dic(str)
     print(params_str)
 

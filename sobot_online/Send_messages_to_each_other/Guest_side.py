@@ -6,7 +6,7 @@ import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
-hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["TX"]
+hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["AL"]
 
 
 class Customer:
@@ -32,7 +32,7 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd"):
+    def customer_info_init(self, partnerid: str = "nnnd",channelFlag=None):
         url = self.host + "/chat-visit/user/init.action"
         print(f"url >>> ： {url}")
         data = {
@@ -63,7 +63,7 @@ class Customer:
             "agid": "",
             "multiParams": "",
             "summaryParams": "",
-            "channelFlag": "",
+            "channelFlag": channelFlag,
             "isVip": "",
             "vipLevel": "",
             "userLabel": "",

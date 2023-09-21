@@ -5,7 +5,7 @@ import requests, re, json, base64
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
-config = load_yaml_file(filepath=r"\config_file\service_data.yml")["TX"]
+config = load_yaml_file(filepath=r"\config_file\service_data.yml")["AL"]
 
 
 class WorkBranch:

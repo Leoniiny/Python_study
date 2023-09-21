@@ -15,6 +15,14 @@ local_time = local_zero.format("YYYY-MM-DD HH:mm:ss")
 today_date = local_zero.format("YYYY-MM-DD")
 yesterday = local_zero.shift(days=-1).format("YYYY-MM-DD")
 print(f"yesterday  的值为：{yesterday}")
+
+tendays_after = local_zero.shift(days=10).format("YYYY-MM-DD HH:mm")
+print(f"tendays_after  的值为：{tendays_after}")
+
+
+
+
+
 print(local_time)  # 输出当天零点时间
 print(today_date)  # 输出当天日期
 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))

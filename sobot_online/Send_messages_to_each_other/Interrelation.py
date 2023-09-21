@@ -15,16 +15,19 @@ class Interrelation:
         self.tid = self.WK.get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         self.WK.login_workbranche(self.tid)
+        self.person_num = 5
+        self.interrelation_num = 10
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
 
     def interrelation(self):
-        j = m = 0
+        j = m = 1
         while True:
-            if j <= 2:
+            print(f"这是第{j}个客户")
+            if j <= self.person_num:
                 j += 1
                 partnerid = "admin" + str(random.randint(10000, 99999))
-                uid, cid = Customer().customer_info_init(partnerid=partnerid)
+                uid, cid = Customer().customer_info_init(partnerid=partnerid,channelFlag="11")
                 rest = Customer().chat_connection(uid=uid, cid=cid)
                 puid = rest.get("puid")
                 status = rest.get("status")
@@ -33,7 +36,7 @@ class Interrelation:
                     i = 1
                     print(f"走的是status == 1 的分支")
                     while True:
-                        if i <= 5:
+                        if i <= self.interrelation_num:
                             time.sleep(1)
                             customer_content = self.Fk.text()
                             workbranch_content = self.Fk.paragraph()
@@ -47,7 +50,7 @@ class Interrelation:
                     i = 1
                     print(f"走的是status == 2 的分支")
                     while True:
-                        if i <= 5:
+                        if i <= self.interrelation_num:
                             time.sleep(1)
                             customer_content = self.Fk.text()
                             Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
@@ -65,7 +68,7 @@ class Interrelation:
                         i = 1
                         print(f"然后走的是status == 1 的分支")
                         while True:
-                            if i <= 5:
+                            if i <= self.interrelation_num:
                                 time.sleep(1)
                                 customer_content = self.Fk.text()
                                 workbranch_content = self.Fk.paragraph()
@@ -79,7 +82,7 @@ class Interrelation:
                         i = 1
                         print(f"然后走的是status == 2 的分支")
                         while True:
-                            if i <= 5:
+                            if i <= self.interrelation_num:
                                 time.sleep(1)
                                 customer_content = self.Fk.text()
                                 Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)

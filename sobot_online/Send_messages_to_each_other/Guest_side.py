@@ -2,6 +2,8 @@
 # encoding: utf-8 -*-
 # @Function：访客端
 import json, re
+import random
+
 import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
@@ -32,7 +34,7 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd",channelFlag=None):
+    def customer_info_init(self, partnerid: str = "nnnd", channelFlag=None):
         url = self.host + "/chat-visit/user/init.action"
         print(f"url >>> ： {url}")
         data = {
@@ -83,7 +85,7 @@ class Customer:
         return uid, cid
 
     # 3.1、与机器人发送消息
-    def send_message_to_robot(self, uid, cid,requestText):
+    def send_message_to_robot(self, uid, cid, requestText):
         url = self.host + "/chat-web/user/robotsend/v2.action"
         data = urlencode({
             "requestText": requestText,
@@ -109,11 +111,11 @@ class Customer:
             'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
-        response = self.session.post(url, headers=headers, data=data,verify=False)
+        response = self.session.post(url, headers=headers, data=data, verify=False)
         print(response.text, sep="\n")
 
     # 3.2、转人工。通过初始化得到的uid，cid 与工作台建立链接，获取puid，并通过这三个参数与工作台进行会话
-    def chat_connection(self, uid, cid,groupId=None):
+    def chat_connection(self, uid, cid, groupId=None):
         url = self.host + "/chat-web/user/chatconnect.action"
         data = {
             "sysNum": self.bno,
@@ -152,7 +154,7 @@ class Customer:
         return rest
 
     # 4、 离线动作
-    def out_action(self,uid):
+    def out_action(self, uid):
         url = self.host + "/chat-web/user/out.action"
         data = {"uid": uid}
         headers = {
@@ -179,7 +181,7 @@ class Customer:
         print(response.text)
 
     # 6、给工作台发送消息
-    def send_message_to_workbranch(self, puid, cid, uid,content=str("访客端：随便发送点啥都行")):
+    def send_message_to_workbranch(self, puid, cid, uid, content=str("访客端：随便发送点啥都行")):
         url = self.host + "/chat-web/message/user/send.action"
         data = urlencode({
             "puid": str(puid),
@@ -198,17 +200,28 @@ class Customer:
         print(f"puid>>>：{puid}, uid>>>:{uid}, cid>>>:{cid}")
         print(f"访客端返回数据response.text>>>:{response.text}")
 
+    # 7、发送留言
+    def allot_leave_msg(self, uid, groupId=None, content=f"这是这个客户的第：{str(random.randint(1000, 9999))}条留言记录"):
+        url = self.host + "/chat-web/user/allotLeaveMsg.action"
+        data = {
+                'uid': uid,
+                'groupId': groupId,
+                'content': content}
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        response = self.session.post(url, headers=headers, data=data)
+        rest = json.loads(response.text)
+        print(rest)
+        return rest
+
 
 if __name__ == '__main__':
     pass
-    # obj01 = get_config()
-    uid, cid = Customer().customer_info_init()
-    rest = Customer().chat_connection(uid=uid, cid=cid)
-    puid = rest.get("puid")
-    status = rest.get("status")
-    print(f"puid >>>>：{puid}")
-    print(f"status >>>>：{status}")
-    Customer().send_message_to_workbranch(puid,uid=uid, cid=cid)
-
-
-
+    obj = Customer()
+    # uid, cid = obj.customer_info_init()
+    # rest = obj.chat_connection(uid=uid, cid=cid)
+    # puid = rest.get("puid")
+    # status = rest.get("status")
+    # print(f"puid >>>>：{puid}")
+    # print(f"status >>>>：{status}")
+    # obj.send_message_to_workbranch(puid, uid=uid, cid=cid)
+    obj.allot_leave_msg(uid="3cddfeb0e813a53aa8092b692bd8412e", groupId="e1536b360f61457789b1d3338f01c5ae")

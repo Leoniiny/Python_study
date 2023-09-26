@@ -15,8 +15,8 @@ class Interrelation:
         self.tid = self.WK.get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         self.WK.login_workbranche(self.tid)
-        self.person_num = 5
-        self.interrelation_num = 10
+        self.person_num = 5      # 进线客户数
+        self.interrelation_num = 10      # 相互交互次数
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
 

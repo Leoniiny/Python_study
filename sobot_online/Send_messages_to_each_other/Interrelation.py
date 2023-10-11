@@ -23,8 +23,8 @@ class Interrelation:
     def interrelation(self):
         j = m = 1
         while True:
-            print(f"这是第{j}个客户")
             if j <= self.person_num:
+                print(f"这是第{j}个客户")
                 j += 1
                 partnerid = "admin" + str(random.randint(10000, 99999))
                 uid, cid = Customer().customer_info_init(partnerid=partnerid,channelFlag="11")

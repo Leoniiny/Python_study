@@ -5,16 +5,17 @@ import requests, re, json, base64
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
-config = load_yaml_file(filepath=r"\config_file\service_data.yml")["AL"]
+config_detail= load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
+config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
 
 
 class WorkBranch:
     def __init__(self):
-        loginPwd = config["PWD"]
-        loginUser = config["EMAIL"]
-        self.host = config["HOST"]
-        self.bno = config["SYSNUM"]
-        self.sb = config["Sysbol"]
+        loginPwd = config_file["PWD"]
+        loginUser = config_file["EMAIL"]
+        self.host = config_file["HOST"]
+        self.bno = config_file["SYSNUM"]
+        self.sb = config_file["Sysbol"]
         self.session = requests.session()
         if self.sb == "HK":
             url = self.host + "/basic-login/serviceLogin/4"

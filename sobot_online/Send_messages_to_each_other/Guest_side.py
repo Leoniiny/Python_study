@@ -8,18 +8,19 @@ import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
-hk_config = load_yaml_file(filepath=r"\config_file\service_data.yml")["AL"]
+config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
+config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
 
 
 class Customer:
     def __init__(self):
-        self.host = hk_config["HOST"]
-        self.bno = hk_config["SYSNUM"]
+        self.host = config_file["HOST"]
+        self.bno = config_file["SYSNUM"]
         self.session = requests.session()
 
     # 1、获取用户信息配置
     def get_config(self):
-        url = "https://hk.sobot.com/chat-visit/user/config.action"
+        url = self.host + "/chat-visit/user/config.action"
         payload = {
             "sysNum": str(self.bno),
             "source": 0,
@@ -204,9 +205,9 @@ class Customer:
     def allot_leave_msg(self, uid, groupId=None, content=f"这是这个客户的第：{str(random.randint(1000, 9999))}条留言记录"):
         url = self.host + "/chat-web/user/allotLeaveMsg.action"
         data = {
-                'uid': uid,
-                'groupId': groupId,
-                'content': content}
+            'uid': uid,
+            'groupId': groupId,
+            'content': content}
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         response = self.session.post(url, headers=headers, data=data)
         rest = json.loads(response.text)
@@ -216,12 +217,14 @@ class Customer:
 
 if __name__ == '__main__':
     pass
-    obj = Customer()
-    # uid, cid = obj.customer_info_init()
-    # rest = obj.chat_connection(uid=uid, cid=cid)
-    # puid = rest.get("puid")
-    # status = rest.get("status")
-    # print(f"puid >>>>：{puid}")
-    # print(f"status >>>>：{status}")
-    # obj.send_message_to_workbranch(puid, uid=uid, cid=cid)
-    obj.allot_leave_msg(uid="3cddfeb0e813a53aa8092b692bd8412e", groupId="e1536b360f61457789b1d3338f01c5ae")
+    # obj = Customer()
+    # # uid, cid = obj.customer_info_init()
+    # # rest = obj.chat_connection(uid=uid, cid=cid)
+    # # puid = rest.get("puid")
+    # # status = rest.get("status")
+    # # print(f"puid >>>>：{puid}")
+    # # print(f"status >>>>：{status}")
+    # # obj.send_message_to_workbranch(puid, uid=uid, cid=cid)
+    # obj.allot_leave_msg(uid="3cddfeb0e813a53aa8092b692bd8412e", groupId="e1536b360f61457789b1d3338f01c5ae")
+    config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
+    print(config_detail)

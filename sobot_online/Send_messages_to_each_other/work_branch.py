@@ -2,15 +2,18 @@
 # encoding: utf-8 -*-
 # @Function：客服工作台
 import requests, re, json, base64
-from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
 config_detail= load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
 config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
+print(f"config_file  类运行前运行了这个代码{config_file}")
 
 
 class WorkBranch:
     def __init__(self):
+        config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
+        config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
+        print(f"config_file  类运行前运行了这个代码{config_file}")
         loginPwd = config_file["PWD"]
         loginUser = config_file["EMAIL"]
         self.host = config_file["HOST"]

@@ -8,12 +8,12 @@ import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
-config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
-config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
-
 
 class Customer:
     def __init__(self):
+        config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
+        config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
+        print(f"config_file  类运行前运行了这个代码{config_file}")
         self.host = config_file["HOST"]
         self.bno = config_file["SYSNUM"]
         self.session = requests.session()
@@ -35,9 +35,9 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd", channelFlag=None):
+    def customer_info_init(self, partnerid: str = "nnnd", channelFlag=None,face=""):
         url = self.host + "/chat-visit/user/init.action"
-        print(f"url >>> ： {url}")
+        # print(f"url >>> ： {url}")
         data = {
             "ack": "1",
             "sysNum": self.bno,
@@ -51,8 +51,8 @@ class Customer:
             "uname": partnerid + "--猜猜我是谁",
             "visitTitle": "",
             "visitUrl": "",
-            "face": "",
-            "realname": "",
+            "face": face,
+            "realname": partnerid + "--真实姓名",
             "weibo": "",
             "weixin": "",
             "qq": "",
@@ -86,7 +86,7 @@ class Customer:
         return uid, cid
 
     # 3.1、与机器人发送消息
-    def send_message_to_robot(self, uid, cid, requestText):
+    def send_message_to_robot(self, uid, cid, requestText,robotFlag="1"):
         url = self.host + "/chat-web/user/robotsend/v2.action"
         data = urlencode({
             "requestText": requestText,
@@ -96,7 +96,7 @@ class Customer:
             "source": "0",
             "questionFlag": "0",
             "lanFlag": "1",
-            "robotFlag": "1",
+            "robotFlag": robotFlag,
             "adminId": "",
             "tranFlag": "0",
             "groupId": "",

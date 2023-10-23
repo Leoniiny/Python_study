@@ -18,6 +18,20 @@ def write_yaml(filepath, content):
         yaml.dump(content, f, Dumper=yaml.Dumper)
 
 
+# 更新配置文件
+def renewal_yaml(file_path, key, value):
+    with open(Projection_PATH + file_path, encoding="utf-8") as f:
+        content = yaml.load(f, Loader=yaml.FullLoader)
+        try:
+            content[key] = value
+        except:
+            if not content:
+                content = {}
+            content.update({key: value})
+    with open(Projection_PATH + file_path, mode="w", encoding="utf-8") as f:
+        yaml.dump(content, f, allow_unicode=True)
+
+
 # 读取excel文件的方法
 def read_excel(filepath, sheet_name):
     # keep_default_na=False 参数的意思是读到空单元格时，他的值是空字符串
@@ -56,5 +70,9 @@ def update_yaml_content(file_path, key, value):
 
 if __name__ == '__main__':
     pass
-    agents = list(load_yaml_file(filepath=r"\Online\config\temp_data.yml")["agent_dic"][0].values())[0]
-    print(agents)
+    # agents = list(load_yaml_file(filepath=r"\Online\config\temp_data.yml")["agent_dic"][0].values())[0]
+    # print(agents)
+    key = "config"
+    value = "AL"
+    file_path = r'''/config_file/operation_config.yml'''
+    renewal_yaml(file_path, key, value)

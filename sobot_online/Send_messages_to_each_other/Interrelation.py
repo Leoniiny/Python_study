@@ -2,7 +2,6 @@
 # encoding: utf-8 -*-
 # @Function：客服-客户相互联系
 from faker import Faker
-
 from sobot_online.Send_messages_to_each_other.Guest_side import *
 from sobot_online.Send_messages_to_each_other.work_branch import *
 
@@ -97,5 +96,17 @@ class Interrelation:
 if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
-    obj01 = Interrelation()
-    obj01.interrelation()
+    # 修改配置文件
+    for i in range(1,3):
+        if i == 1:
+            value = "AL"
+        if i == 2:
+            value = "TX"
+        if i == 3:
+            value = "XJP"
+        if i == 4:
+            value = "HK"
+        renewal_yaml(file_path=r'''/config_file/operation_config.yml''',key="config",value=value)
+        obj01 = Interrelation()
+        obj01.interrelation()
+

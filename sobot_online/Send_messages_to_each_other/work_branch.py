@@ -4,7 +4,7 @@
 import requests, re, json, base64
 from sobot_online.common.file_dealing import *
 
-config_detail= load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
+config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
 config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
 print(f"config_file  类运行前运行了这个代码{config_file}")
 
@@ -64,7 +64,7 @@ class WorkBranch:
         return serviceId
 
     # 获取工作台tid
-    def get_tid(self,serviceId):
+    def get_tid(self, serviceId):
         # serviceId = self.service_menus()
         url = self.host + "/chat-web/webchat/toChat.action"
         params = {
@@ -79,7 +79,7 @@ class WorkBranch:
         return str(tid)
 
     # 登录客服工作台
-    def login_workbranche(self,tid,st="1"):
+    def login_workbranche(self, tid, st="1"):
         url = self.host + "/chat-kwb/admin/aci.action"
         data = {
             "uid": tid,
@@ -98,7 +98,7 @@ class WorkBranch:
         print(response.text)
 
     # 发送消息到访客端
-    def send_msg_to_customer(self, tid,uid, cid, content=str("工作台：随便发送点啥都行")):
+    def send_msg_to_customer(self, tid, uid, cid, content=str("工作台：随便发送点啥都行")):
         # tid = "UXpRM2TWy+f1F38hfGISwqBtjjX8YdfyDu/QQAPpy+UYW1u4KZXp90sdBegyJt+T"
         url = self.host + "/chat-kwb/message/send.action"
         payload = {
@@ -139,6 +139,6 @@ if __name__ == '__main__':
     pass
     obj = WorkBranch()
     serviceId = obj.service_menus()
-    tid= obj.get_tid(serviceId=serviceId)
+    tid = obj.get_tid(serviceId=serviceId)
     obj.login_workbranche(tid=tid)
-    obj.send_msg_to_customer(tid=tid,uid="",cid="")
+    obj.send_msg_to_customer(tid=tid, uid="", cid="")

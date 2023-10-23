@@ -97,7 +97,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1,3):
+    for i in range(5,6):
         if i == 1:
             value = "AL"
         if i == 2:
@@ -106,6 +106,8 @@ if __name__ == '__main__':
             value = "XJP"
         if i == 4:
             value = "HK"
+        if i == 5:
+            value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''',key="config",value=value)
         obj01 = Interrelation()
         obj01.interrelation()

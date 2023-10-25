@@ -4,10 +4,6 @@
 import requests, re, json, base64
 from sobot_online.common.file_dealing import *
 
-config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
-config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
-print(f"config_file  类运行前运行了这个代码{config_file}")
-
 
 class WorkBranch:
     def __init__(self):
@@ -47,9 +43,6 @@ class WorkBranch:
         response = self.session.post(url, headers=headers, data=data)
         self.tempid = json.loads(response.text).get("item")
         # print(f"self.tempid >>>  ：{self.tempid}")
-        # print(f"loginPwd >>>  ：{loginPwd}")
-        # print(f"loginUser >>>  ：{loginUser}")
-        # print(f"self.host >>>  ：{self.host}")
 
     # 获取客服信息配置
     def service_menus(self):

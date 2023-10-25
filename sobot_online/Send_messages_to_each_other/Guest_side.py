@@ -2,8 +2,6 @@
 # encoding: utf-8 -*-
 # @Function：访客端
 import json, re
-import random
-
 import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
@@ -31,17 +29,17 @@ class Customer:
             'bno': str(self.bno),
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = self.session.post(url, headers=headers, data=payload)
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd", channelFlag=None,face=""):
+    def customer_info_init(self, partnerid: str = "nnnd", source="0", channelFlag=None, face=""):
         url = self.host + "/chat-visit/user/init.action"
         # print(f"url >>> ： {url}")
         data = {
             "ack": "1",
             "sysNum": self.bno,
-            "source": "0",
+            "source": source,
             "chooseAdminId": "",
             "tranFlag": "0",
             "groupId": "",
@@ -86,7 +84,7 @@ class Customer:
         return uid, cid
 
     # 3.1、与机器人发送消息
-    def send_message_to_robot(self, uid, cid, requestText,robotFlag="1"):
+    def send_message_to_robot(self, uid, cid, requestText, robotFlag="1"):
         url = self.host + "/chat-web/user/robotsend/v2.action"
         data = urlencode({
             "requestText": requestText,
@@ -207,11 +205,12 @@ class Customer:
         data = {
             'uid': uid,
             'groupId': groupId,
-            'content': content}
+            'content': content
+        }
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         response = self.session.post(url, headers=headers, data=data)
         rest = json.loads(response.text)
-        print(rest)
+        print(f"发送留言  生效>>>：{rest}")
         return rest
 
 

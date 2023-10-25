@@ -14,7 +14,7 @@ class Interrelation:
         self.tid = self.WK.get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         self.WK.login_workbranche(self.tid)
-        self.person_num = 5      # 进线客户数
+        self.person_num = 1      # 进线客户数
         self.interrelation_num = 10      # 相互交互次数
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
@@ -26,7 +26,7 @@ class Interrelation:
                 print(f"这是第{j}个客户")
                 j += 1
                 partnerid = "admin" + str(random.randint(10000, 99999))
-                uid, cid = Customer().customer_info_init(partnerid=partnerid,channelFlag="11")
+                uid, cid = Customer().customer_info_init(partnerid=partnerid,source="4",channelFlag="11")
                 rest = Customer().chat_connection(uid=uid, cid=cid)
                 puid = rest.get("puid")
                 status = rest.get("status")
@@ -43,6 +43,8 @@ class Interrelation:
                             WorkBranch().send_msg_to_customer(tid=self.tid,uid=uid, cid=cid, content=workbranch_content)
                             i += 1
                         else:
+                            content = self.Fk.paragraph()+self.Fk.paragraph()+self.Fk.paragraph()
+                            Customer().allot_leave_msg(uid=uid,content=content)
                             Customer().out_action(uid=uid)
                             break
                 elif status == 2:
@@ -55,6 +57,8 @@ class Interrelation:
                             Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                             i += 1
                         else:
+                            content = self.Fk.paragraph()+self.Fk.paragraph()+self.Fk.paragraph()
+                            Customer().allot_leave_msg(uid=uid,content=content)
                             Customer().out_action(uid=uid)
                             break
                 elif status == 6:
@@ -75,6 +79,8 @@ class Interrelation:
                                 WorkBranch().send_msg_to_customer(tid=self.tid,uid=uid, cid=cid, content=workbranch_content)
                                 i += 1
                             else:
+                                content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                                Customer().allot_leave_msg(uid=uid,groupId=groupId,content=content)
                                 Customer().out_action(uid=uid)
                                 break
                     elif status == 2:
@@ -87,6 +93,8 @@ class Interrelation:
                                 Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                                 i += 1
                             else:
+                                content = self.Fk.paragraph()+self.Fk.paragraph()+self.Fk.paragraph()
+                                Customer().allot_leave_msg(uid=uid,content=content)
                                 Customer().out_action(uid=uid)
                                 break
             else:
@@ -97,7 +105,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(5,6):
+    for i in range(1,2):
         if i == 1:
             value = "AL"
         if i == 2:

@@ -14,7 +14,7 @@ class Interrelation:
         self.tid = self.WK.get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         self.WK.login_workbranche(self.tid)
-        self.person_num = 1      # 进线客户数
+        self.person_num = 10      # 进线客户数
         self.interrelation_num = 10      # 相互交互次数
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1,2):
+    for i in range(5,6):
         if i == 1:
             value = "AL"
         if i == 2:

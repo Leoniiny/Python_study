@@ -1,8 +1,10 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：
+import os,sys
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root_path)
 
-import os
 import datetime
 import time
 import hashlib
@@ -58,8 +60,9 @@ if __name__ == '__main__':
     print(ABS_PATH)
     print(f"DIR_NAME_  的值为{COMMON_PATH}")
     print(f"Projection_PATH  的值为{Projection_PATH}")
-    print(f"Projection_PATH  的值为{Projection_PATH + r'''/config_file/operation_config.yml'''}")
-    time1, time2 = get_today_zero()
-    new_time1 = time1.format("YYYY-MM-DD")
-    print(new_time1)
-    print( time2)
+    # print(f"Projection_PATH  的值为{Projection_PATH + r'''/config_file/operation_config.yml'''}")
+    # time1, time2 = get_today_zero()
+    # new_time1 = time1.format("YYYY-MM-DD")
+    # print(new_time1)
+    # print( time2)
+    print(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

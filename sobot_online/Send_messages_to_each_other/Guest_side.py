@@ -1,6 +1,13 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：访客端
+import os
+import sys
+
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print("root_path的值为：%s" % root_path)
+sys.path.append(root_path)
+
 import json, re
 import requests
 from urllib.parse import urlencode
@@ -9,8 +16,8 @@ from sobot_online.common.file_dealing import *
 
 class Customer:
     def __init__(self):
-        config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
-        config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
+        config_detail = load_yaml_file(filepath=r"/config_file/operation_config.yml")["config"]
+        config_file = load_yaml_file(filepath=r"/config_file/service_data.yml")[f"{config_detail}"]
         print(f"config_file  类运行前运行了这个代码{config_file}")
         self.host = config_file["HOST"]
         self.bno = config_file["SYSNUM"]
@@ -33,7 +40,14 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd", source="0", channelFlag=None, face=""):
+    def customer_info_init(self, partnerid: str = "nnnd", source=str(random.randint(0,4)), channelFlag=None, face=""):
+        """
+        :param partnerid:
+        :param source: 0:桌面网站,1:微信,2:APP,3:微博,4:移动网站,9：企业微信,10：微信小程序
+        :param channelFlag:
+        :param face:
+        :return:
+        """
         url = self.host + "/chat-visit/user/init.action"
         # print(f"url >>> ： {url}")
         data = {
@@ -80,7 +94,7 @@ class Customer:
         rest = json.loads(response.text)
         uid = rest["uid"]
         cid = rest["cid"]
-        print(f"uid>>>：{uid}, cid>>>：{cid}")
+        print(f"uid>>>：{uid}, cid>>>：{cid},source>>>：{source},channelFlag 的值为：{channelFlag}")
         return uid, cid
 
     # 3.1、与机器人发送消息

@@ -1,14 +1,21 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：客服工作台
+import os
+import sys
+
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print("root_path的值为：%s" % root_path)
+sys.path.append(root_path)
+
 import requests, re, json, base64
 from sobot_online.common.file_dealing import *
 
 
 class WorkBranch:
     def __init__(self):
-        config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
-        config_file = load_yaml_file(filepath=r"\config_file\service_data.yml")[f"{config_detail}"]
+        config_detail = load_yaml_file(filepath=r"/config_file/operation_config.yml")["config"]
+        config_file = load_yaml_file(filepath=r"/config_file/service_data.yml")[f"{config_detail}"]
         print(f"config_file  类运行前运行了这个代码{config_file}")
         loginPwd = config_file["PWD"]
         loginUser = config_file["EMAIL"]

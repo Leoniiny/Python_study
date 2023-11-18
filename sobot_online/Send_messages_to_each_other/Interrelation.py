@@ -1,6 +1,13 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：客服-客户相互联系
+import os
+import sys
+
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print("root_path的值为：%s" % root_path)
+sys.path.append(root_path)
+
 from faker import Faker
 from sobot_online.Send_messages_to_each_other.Guest_side import *
 from sobot_online.Send_messages_to_each_other.work_branch import *
@@ -14,8 +21,8 @@ class Interrelation:
         self.tid = self.WK.get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         self.WK.login_workbranche(self.tid)
-        self.person_num = 10      # 进线客户数
-        self.interrelation_num = 10      # 相互交互次数
+        self.person_num = 1  # 进线客户数
+        self.interrelation_num = 2  # 相互交互次数
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
 
@@ -26,7 +33,7 @@ class Interrelation:
                 print(f"这是第{j}个客户")
                 j += 1
                 partnerid = "admin" + str(random.randint(10000, 99999))
-                uid, cid = Customer().customer_info_init(partnerid=partnerid,source="4",channelFlag="11")
+                uid, cid = Customer().customer_info_init(partnerid=partnerid, source=str(random.randint(0,4)), channelFlag=str(random.randint(0,5)))
                 rest = Customer().chat_connection(uid=uid, cid=cid)
                 puid = rest.get("puid")
                 status = rest.get("status")
@@ -40,11 +47,12 @@ class Interrelation:
                             customer_content = self.Fk.text()
                             workbranch_content = self.Fk.paragraph()
                             Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid, content=customer_content)
-                            WorkBranch().send_msg_to_customer(tid=self.tid,uid=uid, cid=cid, content=workbranch_content)
+                            WorkBranch().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
+                                                              content=workbranch_content)
                             i += 1
                         else:
-                            content = self.Fk.paragraph()+self.Fk.paragraph()+self.Fk.paragraph()
-                            Customer().allot_leave_msg(uid=uid,content=content)
+                            content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                            Customer().allot_leave_msg(uid=uid, content=content)
                             Customer().out_action(uid=uid)
                             break
                 elif status == 2:
@@ -57,14 +65,14 @@ class Interrelation:
                             Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                             i += 1
                         else:
-                            content = self.Fk.paragraph()+self.Fk.paragraph()+self.Fk.paragraph()
-                            Customer().allot_leave_msg(uid=uid,content=content)
+                            content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                            Customer().allot_leave_msg(uid=uid, content=content)
                             Customer().out_action(uid=uid)
                             break
                 elif status == 6:
                     print(f"最先走的是status == 6 的分支！！！")
                     groupId = rest.get("groupList")[0].get("groupId")
-                    rest = Customer().chat_connection(uid=uid, cid=cid,groupId=groupId)
+                    rest = Customer().chat_connection(uid=uid, cid=cid, groupId=groupId)
                     status = rest.get("status")
                     print(f"puid >>>>：{puid},status >>>>：{status}")
                     if status == 1:
@@ -75,12 +83,14 @@ class Interrelation:
                                 time.sleep(1)
                                 customer_content = self.Fk.text()
                                 workbranch_content = self.Fk.paragraph()
-                                Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid, content=customer_content)
-                                WorkBranch().send_msg_to_customer(tid=self.tid,uid=uid, cid=cid, content=workbranch_content)
+                                Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid,
+                                                                      content=customer_content)
+                                WorkBranch().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
+                                                                  content=workbranch_content)
                                 i += 1
                             else:
                                 content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                                Customer().allot_leave_msg(uid=uid,groupId=groupId,content=content)
+                                Customer().allot_leave_msg(uid=uid, groupId=groupId, content=content)
                                 Customer().out_action(uid=uid)
                                 break
                     elif status == 2:
@@ -93,8 +103,8 @@ class Interrelation:
                                 Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                                 i += 1
                             else:
-                                content = self.Fk.paragraph()+self.Fk.paragraph()+self.Fk.paragraph()
-                                Customer().allot_leave_msg(uid=uid,content=content)
+                                content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                                Customer().allot_leave_msg(uid=uid, content=content)
                                 Customer().out_action(uid=uid)
                                 break
             else:
@@ -105,7 +115,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(5,6):
+    for i in range(1, 2):
         if i == 1:
             value = "AL"
         if i == 2:
@@ -116,7 +126,6 @@ if __name__ == '__main__':
             value = "HK"
         if i == 5:
             value = "US"
-        renewal_yaml(file_path=r'''/config_file/operation_config.yml''',key="config",value=value)
+        renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
         obj01 = Interrelation()
         obj01.interrelation()
-

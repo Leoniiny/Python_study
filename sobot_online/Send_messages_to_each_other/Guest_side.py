@@ -1,6 +1,7 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：访客端
+# 在linux 环境中运行，需要将项目 根目录 路径添加到python 的环境变量中
 import os
 import sys
 
@@ -40,7 +41,7 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd", source=str(random.randint(0,4)), channelFlag=None, face=""):
+    def customer_info_init(self, partnerid: str = "nnnd", source=str(random.randint(0, 4)), channelFlag=None, face=""):
         """
         :param partnerid:
         :param source: 0:桌面网站,1:微信,2:APP,3:微博,4:移动网站,9：企业微信,10：微信小程序
@@ -227,10 +228,54 @@ class Customer:
         print(f"发送留言  生效>>>：{rest}")
         return rest
 
+    # 8.1、获取满意度评价模板数据
+    def satisfaction_message_data(self, uid):
+        url = self.host + "/chat-web/user/satisfactionMessage/v2.action"
+        params = {
+            "uid": uid
+        }
+        headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        }
+        response = self.session.get(url=url, headers=headers, params=params)
+        rest = json.loads(response.text).get("data")
+        return rest
+
+    #  8.2、进行满意度评价
+    def comment(self, cid, uid,score=0, tag="",solved="0", remark=None, satisfy_type=0,commentType="1",scoreFlag=0, scoreExplain="",rest=None):
+        url = self.host + "/chat-web/user/comment.action"
+        if rest:
+            get_score_info = rest[random.randint(0, len(rest) - 1)]
+            score = get_score_info["score"]
+            scoreFlag = get_score_info["scoreFlag"]
+            scoreExplain = get_score_info["scoreExplain"]
+            satisfy_type =1
+            if get_score_info["labelName"]:
+                tag_list = get_score_info["labelName"].split(",")
+                tag = tag_list[-1]
+        data = {
+            "cid": cid,
+            "visitorId": uid,
+            "score": score,
+            "solved": solved,
+            "tag": tag,
+            "robotFlag": "",
+            "remark": remark,
+            "type": satisfy_type,
+            "commentType": commentType,
+            "scoreFlag": scoreFlag,
+            "scoreExplain": scoreExplain
+        }
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        }
+        response = self.session.post(url=url, headers=headers, data=data)
+        print(response.text)
+
 
 if __name__ == '__main__':
     pass
-    # obj = Customer()
+    obj = Customer()
     # # uid, cid = obj.customer_info_init()
     # # rest = obj.chat_connection(uid=uid, cid=cid)
     # # puid = rest.get("puid")
@@ -239,5 +284,5 @@ if __name__ == '__main__':
     # # print(f"status >>>>：{status}")
     # # obj.send_message_to_workbranch(puid, uid=uid, cid=cid)
     # obj.allot_leave_msg(uid="3cddfeb0e813a53aa8092b692bd8412e", groupId="e1536b360f61457789b1d3338f01c5ae")
-    config_detail = load_yaml_file(filepath=r"\config_file\operation_config.yml")["config"]
-    print(config_detail)
+    # config_detail = load_yaml_file(
+    obj.satisfaction_message_data(uid="7d3e78b4b34d46d7b8e1ef3c4b71b5a1")

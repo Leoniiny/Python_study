@@ -26,10 +26,12 @@ class Interrelation:
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
 
+    # 互相发消息
     def interrelation(self):
-        j = 1
+        j =0
         while True:
             j += 1
+            score = solved = commentType = j % 2
             if j <= self.person_num:
                 print(f"这是第{j}个客户")
                 partnerid = "admin" + str(random.randint(10000, 99999))
@@ -40,7 +42,7 @@ class Interrelation:
                 print(f"走分支前的：puid >>>>：{puid},status >>>>：{status}")
                 if status == 1:
                     i = 1
-                    print(f"查询status 后，最先走的是status == 1 的分支")
+                    print(f"查询status 之后，首先走的是status == 1 的分支")
                     while True:
                         if i <= self.interrelation_num:
                             time.sleep(1)
@@ -52,12 +54,15 @@ class Interrelation:
                             i += 1
                         else:
                             content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                            rest = Customer().satisfaction_message_data(uid)
+                            Customer().comment(cid=cid,uid=uid,solved=solved,remark=self.Fk.text(),commentType=commentType,rest = rest)
+                            print(f"评价成功！！！")
                             Customer().allot_leave_msg(uid=uid, content=content)
                             Customer().out_action(uid=uid)
                             break
                 elif status == 2:
                     i = 1
-                    print(f"查询status 后，最先走的是status == 2 的分支")
+                    print(f"查询status 之后，首先走的是status == 2 的分支")
                     while True:
                         if i <= self.interrelation_num:
                             time.sleep(1)
@@ -66,18 +71,20 @@ class Interrelation:
                             i += 1
                         else:
                             content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                            # 给机器人评价
+                            Customer().comment(cid=cid,uid=uid,score = score,solved=solved,remark=self.Fk.text(),commentType=commentType,rest = rest)
                             Customer().allot_leave_msg(uid=uid, content=content)
                             Customer().out_action(uid=uid)
                             break
                 elif status == 6:
-                    print(f"最先走的是status == 6 的分支！！！")
+                    print(f"查询status 之后，首先走的是status == 6 的分支,然后去获取技能组id")
                     groupId = rest.get("groupList")[0].get("groupId")
                     rest = Customer().chat_connection(uid=uid, cid=cid, groupId=groupId)
                     status = rest.get("status")
-                    print(f"puid >>>>：{puid},status >>>>：{status}")
+                    print(f"status == 6 >>>   puid >>>：{puid},status >>>>：{status}")
                     if status == 1:
                         i = 1
-                        print(f"然后走的是status == 1 的分支")
+                        print(f"status 节点：6 > 1")
                         while True:
                             if i <= self.interrelation_num:
                                 time.sleep(1)
@@ -90,12 +97,16 @@ class Interrelation:
                                 i += 1
                             else:
                                 content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                                rest = Customer().satisfaction_message_data(uid)
+                                Customer().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
+                                                   commentType=commentType, rest=rest)
+                                print(f"评价成功！！！")
                                 Customer().allot_leave_msg(uid=uid, groupId=groupId, content=content)
                                 Customer().out_action(uid=uid)
                                 break
                     elif status == 2:
                         i = 1
-                        print(f"然后走的是status == 2 的分支")
+                        print(f"status 节点：6 > 2")
                         while True:
                             if i <= self.interrelation_num:
                                 time.sleep(1)
@@ -104,6 +115,10 @@ class Interrelation:
                                 i += 1
                             else:
                                 content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                                # 给机器人评价
+                                Customer().comment(cid=cid, uid=uid, score=score, solved=solved, remark=self.Fk.text(),
+                                                   commentType=commentType, rest=rest)
+
                                 Customer().allot_leave_msg(uid=uid, content=content)
                                 Customer().out_action(uid=uid)
                                 break
@@ -115,7 +130,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1, 2):
+    for i in range(1, 6):
         if i == 1:
             value = "AL"
         if i == 2:

@@ -19,7 +19,7 @@ class Customer:
     def __init__(self):
         config_detail = load_yaml_file(filepath=r"/config_file/operation_config.yml")["config"]
         config_file = load_yaml_file(filepath=r"/config_file/service_data.yml")[f"{config_detail}"]
-        print(f"config_file  类运行前运行了这个代码{config_file}")
+        # print(f"config_file  类运行前运行了这个代码{config_file}")
         self.host = config_file["HOST"]
         self.bno = config_file["SYSNUM"]
         self.session = requests.session()
@@ -41,7 +41,7 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd", source=str(random.randint(0, 4)), channelFlag=None, face="",isVip="0"):
+    def customer_info_init(self, partnerid: str = "nnnd",uname="", source=str(random.randint(0, 4)), channelFlag=None, face="",isVip="0"):
         """
         :param partnerid:
         :param source: 0:桌面网站,1:微信,2:APP,3:微博,4:移动网站,9：企业微信,10：微信小程序
@@ -50,42 +50,44 @@ class Customer:
         :return:
         """
         url = self.host + "/chat-visit/user/init.action"
-        data = {
-            "ack": "1",
-            "sysNum": self.bno,
-            "source": source,
-            "chooseAdminId": "",
-            "tranFlag": "0",
-            "groupId": "",
-            "partnerId": partnerid,
-            "tel": "",
-            "email": "",
-            "uname": partnerid + "--猜猜我是谁",
-            "visitTitle": "",
-            "visitUrl": "",
-            "face": face,
-            "realname": partnerid + "--真实姓名",
-            "weibo": "",
-            "weixin": "",
-            "qq": "",
-            "sex": "",
-            "birthday": "",
-            "remark": "",
-            "params": "",
-            "isReComment": "1",
-            "customerFields": "",
-            "visitStartTime": "",
-            "agid": "",
-            "multiParams": "",
-            "summaryParams": "",
-            "channelFlag": channelFlag,
-            "isVip": isVip,
-            "vipLevel": "",
-            "userLabel": "",
-            "xst": "",
-            "isJs": "0",
-            "joinType": ""
-        }
+        data = urlencode(
+            {
+                "ack": "1",
+                "sysNum": self.bno,
+                "source": source,
+                "chooseAdminId": "",
+                "tranFlag": "0",
+                "groupId": "",
+                "partnerId": partnerid,
+                "tel": "",
+                "email": "",
+                "uname": uname + "--猜猜我是谁",
+                "visitTitle": "",
+                "visitUrl": "",
+                "face": face,
+                "realname": uname + "--真实姓名",
+                "weibo": "",
+                "weixin": "",
+                "qq": "",
+                "sex": "",
+                "birthday": "",
+                "remark": "",
+                "params": "",
+                "isReComment": "1",
+                "customerFields": "",
+                "visitStartTime": "",
+                "agid": "",
+                "multiParams": "",
+                "summaryParams": "",
+                "channelFlag": channelFlag,
+                "isVip": isVip,
+                "vipLevel": "",
+                "userLabel": "",
+                "xst": "",
+                "isJs": "0",
+                "joinType": ""
+            }
+        )
         headers = {
             'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',

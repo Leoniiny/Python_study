@@ -4,7 +4,8 @@
 # @Software: PyCharm
 # @Function:console 设置
 from sobot_online.Send_messages_to_each_other.work_branch import WorkBranch
-from sobot_online.common.utils import *
+from sobot_online.common.file_dealing import *
+import json, re
 
 
 class ConsoleSetting(WorkBranch):
@@ -24,7 +25,7 @@ class ConsoleSetting(WorkBranch):
             "Temp-Id":self.tempid
         }
         response = self.session.post(url = url,headers = headers,data=data,files=files)
-        print(f"\n response 的结果为：{json.loads(response.text)}")
+        # print(f"\n response 的结果为：{json.loads(response.text)}\n")
         img_url = ""
         try:
             img_url = json.loads(response.text).get("item").get("url")

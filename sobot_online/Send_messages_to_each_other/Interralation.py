@@ -11,6 +11,7 @@ sys.path.append(root_path)
 from faker import Faker
 from sobot_online.Send_messages_to_each_other.Guest_side import *
 from sobot_online.Send_messages_to_each_other.work_branch import *
+from sobot_online.Send_messages_to_each_other.console_setting import *
 
 
 class Interrelation:
@@ -31,11 +32,11 @@ class Interrelation:
         j =0
         while True:
             j += 1
-            questionStatus = score = solved = commentType = j % 2
+            isVip = questionStatus = score = solved = commentType = j % 2
             if j <= self.person_num:
                 print(f"这是第{j}个客户")
-                partnerid = "客户"+self.Fk.name() + str(random.randint(100000,999999))
-                uid, cid,pid = Customer().customer_info_init(partnerid=partnerid, source=str(random.randint(0,4)), channelFlag=str(random.randint(0,5)))
+                partnerid = "客户--"+self.Fk.name()+"--" + str(random.randint(100000,999999))
+                uid, cid,pid = Customer().customer_info_init(partnerid=partnerid, source=str(random.randint(0,4)), channelFlag=str(random.randint(0,5)),isVip=str(isVip))
                 chat_connection_rest = Customer().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
                 status = chat_connection_rest.get("status")
@@ -53,21 +54,17 @@ class Interrelation:
                                                               content=workbranch_content)
                             i += 1
                         else:
-                            # 客服邀请评价
+                            # 客服邀请评价： commentType == 0 为客服邀请评价
                             if commentType == 0:
                                 WorkBranch().recomment(tid=self.tid,cid=cid,uid=uid)
                             # 客服进行服务总结
-                            unit_infos_list = WorkBranch().get_unit_infos(tid=self.tid)
-                            print(f"获取业务单元列表 unit_infos_list >>>：{unit_infos_list}")
                             fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                            if unit_infos_list:
-                                unitId = [unit_info.get("unitId") for unit_info in unit_infos_list]
-                                unit_body_list,unit_fieldList = WorkBranch().get_unifo_body(tid=self.tid,cid=cid,unitId=unitId)
-                                print(f"获取业务单元列表 unit_body_list >>>：{unit_body_list}, unit_fieldList >>>：{unit_fieldList}")
-                                WorkBranch().submmit_summary(tid=self.tid,uid=uid,cid=cid,pid=pid,questionStatus=questionStatus,questionDescribe=questionDescribe,fields_value=fields_value,
-                                                             unit_infos_list=unit_infos_list, unit_body_list=unit_body_list, unit_fieldList=unit_fieldList)
-                            satisfaction_info = Customer().satisfaction_message_data(uid=uid)
+                            unit_info,unit_body_list,unit_fieldList = WorkBranch().get_unifo_body(tid=self.tid,cid=cid)
+                            print(f"获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}",sep="\n")
+                            WorkBranch().submmit_summary(tid=self.tid,uid=uid,cid=cid,pid=pid,questionStatus=questionStatus,questionDescribe=questionDescribe,fields_value=fields_value,
+                                                         unit_info=unit_info, unit_body_list=unit_body_list, unit_fieldList=unit_fieldList)
                             # 客户进行满意度评价
+                            satisfaction_info = Customer().satisfaction_message_data(uid=uid)
                             Customer().comment(cid=cid,uid=uid,solved=solved,remark=self.Fk.text(),commentType=commentType,satisfaction_info = satisfaction_info)
                             print(f"评价成功！！！")
                             # 客户进行留言
@@ -100,7 +97,7 @@ class Interrelation:
                     print(f"status == 6 >>>   puid >>>：{puid},status >>>>：{status}")
                     if status == 1:
                         i = 1
-                        print(f"status节点 6 》 1")
+                        print(f"查询status 之后，首先走的是status == 1 的分支")
                         while True:
                             if i <= self.interrelation_num:
                                 time.sleep(1)
@@ -112,28 +109,24 @@ class Interrelation:
                                                                   content=workbranch_content)
                                 i += 1
                             else:
-                                # 客服邀请评价
+                                # 客服邀请评价： commentType == 0 为客服邀请评价
                                 if commentType == 0:
                                     WorkBranch().recomment(tid=self.tid, cid=cid, uid=uid)
                                 # 客服进行服务总结
-                                unit_infos_list = WorkBranch().get_unit_infos(tid=self.tid)
-                                print(f"获取业务单元列表 unit_infos_list >>>：{unit_infos_list}")
                                 fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                                if unit_infos_list:
-                                    unitId = [unit_info.get("unitId") for unit_info in unit_infos_list]
-                                    unit_body_list, unit_fieldList = WorkBranch().get_unifo_body(tid=self.tid, cid=cid,
-                                                                                                 unitId=unitId)
-                                    print(
-                                        f"获取业务单元列表 unit_body_list >>>：{unit_body_list}, unit_fieldList >>>：{unit_fieldList}")
-                                    WorkBranch().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
-                                                                 questionStatus=questionStatus,
-                                                                 questionDescribe=questionDescribe,
-                                                                 fields_value=fields_value,
-                                                                 unit_infos_list=unit_infos_list,
-                                                                 unit_body_list=unit_body_list,
-                                                                 unit_fieldList=unit_fieldList)
-                                satisfaction_info = Customer().satisfaction_message_data(uid=uid)
+                                unit_info, unit_body_list, unit_fieldList = WorkBranch().get_unifo_body(tid=self.tid,
+                                                                                                        cid=cid)
+                                print(
+                                    f"获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}",
+                                    sep="\n")
+                                WorkBranch().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
+                                                             questionStatus=questionStatus,
+                                                             questionDescribe=questionDescribe,
+                                                             fields_value=fields_value,
+                                                             unit_info=unit_info, unit_body_list=unit_body_list,
+                                                             unit_fieldList=unit_fieldList)
                                 # 客户进行满意度评价
+                                satisfaction_info = Customer().satisfaction_message_data(uid=uid)
                                 Customer().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
                                                    commentType=commentType, satisfaction_info=satisfaction_info)
                                 print(f"评价成功！！！")

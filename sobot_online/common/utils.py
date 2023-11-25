@@ -1,7 +1,7 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：
-import os,sys
+import os,sys,json
 root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(root_path)
 
@@ -55,14 +55,16 @@ def get_today_zero():
 ABS_PATH = os.path.abspath(__file__)  # 获取当前文件的绝对路径
 COMMON_PATH = os.path.dirname(ABS_PATH)  # 获取本项目所在的目录
 Projection_PATH = os.path.dirname(COMMON_PATH)
+DATA_PATH = Projection_PATH + r"/data"
 
 if __name__ == '__main__':
-    print(ABS_PATH)
-    print(f"DIR_NAME_  的值为{COMMON_PATH}")
-    print(f"Projection_PATH  的值为{Projection_PATH}")
+    # print(ABS_PATH)
+    # print(f"DIR_NAME_  的值为{COMMON_PATH}")
+    # print(f"Projection_PATH  的值为{Projection_PATH}")
     # print(f"Projection_PATH  的值为{Projection_PATH + r'''/config_file/operation_config.yml'''}")
     # time1, time2 = get_today_zero()
     # new_time1 = time1.format("YYYY-MM-DD")
     # print(new_time1)
     # print( time2)
-    print(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    # print(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    print(DATA_PATH)

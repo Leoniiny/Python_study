@@ -15,7 +15,7 @@ from sobot_online.common.file_dealing import *
 
 
 class Interrelation(ConsoleSetting):
-    def __init__(self):
+    def __init__(self,enter_num=2,inter_relation_num =2):
         super().__init__()
         self.Fk = Faker(locale="zh_CN")
         # self.WK = WorkBranch()
@@ -25,8 +25,8 @@ class Interrelation(ConsoleSetting):
         self.tid = super().get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         super().login_workbranche(self.tid)
-        self.person_num = 2  # 进线客户数
-        self.interrelation_num = 2  # 相互交互次数
+        self.person_num = enter_num  # 进线客户数
+        self.interrelation_num = inter_relation_num  # 相互交互次数
 
     # 客户与客服互相发消息
     def interrelation(self):
@@ -171,7 +171,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1, 2):
+    for i in range(1, 6):
         if i == 1:
             value = "AL"
         if i == 2:
@@ -183,5 +183,5 @@ if __name__ == '__main__':
         if i == 5:
             value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation()
+        obj01 = Interrelation(enter_num=2,inter_relation_num=3)
         obj01.interrelation()

@@ -2,7 +2,16 @@
 # @Author : 雷洋平
 # @File : console_setting.py
 # @Software: PyCharm
-# @Function:console 设置
+# @Function:控制台 设置
+
+
+# import os
+# import sys
+#
+# root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# print("root_path的值为：%s" % root_path)
+# sys.path.append(root_path)
+
 from sobot_online.Send_messages_to_each_other.work_branch import WorkBranch
 from sobot_online.common.file_dealing import *
 import json, re
@@ -25,7 +34,6 @@ class ConsoleSetting(WorkBranch):
             "Temp-Id":self.tempid
         }
         response = self.session.post(url = url,headers = headers,data=data,files=files)
-        # print(f"\n response 的结果为：{json.loads(response.text)}\n")
         img_url = ""
         try:
             img_url = json.loads(response.text).get("item").get("url")

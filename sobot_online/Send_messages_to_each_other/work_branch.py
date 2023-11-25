@@ -4,9 +4,9 @@
 import os
 import sys
 
-root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print("root_path的值为：%s" % root_path)
-sys.path.append(root_path)
+# root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# print("root_path的值为：%s" % root_path)
+# sys.path.append(root_path)
 
 import requests, re, json, base64
 from urllib.parse import urlencode

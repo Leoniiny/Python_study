@@ -26,7 +26,7 @@ class Interrelation:
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
 
-    # 互相发消息
+    # 客户与客服互相发消息
     def interrelation(self):
         j =0
         while True:
@@ -34,7 +34,7 @@ class Interrelation:
             questionStatus = score = solved = commentType = j % 2
             if j <= self.person_num:
                 print(f"这是第{j}个客户")
-                partnerid = "admin" + str(random.randint(10000, 99999))
+                partnerid = "客户"+self.Fk.name() + str(random.randint(100000,999999))
                 uid, cid,pid = Customer().customer_info_init(partnerid=partnerid, source=str(random.randint(0,4)), channelFlag=str(random.randint(0,5)))
                 chat_connection_rest = Customer().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(4, 6):
+    for i in range(1, 2):
         if i == 1:
             value = "AL"
         if i == 2:

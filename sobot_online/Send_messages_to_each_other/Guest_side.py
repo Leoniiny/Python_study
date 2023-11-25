@@ -95,8 +95,9 @@ class Customer:
         rest = json.loads(response.text)
         uid = rest["uid"]
         cid = rest["cid"]
-        print(f"uid>>>：{uid}, cid>>>：{cid},source>>>：{source},channelFlag 的值为：{channelFlag}")
-        return uid, cid
+        pid = rest["pid"]
+        print(f"uid>>>：{uid}, cid>>>：{cid}, pid>>>：{pid}source>>>：{source},channelFlag 的值为：{channelFlag}")
+        return uid, cid,pid
 
     # 3.1、与机器人发送消息
     def send_message_to_robot(self, uid, cid, requestText, robotFlag="1"):
@@ -238,14 +239,31 @@ class Customer:
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
         }
         response = self.session.get(url=url, headers=headers, params=params)
-        rest = json.loads(response.text).get("data")
-        return rest
+        satisfaction_info = json.loads(response.text).get("data")
+        return satisfaction_info
 
     #  8.2、进行满意度评价
-    def comment(self, cid, uid,score=0, tag="",solved="0", remark=None, satisfy_type=0,commentType="1",scoreFlag=0, scoreExplain="",rest=None):
+    def comment(self, cid, uid,score=0, tag="",solved="0", remark=None, satisfy_type=0,commentType="1",scoreFlag=0, scoreExplain="",satisfaction_info=None):
+        """
+        :param cid:
+        :param uid:
+        :param score:
+        :param tag:
+        :param solved:
+        :param remark:
+        :param satisfy_type:
+        :param commentType: 0:邀请评价，1：主动评价
+        :param scoreFlag:
+        :param scoreExplain:
+        :param satisfaction_info:
+        :return:
+        """
         url = self.host + "/chat-web/user/comment.action"
-        if rest:
-            get_score_info = rest[random.randint(0, len(rest) - 1)]
+        if satisfaction_info:
+            if len(satisfaction_info) > 1:
+                get_score_info = satisfaction_info[random.randint(0, len(satisfaction_info) - 1)]
+            else:
+                get_score_info = satisfaction_info[0]
             score = get_score_info["score"]
             scoreFlag = get_score_info["scoreFlag"]
             scoreExplain = get_score_info["scoreExplain"]
@@ -285,4 +303,5 @@ if __name__ == '__main__':
     # # obj.send_message_to_workbranch(puid, uid=uid, cid=cid)
     # obj.allot_leave_msg(uid="3cddfeb0e813a53aa8092b692bd8412e", groupId="e1536b360f61457789b1d3338f01c5ae")
     # config_detail = load_yaml_file(
-    obj.satisfaction_message_data(uid="7d3e78b4b34d46d7b8e1ef3c4b71b5a1")
+    # obj.satisfaction_message_data(uid="7d3e78b4b34d46d7b8e1ef3c4b71b5a1")
+    obj.customer_info_init()

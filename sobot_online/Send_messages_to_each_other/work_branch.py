@@ -9,6 +9,7 @@ print("root_path的值为：%s" % root_path)
 sys.path.append(root_path)
 
 import requests, re, json, base64
+from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
 
@@ -134,11 +135,144 @@ class WorkBranch:
         response = self.session.post(url, headers=headers, data=data)
         print(f"response 的值为：{response.text}")
 
+    # 邀请评价
+    def recomment(self, tid, cid, uid):
+        url = self.host + "/chat-kwb/admin/reComment.action"
+        data = {
+            "tid": tid,
+            "cid": cid,
+            "uid": uid
+        }
+        headers = {
+            'bNo': self.bno,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        response = self.session.post(url=url, headers=headers, data=data)
+        print(response.text)
+
+    # 提交服务总结《这里需要区分V1和V6》
+    # 获取服务总结列表
+    def get_unit_infos(self, tid):
+        url = self.host + "/chat-kwb/conversation/getUnitInfos.action"
+        data = {
+            "tid": tid
+        }
+        headers = {
+            'bNo': self.bno,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        response = self.session.post(url=url, headers=headers, data=data)
+        unit_infos_list = json.loads(response.text).get("items")
+        return unit_infos_list
+
+    # 获取服务总结某一个业务单元的内容
+    def get_unifo_body(self, tid, cid, unitId):
+        url = self.host + "/chat-kwb/conversation/getUnifoInfoById.action"
+        data = {
+            "tid": tid,
+            "cid": cid,
+            "unitId": unitId
+        }
+        headers = {
+            'bNo': self.bno,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        response = self.session.post(url=url, headers=headers, data=data)
+        try:
+            unit_body_list = json.loads(response.text).get("item").get("typeList")
+            unit_fieldList = json.loads(response.text).get("item").get("fieldList")
+            return unit_body_list, unit_fieldList
+        except Exception as e:
+            print(f"这个服务总结没有业务分类：{e}")
+
+    # 提交服务总结
+    def submmit_summary(self, tid, uid, cid, pid, questionStatus=0, reqTypeIdPath="", reqTypeNamePath="",
+                        questionDescribe="",
+                        fields="", fields_value="", unit_infos_list=None, unit_body_list=None, unit_fieldList=None):
+        """
+        :param fields_value:
+        :param tid:
+        :param uid:
+        :param cid:
+        :param pid:
+        :param questionStatus:
+        :param reqTypeIdPath:
+        :param reqTypeNamePath:
+        :param questionDescribe:
+        :param fields:
+        :param unit_infos_list: 业务单元列表
+        :param unit_body_list: 业务分类列表
+        :param unit_fieldList: 业务分类的自定义字段
+        :return:
+        """
+        url = self.host + "/chat-kwb/conversation/summarySubmitVer2.action"
+        headers = {
+            'bNo': self.bno,
+            'Content-Type': "application/x-www-form-urlencoded"
+        }
+        # 有效记录
+        if unit_infos_list:
+            random_num = random.randint(0, len(unit_infos_list) - 1)
+            operationId = unit_infos_list[random_num].get("unitId")
+            operationName = unit_infos_list[random_num].get("unitName")
+            if unit_body_list:
+                if len(unit_body_list) > 1:
+                    reqTypeIdPath = unit_body_list[random.randint(0, len(unit_body_list) - 1)].get("typeId")
+                    reqTypeNamePath = unit_body_list[random.randint(0, len(unit_body_list) - 1)].get("typeName")
+                else:
+                    reqTypeIdPath = unit_body_list[0].get("typeId")
+                    reqTypeNamePath = unit_body_list[0].get("typeName")
+            if unit_fieldList:
+                fields = []
+                if len(unit_fieldList) > 1:
+                    new_field_dic = {
+                        "fieldId": unit_fieldList[random.randint(0, len(unit_fieldList) - 1)].get("fieldId"),
+                        "fieldName": unit_fieldList[random.randint(0, len(unit_fieldList) - 1)].get("fieldName"),
+                        "fieldValue": fields_value
+                    }
+                else:
+                    new_field_dic = {
+                        "fieldId": unit_fieldList[0].get("fieldId"),
+                        "fieldName": unit_fieldList[0].get("fieldName"),
+                        "fieldValue": fields_value
+                    }
+                fields.append(new_field_dic)
+            data = urlencode(
+                {
+                    "updateServiceId": tid,
+                    "uid": uid,
+                    "cid": cid,
+                    "pid": pid,
+                    "questionStatus": questionStatus,
+                    "operationId": operationId,
+                    "operationName": operationName,
+                    "reqTypeIdPath": reqTypeIdPath,
+                    "reqTypeNamePath": reqTypeNamePath,
+                    "questionDescribe": questionDescribe,
+                    "fields": fields
+                }
+            )
+        # 无效会话
+        else:
+            data = urlencode(
+                {
+                    "updateServiceId": tid,
+                    "uid": uid,
+                    "cid": cid,
+                    "invalidSession": 1
+                }
+            )
+        response = self.session.post(url=url, headers=headers, data=data)
+        print(f"提交满意度评价的结果为>>>>：{json.loads(response.text)}\n\n\n\n")
+
+
 
 if __name__ == '__main__':
     pass
     obj = WorkBranch()
-    serviceId = obj.service_menus()
-    tid = obj.get_tid(serviceId=serviceId)
-    obj.login_workbranche(tid=tid)
-    obj.send_msg_to_customer(tid=tid, uid="", cid="")
+    # serviceId = obj.service_menus()
+    # tid = obj.get_tid(serviceId=serviceId)
+    # obj.login_workbranche(tid=tid)
+    # obj.send_msg_to_customer(tid=tid, uid="", cid="")
+    # rest = obj.get_unit_infos(tid=tid)
+    # print(rest)

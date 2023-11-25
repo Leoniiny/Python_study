@@ -21,7 +21,7 @@ class Interrelation:
         self.tid = self.WK.get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         self.WK.login_workbranche(self.tid)
-        self.person_num = 1  # 进线客户数
+        self.person_num = 2  # 进线客户数
         self.interrelation_num = 2  # 相互交互次数
         # print(f"self.serviceId >>>>：{self.serviceId}")
         # print(f"self.tid >>>>：{self.tid}")
@@ -31,14 +31,14 @@ class Interrelation:
         j =0
         while True:
             j += 1
-            score = solved = commentType = j % 2
+            questionStatus = score = solved = commentType = j % 2
             if j <= self.person_num:
                 print(f"这是第{j}个客户")
                 partnerid = "admin" + str(random.randint(10000, 99999))
-                uid, cid = Customer().customer_info_init(partnerid=partnerid, source=str(random.randint(0,4)), channelFlag=str(random.randint(0,5)))
-                rest = Customer().chat_connection(uid=uid, cid=cid)
-                puid = rest.get("puid")
-                status = rest.get("status")
+                uid, cid,pid = Customer().customer_info_init(partnerid=partnerid, source=str(random.randint(0,4)), channelFlag=str(random.randint(0,5)))
+                chat_connection_rest = Customer().chat_connection(uid=uid, cid=cid)
+                puid = chat_connection_rest.get("puid")
+                status = chat_connection_rest.get("status")
                 print(f"走分支前的：puid >>>>：{puid},status >>>>：{status}")
                 if status == 1:
                     i = 1
@@ -53,10 +53,24 @@ class Interrelation:
                                                               content=workbranch_content)
                             i += 1
                         else:
-                            content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                            rest = Customer().satisfaction_message_data(uid)
-                            Customer().comment(cid=cid,uid=uid,solved=solved,remark=self.Fk.text(),commentType=commentType,rest = rest)
+                            # 客服邀请评价
+                            if commentType == 0:
+                                WorkBranch().recomment(tid=self.tid,cid=cid,uid=uid)
+                            # 客服进行服务总结
+                            unit_infos_list = WorkBranch().get_unit_infos(tid=self.tid)
+                            print(f"获取业务单元列表 unit_infos_list >>>：{unit_infos_list}")
+                            fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                            if unit_infos_list:
+                                unitId = [unit_info.get("unitId") for unit_info in unit_infos_list]
+                                unit_body_list,unit_fieldList = WorkBranch().get_unifo_body(tid=self.tid,cid=cid,unitId=unitId)
+                                print(f"获取业务单元列表 unit_body_list >>>：{unit_body_list}, unit_fieldList >>>：{unit_fieldList}")
+                                WorkBranch().submmit_summary(tid=self.tid,uid=uid,cid=cid,pid=pid,questionStatus=questionStatus,questionDescribe=questionDescribe,fields_value=fields_value,
+                                                             unit_infos_list=unit_infos_list, unit_body_list=unit_body_list, unit_fieldList=unit_fieldList)
+                            satisfaction_info = Customer().satisfaction_message_data(uid=uid)
+                            # 客户进行满意度评价
+                            Customer().comment(cid=cid,uid=uid,solved=solved,remark=self.Fk.text(),commentType=commentType,satisfaction_info = satisfaction_info)
                             print(f"评价成功！！！")
+                            # 客户进行留言
                             Customer().allot_leave_msg(uid=uid, content=content)
                             Customer().out_action(uid=uid)
                             break
@@ -70,21 +84,23 @@ class Interrelation:
                             Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                             i += 1
                         else:
-                            content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                            remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                             # 给机器人评价
-                            Customer().comment(cid=cid,uid=uid,score = score,solved=solved,remark=self.Fk.text(),commentType=commentType,rest = rest)
+                            Customer().comment(cid=cid, uid = uid,score=score, tag="回答错误",solved=solved, remark=remark, satisfy_type=0,commentType="1",scoreFlag=0, scoreExplain="",satisfaction_info=None)
+                            # 给机器人留言
                             Customer().allot_leave_msg(uid=uid, content=content)
                             Customer().out_action(uid=uid)
                             break
                 elif status == 6:
                     print(f"查询status 之后，首先走的是status == 6 的分支,然后去获取技能组id")
-                    groupId = rest.get("groupList")[0].get("groupId")
-                    rest = Customer().chat_connection(uid=uid, cid=cid, groupId=groupId)
-                    status = rest.get("status")
+                    groupId = chat_connection_rest.get("groupList")[0].get("groupId")
+                    # 通过groupid 获取新的客服工作状态
+                    chat_connection_rest_bygroupid = Customer().chat_connection(uid=uid, cid=cid, groupId=groupId)
+                    status = chat_connection_rest_bygroupid.get("status")
                     print(f"status == 6 >>>   puid >>>：{puid},status >>>>：{status}")
                     if status == 1:
                         i = 1
-                        print(f"status 节点：6 > 1")
+                        print(f"status节点 6 》 1")
                         while True:
                             if i <= self.interrelation_num:
                                 time.sleep(1)
@@ -96,17 +112,38 @@ class Interrelation:
                                                                   content=workbranch_content)
                                 i += 1
                             else:
-                                content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                                rest = Customer().satisfaction_message_data(uid)
+                                # 客服邀请评价
+                                if commentType == 0:
+                                    WorkBranch().recomment(tid=self.tid, cid=cid, uid=uid)
+                                # 客服进行服务总结
+                                unit_infos_list = WorkBranch().get_unit_infos(tid=self.tid)
+                                print(f"获取业务单元列表 unit_infos_list >>>：{unit_infos_list}")
+                                fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                                if unit_infos_list:
+                                    unitId = [unit_info.get("unitId") for unit_info in unit_infos_list]
+                                    unit_body_list, unit_fieldList = WorkBranch().get_unifo_body(tid=self.tid, cid=cid,
+                                                                                                 unitId=unitId)
+                                    print(
+                                        f"获取业务单元列表 unit_body_list >>>：{unit_body_list}, unit_fieldList >>>：{unit_fieldList}")
+                                    WorkBranch().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
+                                                                 questionStatus=questionStatus,
+                                                                 questionDescribe=questionDescribe,
+                                                                 fields_value=fields_value,
+                                                                 unit_infos_list=unit_infos_list,
+                                                                 unit_body_list=unit_body_list,
+                                                                 unit_fieldList=unit_fieldList)
+                                satisfaction_info = Customer().satisfaction_message_data(uid=uid)
+                                # 客户进行满意度评价
                                 Customer().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
-                                                   commentType=commentType, rest=rest)
+                                                   commentType=commentType, satisfaction_info=satisfaction_info)
                                 print(f"评价成功！！！")
-                                Customer().allot_leave_msg(uid=uid, groupId=groupId, content=content)
+                                # 客户进行留言
+                                Customer().allot_leave_msg(uid=uid, content=content)
                                 Customer().out_action(uid=uid)
                                 break
                     elif status == 2:
                         i = 1
-                        print(f"status 节点：6 > 2")
+                        print(f"status节点 6 》 2")
                         while True:
                             if i <= self.interrelation_num:
                                 time.sleep(1)
@@ -114,11 +151,10 @@ class Interrelation:
                                 Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                                 i += 1
                             else:
-                                content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
+                                remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                                 # 给机器人评价
-                                Customer().comment(cid=cid, uid=uid, score=score, solved=solved, remark=self.Fk.text(),
-                                                   commentType=commentType, rest=rest)
-
+                                Customer().comment(cid=cid, uid = uid,score=score, tag="回答错误",solved=solved, remark=remark, satisfy_type=0,commentType="1",scoreFlag=0, scoreExplain="",satisfaction_info=None)
+                                # 给机器人留言
                                 Customer().allot_leave_msg(uid=uid, content=content)
                                 Customer().out_action(uid=uid)
                                 break
@@ -130,7 +166,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(3, 6):
+    for i in range(4, 6):
         if i == 1:
             value = "AL"
         if i == 2:

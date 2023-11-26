@@ -3,7 +3,6 @@
 # @Function：客服工作台
 import os
 import sys
-
 # root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # print("root_path的值为：%s" % root_path)
 # sys.path.append(root_path)
@@ -13,8 +12,9 @@ from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
 
-
+# 客服在线|融合工作台接口集合
 class WorkBranch:
+    # 初始化获取tempid
     def __init__(self):
         config_detail = load_yaml_file(filepath=r"/config_file/operation_config.yml")["config"]
         config_file = load_yaml_file(filepath=r"/config_file/service_data.yml")[f"{config_detail}"]
@@ -37,7 +37,7 @@ class WorkBranch:
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
-        if self.sb == "TX" or "AL":
+        else:
             url = self.host + "/basic-login/account/consoleLogin/4"
             data = json.dumps({
                 "loginUser": loginUser,
@@ -76,11 +76,11 @@ class WorkBranch:
             "token": str(self.tempid)
         }
         response = self.session.get(url, params=params, allow_redirects=False)
-        tid = re.findall("id=(.*?)&lt", json.dumps(str(response.headers)))[0]
-        print(f"tid 的值为：{tid}")
-        return str(tid)
+        online_tid = re.findall("id=(.*?)&lt", json.dumps(str(response.headers)))[0]
+        print(f"tid 的值为：{online_tid}")
+        return str(online_tid)
 
-    # 登录客服工作台
+    # 登录在线客服工作台
     def login_workbranche(self, tid, st="1"):
         url = self.host + "/chat-kwb/admin/aci.action"
         data = {
@@ -98,6 +98,31 @@ class WorkBranch:
         }
         response = self.session.post(url=url, headers=headers, data=data)
         print(response.text)
+
+    # 登录融合工作台
+    def login_mix_workbranche(self,st="1",mix_tid=None):
+        url = self.host + "/chat-kwb/mix/status/login"
+        data = urlencode(
+            {
+                "st": st,
+                "token": self.tempid,
+                "way": "1",
+                "ack": "1"
+            }
+        )
+        headers = {
+            'bNo': self.bno,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url=url, headers=headers,data=data)
+        print(response.text)
+        try:
+            mix_tid = json.loads(response.text).get("tid")
+            return mix_tid
+        except Exception as e:
+            print(f"e 的描述为{e}")
+            return mix_tid
 
     # 发送消息到访客端
     def send_msg_to_customer(self, tid, uid, cid, content=str("工作台：随便发送点啥都行")):
@@ -187,12 +212,13 @@ class WorkBranch:
             try:
                 unit_body_list = json.loads(response.text).get("item").get("typeList")
                 unit_fieldList = json.loads(response.text).get("item").get("fieldList")
-                return unit_info,unit_body_list, unit_fieldList
+                return unit_info, unit_body_list, unit_fieldList
             except Exception as e:
                 print(f"这个服务总结没有业务分类：{e}")
 
     # C、提交服务总结
-    def submmit_summary(self, tid, uid, cid, pid, questionStatus=0, reqTypeIdPath="", reqTypeNamePath="",questionDescribe="",
+    def submmit_summary(self, tid, uid, cid, pid, questionStatus=0, reqTypeIdPath="", reqTypeNamePath="",
+                        questionDescribe="",
                         fields="", fields_value="", unit_info=None, unit_body_list=None, unit_fieldList=None):
         """
         :param fields_value:
@@ -269,13 +295,11 @@ class WorkBranch:
         response = self.session.post(url=url, headers=headers, data=data)
         print(f"\n\n\n提交满意度评价的结果为  >>>：{json.loads(response.text)}\n\n\n\n")
 
+    # V6版的服务总结
+
 
 if __name__ == '__main__':
     pass
     obj = WorkBranch()
-    # serviceId = obj.service_menus()
-    # tid = obj.get_tid(serviceId=serviceId)
-    # obj.login_workbranche(tid=tid)
-    # obj.send_msg_to_customer(tid=tid, uid="", cid="")
-    # rest = obj.get_unit_infos(tid=tid)
-    # print(rest)
+    mix_tid = obj.login_mix_workbranche()
+    print(f"\n\n {mix_tid}\n\n")

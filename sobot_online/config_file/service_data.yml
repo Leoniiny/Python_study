@@ -4,6 +4,7 @@ HK:
   EMAIL: kf_admin3@hk.com
   PWD: THlwMTIzNDU2
   HOST: http://hk.sobot.com
+  HOST2: http://hk.sobot.com
 
 TX:
   Sysbol: TX
@@ -11,6 +12,7 @@ TX:
   EMAIL: zhichi20@163.com
   PWD: bHlwMTIzNDU2
   HOST: https://api-c.soboten.com/text
+  HOST2: https://www.soboten.com
 
 AL:
   Sysbol: AL
@@ -18,6 +20,7 @@ AL:
   EMAIL: aliyqijiancjb04@163.com
   PWD: YWxpMTIzNDU2
   HOST: https://api-c.sobot.com/text
+  HOST2: https://www.sobot.com
 
 XJP:
   Sysbol: XJP
@@ -25,6 +28,7 @@ XJP:
   EMAIL: kf_admin3@sg.com
   PWD: THlwMTIzNDU2
   HOST: https://sg.sobot.com
+  HOST2: https://sg.sobot.com
 
 US:
   Sysbol: US
@@ -32,3 +36,12 @@ US:
   EMAIL: lyp_admin01@us01.com
   PWD: THlwMTIzNDU2
   HOST: https://us.sobot.com
+  HOST2: https://us.sobot.com
+
+TS:
+  Sysbol: TS
+  SYSNUM: 443af7afa23f4c87a8900f178137d09c
+  EMAIL: ceshiqijianxb01@qq.com
+  PWD: THlwMTIzNDU2
+  HOST: https://test.sobot.com
+  HOST2: https://test-branche1.sobot.com

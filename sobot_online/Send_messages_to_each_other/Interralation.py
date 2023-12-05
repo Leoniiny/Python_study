@@ -1,6 +1,7 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：客服-客户相互联系
+# linux 下的路径只能是 /
 import os
 import sys
 
@@ -25,8 +26,8 @@ class Interrelation(ConsoleSetting):
         self.tid = super().get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         super().login_workbranche(self.tid)
-        self.person_num = 2  # 进线客户数
-        self.interrelation_num = 2  # 相互交互次数
+        self.person_num = 10  # 进线客户数
+        self.interrelation_num = 5  # 相互交互次数
 
     # 客户与客服互相发消息
     def interrelation(self):

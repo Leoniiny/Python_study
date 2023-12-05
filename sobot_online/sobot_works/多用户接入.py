@@ -8,9 +8,9 @@ fake = Faker(locale="zh_CN")
 
 
 def died_data(
-              host="https://api-c.sobot.com/text",
-              sysNum="cfd4681074ce4bed904928fb609fc824",
-              groupId="c360e6dfc43d4cbbb232a8ab215a535e"):
+        host="https://api-c.sobot.com/text",
+        sysNum="cfd4681074ce4bed904928fb609fc824",
+        groupId="c360e6dfc43d4cbbb232a8ab215a535e"):
     url = host + "/chat-visit/user/init/v6"
     partnerId = "admin-ali--" + str(random.randint(10000, 99999))
     payload = f'sysNum={sysNum}&source=0&groupId={groupId}&uname={partnerId}&partnerId={partnerId}'
@@ -31,7 +31,7 @@ def died_data(
 
     for i in range(1, 10):
         time.sleep(0.5)
-        content = fake.text() + fake.text() + fake.text() + fake.text()
+        content = fake.text() + fake.text() + fake.text() + fake.text() + fake.text() + fake.text()
         url = host + "/chat-web/message/user/send.action"
         data = urlencode({
             "puid": str(puid),
@@ -43,7 +43,7 @@ def died_data(
             "fileName": "undefined"
         })
         headers = {
-            'bno': {sysNum},
+            'bno': sysNum,
             'content-type': 'application/x-www-form-urlencoded',
         }
         response = requests.post(url, headers=headers, data=data)
@@ -53,6 +53,12 @@ def died_data(
 
 if __name__ == '__main__':
     pass
-    time.sleep(600)
-    for i in range(1, 10):
-        run_data = died_data()
+    m = 0
+    while True:
+        if m <= 10:
+            for i in range(30):
+                died_data()
+            time.sleep(600)
+            m += 1
+        else:
+            break

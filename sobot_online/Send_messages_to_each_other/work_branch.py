@@ -57,16 +57,7 @@ class WorkBranch:
         response = self.session.post(url, headers=headers, data=data)
         self.tempid = json.loads(response.text).get("item")
         print(f"self.tempid >>>  ：{self.tempid}")
-        # # 登录融合工作台需要获取access_token:
-        # mix_url = self.host2 + "/tokens/getToken"
-        # mix_headers ={
-        #         'Content-Type': 'application/x-www-form-urlencoded',
-        #         "temp-id": self.tempid
-        #     }
-        # mix_response = self.session.post(url = mix_url, headers=mix_headers)
-        # print(f"mix_response >>>  ：{mix_response.text},类型为：{type(mix_response.text)}")
-        # self.accessToken = json.loads(mix_response.text).get("accessToken")
-        # print(f"self.accessToken >>>  ：{self.accessToken}")
+
 
     # 获取客服信息配置
     def service_menus(self):
@@ -310,46 +301,7 @@ class WorkBranch:
         response = self.session.post(url=url, headers=headers, data=data)
         print(f"\n\n\n提交满意度评价的结果为  >>>：{json.loads(response.text)}\n\n\n\n")
 
-    # # V6版的服务总结
-    # # V6版的服务总结的分类
-    # def V6_summary_list(self):
-    #     url = self.host + "/callservice/v6/cc-config/summary-classifies"
-    #     if self.sb == "TS":
-    #         url = self.host2 + "/callservice/v6/cc-config/summary-classifies"
-    #     params = {
-    #         "planType" : 1
-    #     }
-    #     headers = {
-    #         'authorization': 'Bearer ' + self.accessToken
-    #                     }
-    #     resp = self.session.get(url = url, headers=headers, params=params)
-    #     V6_summary_list = json.loads(resp.text).get("data")
-    #     print(f"\n \n V6_summary_list 的值为{V6_summary_list}\n \n")
-    #     return V6_summary_list
-    #
-    # # V6服务总结的模板
-    # def get_templates(self):
-    #     url = self.host + "/callservice/v6/cc-config/templates"
-    #     if self.sb == "TS":
-    #         url = self.host2 +"/callservice/v6/cc-config/templates"
-    #     json_data = {
-    #         "currPage": 1,
-    #         "pageSize": -1
-    #     }
-    #     headers = {
-    #         'authorization': 'Bearer ' + self.accessToken,
-    #         "content-type":"application/json;charset=utf-8",
-    #         "temp-id": self.tempid
-    #                          }
-    #     resp = self.session.post(url = url, headers=headers, json=json_data)
-    #     print(f"\n resp.text 的值为{resp.text} \n")
-    #     template_list=[]
-    #     try:
-    #         template_list = json.loads(resp.text).get("data").get("list")
-    #         return template_list
-    #     except Exception as e:
-    #         print(f"e 的结果为：{e}")
-    #         return template_list
+
 
 
 if __name__ == '__main__':

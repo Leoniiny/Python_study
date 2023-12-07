@@ -11,11 +11,11 @@ sys.path.append(root_path)
 
 from faker import Faker
 from sobot_online.Send_messages_to_each_other.Guest_side import Customer
-from sobot_online.Send_messages_to_each_other.console_setting import ConsoleSetting
+from sobot_online.Send_messages_to_each_other.work_branch import WorkBranch
 from sobot_online.common.file_dealing import *
 
 
-class Interrelation(ConsoleSetting):
+class Interrelation(WorkBranch):
     def __init__(self):
         super().__init__()
         self.Fk = Faker(locale="zh_CN")
@@ -40,7 +40,7 @@ class Interrelation(ConsoleSetting):
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
                 source = random.randint(0,1)
                 print(f"\nsource 的值为  >>>>：{source}\n\n")
-                channelFlag_list = ConsoleSetting().get_child_source(channelType=source)
+                channelFlag_list = super().get_child_source(channelType=source)
                 channelFlag = random.choice(channelFlag_list)
                 print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
                 if face_num == 1:
@@ -49,7 +49,7 @@ class Interrelation(ConsoleSetting):
                     file_content = (
                         f"p{img_num}.jpg", open(DATA_PATH + fr"/imgs/p{img_num}.jpg", mode="rb"), 'image/jpg'
                     )
-                    face = ConsoleSetting().uploading_images(file_content=file_content)
+                    face = super().uploading_images(file_content=file_content)
                     # print(f"\nface 的值为  >>>>：{face}\n\n")
                 else:
                     face = ""

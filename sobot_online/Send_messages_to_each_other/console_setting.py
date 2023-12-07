@@ -12,14 +12,53 @@
 # print("root_path的值为：%s" % root_path)
 # sys.path.append(root_path)
 
-from sobot_online.Send_messages_to_each_other.work_branch import WorkBranch
 from sobot_online.common.file_dealing import *
-import json, re
+import requests, re, json, base64,random
+from urllib.parse import urlencode
 
 
-class ConsoleSetting(WorkBranch):
+class ConsoleSetting:
     def __init__(self):
-        super().__init__()
+        config_detail = load_yaml_file(filepath=r"/config_file/operation_config.yml")["config"]
+        config_file = load_yaml_file(filepath=r"/config_file/service_data.yml")[f"{config_detail}"]
+        loginPwd = config_file["PWD"]
+        loginUser = config_file["EMAIL"]
+        self.host = config_file["HOST"]
+        try:
+            self.host2 = config_file["HOST2"]
+            print(f"\nself.host2的值为：{self.host2}\n")
+        except Exception as e:
+            print(f"e 的值为{e}")
+        self.bno = config_file["SYSNUM"]
+        self.sb = config_file["Sysbol"]
+        self.session = requests.session()
+        if self.sb == "HK":
+            url = self.host + "/basic-login/serviceLogin/4"
+            data = {
+                "loginUser": loginUser,
+                "loginPwd": loginPwd,
+                "randomKey": "",
+                "loginFlag": "1",
+                "terminalCode": ""
+            }
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        else:
+            url = self.host + "/basic-login/account/consoleLogin/4"
+            data = json.dumps({
+                "loginUser": loginUser,
+                "loginPwd": str(loginPwd),
+                "randomKey": "",
+                "loginFlag": "1",
+                "terminalCode": ""
+            })
+            headers = {
+                'Content-Type': 'application/json',
+            }
+        response = self.session.post(url, headers=headers, data=data)
+        self.tempid = json.loads(response.text).get("item")
+        print(f"self.tempid >>>  ：{self.tempid}")
 
     # 上传图片
     def uploading_images(self, file_content=None):

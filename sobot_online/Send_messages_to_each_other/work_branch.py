@@ -1,63 +1,16 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：客服工作台
-import os
-import sys
-# root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# print("root_path的值为：%s" % root_path)
-# sys.path.append(root_path)
-
-import requests, re, json, base64
+import requests, re, json, base64,random
+from sobot_online.Send_messages_to_each_other.console_setting import ConsoleSetting
 from urllib.parse import urlencode
-from sobot_online.common.file_dealing import *
 
 
 # 客服在线接口集合
-class WorkBranch:
+class WorkBranch(ConsoleSetting):
     # 初始化获取tempid
     def __init__(self):
-        config_detail = load_yaml_file(filepath=r"/config_file/operation_config.yml")["config"]
-        config_file = load_yaml_file(filepath=r"/config_file/service_data.yml")[f"{config_detail}"]
-        # print(f"config_file  类运行前运行了这个代码{config_file}")
-        loginPwd = config_file["PWD"]
-        loginUser = config_file["EMAIL"]
-        self.host = config_file["HOST"]
-        try:
-            self.host2 = config_file["HOST2"]
-            print(f"\nself.host2的值为：{self.host2}\n")
-        except Exception as e:
-            print(f"e 的值为{e}")
-        self.bno = config_file["SYSNUM"]
-        self.sb = config_file["Sysbol"]
-        self.session = requests.session()
-        if self.sb == "HK":
-            url = self.host + "/basic-login/serviceLogin/4"
-            data = {
-                "loginUser": loginUser,
-                "loginPwd": loginPwd,
-                "randomKey": "",
-                "loginFlag": "1",
-                "terminalCode": ""
-            }
-            headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            }
-        else:
-            url = self.host + "/basic-login/account/consoleLogin/4"
-            data = json.dumps({
-                "loginUser": loginUser,
-                "loginPwd": str(loginPwd),
-                "randomKey": "",
-                "loginFlag": "1",
-                "terminalCode": ""
-            })
-            headers = {
-                'Content-Type': 'application/json',
-            }
-        response = self.session.post(url, headers=headers, data=data)
-        self.tempid = json.loads(response.text).get("item")
-        print(f"self.tempid >>>  ：{self.tempid}")
-
+        super().__init__()
 
     # 获取客服信息配置
     def service_menus(self):
@@ -68,7 +21,7 @@ class WorkBranch:
         }
         response = self.session.get(url, headers=headers)
         serviceId = json.loads(response.text).get("item").get("serviceId")
-        # print(f"serviceId  的值：{serviceId}")
+        print(f"serviceId  的值：{serviceId}")
         return serviceId
 
     # 获取工作台tid
@@ -105,30 +58,6 @@ class WorkBranch:
         response = self.session.post(url=url, headers=headers, data=data)
         print(response.text)
 
-    # 登录融合工作台
-    def login_mix_workbranche(self,st="1",mix_tid=None):
-        url = self.host + "/chat-kwb/mix/status/login"
-        data = urlencode(
-            {
-                "st": st,
-                "token": self.tempid,
-                "way": "1",
-                "ack": "1"
-            }
-        )
-        headers = {
-            'bNo': self.bno,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'temp-id': self.tempid
-        }
-        response = self.session.post(url=url, headers=headers,data=data)
-        print(response.text)
-        try:
-            mix_tid = json.loads(response.text).get("tid")
-            return mix_tid
-        except Exception as e:
-            print(f"e 的描述为{e}")
-            return mix_tid
 
     # 发送消息到访客端
     def send_msg_to_customer(self, tid, uid, cid, content=str("工作台：随便发送点啥都行")):
@@ -307,6 +236,7 @@ class WorkBranch:
 if __name__ == '__main__':
     pass
     obj = WorkBranch()
+    obj.service_menus()
     # mix_tid = obj.login_mix_workbranche()
     # print(f"\n\n {mix_tid}\n\n")
     # obj.V6_summary_list()

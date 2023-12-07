@@ -26,31 +26,38 @@ class Interrelation(ConsoleSetting):
         self.tid = super().get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         super().login_workbranche(self.tid)
-        self.person_num = 10  # 进线客户数
-        self.interrelation_num = 5  # 相互交互次数
+        self.person_num = 2  # 进线客户数
+        self.interrelation_num = 2 # 相互交互次数
 
     # 客户与客服互相发消息
     def interrelation(self):
-        j =0
+        j = 0
         while True:
             j += 1
             if j <= self.person_num:
                 # 设置访客信息
                 print(f"这是第{j}个客户")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
+                source = random.randint(0,1)
+                print(f"\nsource 的值为  >>>>：{source}\n\n")
+                channelFlag_list = ConsoleSetting().get_child_source(channelType=source)
+                channelFlag = random.choice(channelFlag_list)
+                print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
                 if face_num == 1:
                     img_num = random.randint(1, 30)
-                    print(f"\n\nimg_num 的值为：{img_num}\n\n")
+                    # print(f"\n\nimg_num 的值为：{img_num}\n\n")
                     file_content = (
-                    f"p{img_num}.jpg", open(DATA_PATH + fr"/imgs/p{img_num}.jpg", mode="rb"), 'image/jpg'
+                        f"p{img_num}.jpg", open(DATA_PATH + fr"/imgs/p{img_num}.jpg", mode="rb"), 'image/jpg'
                     )
                     face = ConsoleSetting().uploading_images(file_content=file_content)
-                    print(f"\nface 的值为  >>>>：{face}\n\n")
+                    # print(f"\nface 的值为  >>>>：{face}\n\n")
                 else:
                     face = ""
-                partnerid = "admin"+ str(random.randint(100000,999999))
-                uname = "客户-"+self.Fk.name()+"-" + partnerid
-                uid, cid,pid = Customer().customer_info_init(partnerid=partnerid,uname = uname, source=str(random.randint(0,4)), face=face,channelFlag=str(random.randint(0,5)),isVip=str(isVip))
+                partnerid = "admin" + str(random.randint(100000, 999999))
+                uname = "客户-" + self.Fk.name() + "-" + partnerid
+                uid, cid, pid = Customer().customer_info_init(partnerid=partnerid, uname=uname,
+                                                              source=source, face=face,
+                                                              channelFlag=channelFlag, isVip=str(isVip))
                 chat_connection_rest = Customer().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
                 status = chat_connection_rest.get("status")
@@ -65,21 +72,27 @@ class Interrelation(ConsoleSetting):
                             workbranch_content = self.Fk.paragraph()
                             Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid, content=customer_content)
                             super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
-                                                              content=workbranch_content)
+                                                         content=workbranch_content)
                             i += 1
                         else:
                             # 客服邀请评价： commentType == 0 为客服邀请评价
                             if commentType == 0:
-                                super().recomment(tid=self.tid,cid=cid,uid=uid)
+                                super().recomment(tid=self.tid, cid=cid, uid=uid)
                             # 客服进行服务总结
                             fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                            unit_info,unit_body_list,unit_fieldList = super().get_unifo_body(tid=self.tid,cid=cid)
-                            print(f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n",sep="\n")
-                            super().submmit_summary(tid=self.tid,uid=uid,cid=cid,pid=pid,questionStatus=questionStatus,questionDescribe=questionDescribe,fields_value=fields_value,
-                                                         unit_info=unit_info, unit_body_list=unit_body_list, unit_fieldList=unit_fieldList)
+                            unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid, cid=cid)
+                            print(
+                                f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n",
+                                sep="\n")
+                            super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
+                                                    questionStatus=questionStatus, questionDescribe=questionDescribe,
+                                                    fields_value=fields_value,
+                                                    unit_info=unit_info, unit_body_list=unit_body_list,
+                                                    unit_fieldList=unit_fieldList)
                             # 客户进行满意度评价
                             satisfaction_info = Customer().satisfaction_message_data(uid=uid)
-                            Customer().comment(cid=cid,uid=uid,solved=solved,remark=self.Fk.text(),commentType=commentType,satisfaction_info = satisfaction_info)
+                            Customer().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
+                                               commentType=commentType, satisfaction_info=satisfaction_info)
                             print(f"\n\n客户进行满意度评价 评价成功！！！\n\n")
                             # 客户进行留言
                             Customer().allot_leave_msg(uid=uid, content=content)
@@ -97,7 +110,9 @@ class Interrelation(ConsoleSetting):
                         else:
                             remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                             # 给机器人评价
-                            Customer().comment(cid=cid, uid = uid,score=score, tag="回答错误",solved=solved, remark=remark, satisfy_type=0,commentType="1",scoreFlag=0, scoreExplain="",satisfaction_info=None)
+                            Customer().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved, remark=remark,
+                                               satisfy_type=0, commentType="1", scoreFlag=0, scoreExplain="",
+                                               satisfaction_info=None)
                             # 给机器人留言
                             Customer().allot_leave_msg(uid=uid, content=content)
                             Customer().out_action(uid=uid)
@@ -120,7 +135,7 @@ class Interrelation(ConsoleSetting):
                                 Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid,
                                                                       content=customer_content)
                                 super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
-                                                                  content=workbranch_content)
+                                                             content=workbranch_content)
                                 i += 1
                             else:
                                 # 客服邀请评价： commentType == 0 为客服邀请评价
@@ -129,16 +144,16 @@ class Interrelation(ConsoleSetting):
                                 # 客服进行服务总结
                                 fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                                 unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,
-                                                                                                        cid=cid)
+                                                                                                   cid=cid)
                                 print(
                                     f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n",
                                     sep="\n")
                                 super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
-                                                             questionStatus=questionStatus,
-                                                             questionDescribe=questionDescribe,
-                                                             fields_value=fields_value,
-                                                             unit_info=unit_info, unit_body_list=unit_body_list,
-                                                             unit_fieldList=unit_fieldList)
+                                                        questionStatus=questionStatus,
+                                                        questionDescribe=questionDescribe,
+                                                        fields_value=fields_value,
+                                                        unit_info=unit_info, unit_body_list=unit_body_list,
+                                                        unit_fieldList=unit_fieldList)
                                 # 客户进行满意度评价
                                 satisfaction_info = Customer().satisfaction_message_data(uid=uid)
                                 Customer().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
@@ -160,7 +175,9 @@ class Interrelation(ConsoleSetting):
                             else:
                                 remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                                 # 给机器人评价
-                                Customer().comment(cid=cid, uid = uid,score=score, tag="回答错误",solved=solved, remark=remark, satisfy_type=0,commentType="1",scoreFlag=0, scoreExplain="",satisfaction_info=None)
+                                Customer().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved,
+                                                   remark=remark, satisfy_type=0, commentType="1", scoreFlag=0,
+                                                   scoreExplain="", satisfaction_info=None)
                                 # 给机器人留言
                                 Customer().allot_leave_msg(uid=uid, content=content)
                                 Customer().out_action(uid=uid)

@@ -12,7 +12,7 @@ from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
 
 
-# 客服在线|融合工作台接口集合
+# 客服在线接口集合
 class WorkBranch:
     # 初始化获取tempid
     def __init__(self):

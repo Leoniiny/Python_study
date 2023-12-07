@@ -41,10 +41,12 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd",uname="", source=str(random.randint(0, 4)), channelFlag=None, face="",isVip="0"):
+    def customer_info_init(self, partnerid: str = "nnnd",uname="", source=0, channelFlag=None, face="",isVip="0"):
         """
+        :param isVip:
+        :param uname:
         :param partnerid:
-        :param source: 0:桌面网站,1:微信,2:APP,3:微博,4:移动网站,9：企业微信,10：微信小程序
+        :param source: 0web，1移动，2APP，3微信
         :param channelFlag:
         :param face:
         :return:

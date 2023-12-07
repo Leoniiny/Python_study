@@ -35,11 +35,15 @@ class Interrelation(WorkBranch,Customer):
                 # 设置访客信息
                 print(f"这是第{j}个客户")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
-                # source = random.randint(0,9)
-                source = random.randint(0,1)
+                source = random.choice([0,4])
+                # source = 4
                 print(f"\nsource 的值为  >>>>：{source}\n\n")
-                if source >= 2:
-                    channelFlag = ""
+                if source == 4:
+                    channelFlag_list = super().get_child_source(channelType=1)
+                    if channelFlag_list:
+                        channelFlag = random.choice(channelFlag_list)
+                    else:
+                        channelFlag=""
                 else:
                     channelFlag_list = super().get_child_source(channelType=source)
                     if channelFlag_list:

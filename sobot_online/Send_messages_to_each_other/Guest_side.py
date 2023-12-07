@@ -96,6 +96,7 @@ class Customer:
         }
         response = self.session.post(url, headers=headers, data=data)
         rest = json.loads(response.text)
+        print(f"rest 的值为：{rest}")
         uid = rest["uid"]
         cid = rest["cid"]
         pid = rest["pid"]
@@ -307,4 +308,4 @@ if __name__ == '__main__':
     # obj.allot_leave_msg(uid="3cddfeb0e813a53aa8092b692bd8412e", groupId="e1536b360f61457789b1d3338f01c5ae")
     # config_detail = load_yaml_file(
     # obj.satisfaction_message_data(uid="7d3e78b4b34d46d7b8e1ef3c4b71b5a1")
-    obj.customer_info_init()
+    obj.customer_info_init(source=8, channelFlag="")

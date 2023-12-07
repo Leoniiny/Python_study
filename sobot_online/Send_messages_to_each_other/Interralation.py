@@ -38,11 +38,18 @@ class Interrelation(WorkBranch):
                 # 设置访客信息
                 print(f"这是第{j}个客户")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
+                # source = random.randint(0,9)
                 source = random.randint(0,1)
                 print(f"\nsource 的值为  >>>>：{source}\n\n")
-                channelFlag_list = super().get_child_source(channelType=source)
-                channelFlag = random.choice(channelFlag_list)
-                print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
+                if source >= 2:
+                    channelFlag = ""
+                else:
+                    channelFlag_list = super().get_child_source(channelType=source)
+                    if channelFlag_list:
+                        channelFlag = random.choice(channelFlag_list)
+                    else:
+                        channelFlag=""
+                    print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
                 if face_num == 1:
                     img_num = random.randint(1, 30)
                     # print(f"\n\nimg_num 的值为：{img_num}\n\n")
@@ -190,7 +197,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1, 2):
+    for i in range(1, 6):
         if i == 1:
             value = "AL"
         if i == 2:

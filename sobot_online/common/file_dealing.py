@@ -1,12 +1,6 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：
-import os
-import sys
-root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print("root_path的值为：%s" %root_path)
-sys.path.append(root_path)
-
 from sobot_online.common.utils import *
 import pandas,sys
 import yaml

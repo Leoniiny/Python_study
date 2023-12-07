@@ -3,18 +3,8 @@
 # @File : console_setting.py
 # @Software: PyCharm
 # @Function:控制台 设置
-
-
-# import os
-# import sys
-#
-# root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# print("root_path的值为：%s" % root_path)
-# sys.path.append(root_path)
-
 from sobot_online.common.file_dealing import *
-import requests, re, json, base64,random
-from urllib.parse import urlencode
+import requests, re, json
 
 
 class ConsoleSetting:
@@ -81,6 +71,7 @@ class ConsoleSetting:
             print(f"\n response 的结果为：{json.loads(response.text)}；\n\ne 的返回值为：{e}；\n")
             return img_url
 
+    # 获取PC\h5 的所有子渠道
     def get_child_source(self, channelType=1):
         """
         :param channelType: 0web，1移动，2APP，3微信

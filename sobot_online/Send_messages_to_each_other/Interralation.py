@@ -15,13 +15,10 @@ from sobot_online.Send_messages_to_each_other.work_branch import WorkBranch
 from sobot_online.common.file_dealing import *
 
 
-class Interrelation(WorkBranch):
+class Interrelation(WorkBranch,Customer):
     def __init__(self):
         super().__init__()
         self.Fk = Faker(locale="zh_CN")
-        # self.WK = WorkBranch()
-        # self.serviceId = self.WK.service_menus()
-        # self.tid = self.WK.get_tid(self.serviceId)
         self.serviceId = super().service_menus()
         self.tid = super().get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
@@ -52,12 +49,10 @@ class Interrelation(WorkBranch):
                     print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
                 if face_num == 1:
                     img_num = random.randint(1, 30)
-                    # print(f"\n\nimg_num 的值为：{img_num}\n\n")
                     file_content = (
                         f"p{img_num}.jpg", open(DATA_PATH + fr"/imgs/p{img_num}.jpg", mode="rb"), 'image/jpg'
                     )
                     face = super().uploading_images(file_content=file_content)
-                    # print(f"\nface 的值为  >>>>：{face}\n\n")
                 else:
                     face = ""
                 partnerid = "admin" + str(random.randint(100000, 999999))
@@ -97,13 +92,13 @@ class Interrelation(WorkBranch):
                                                     unit_info=unit_info, unit_body_list=unit_body_list,
                                                     unit_fieldList=unit_fieldList)
                             # 客户进行满意度评价
-                            satisfaction_info = Customer().satisfaction_message_data(uid=uid)
-                            Customer().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
+                            satisfaction_info = super().satisfaction_message_data(uid=uid)
+                            super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
                                                commentType=commentType, satisfaction_info=satisfaction_info)
                             print(f"\n\n客户进行满意度评价 评价成功！！！\n\n")
                             # 客户进行留言
-                            Customer().allot_leave_msg(uid=uid, content=content)
-                            Customer().out_action(uid=uid)
+                            super().allot_leave_msg(uid=uid, content=content)
+                            super().out_action(uid=uid)
                             break
                 elif status == 2:
                     i = 1
@@ -112,17 +107,17 @@ class Interrelation(WorkBranch):
                         if i <= self.interrelation_num:
                             time.sleep(1)
                             customer_content = self.Fk.text()
-                            Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
+                            super().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                             i += 1
                         else:
                             remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                             # 给机器人评价
-                            Customer().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved, remark=remark,
+                            super().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved, remark=remark,
                                                satisfy_type=0, commentType="1", scoreFlag=0, scoreExplain="",
                                                satisfaction_info=None)
                             # 给机器人留言
-                            Customer().allot_leave_msg(uid=uid, content=content)
-                            Customer().out_action(uid=uid)
+                            super().allot_leave_msg(uid=uid, content=content)
+                            super().out_action(uid=uid)
                             break
                 elif status == 6:
                     print(f"\n\n查询status 之后，首先走的是status == 6 的分支,然后去获取技能组id\n\n")
@@ -139,7 +134,7 @@ class Interrelation(WorkBranch):
                                 time.sleep(1)
                                 customer_content = self.Fk.text()
                                 workbranch_content = self.Fk.paragraph()
-                                Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid,
+                                super().send_message_to_workbranch(puid=puid, uid=uid, cid=cid,
                                                                       content=customer_content)
                                 super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
                                                              content=workbranch_content)
@@ -162,13 +157,13 @@ class Interrelation(WorkBranch):
                                                         unit_info=unit_info, unit_body_list=unit_body_list,
                                                         unit_fieldList=unit_fieldList)
                                 # 客户进行满意度评价
-                                satisfaction_info = Customer().satisfaction_message_data(uid=uid)
-                                Customer().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
+                                satisfaction_info = super().satisfaction_message_data(uid=uid)
+                                super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
                                                    commentType=commentType, satisfaction_info=satisfaction_info)
                                 print(f"\n\n  6 --->> 1  客户进行满意度评价评价成功！！！\n\n")
                                 # 客户进行留言
-                                Customer().allot_leave_msg(uid=uid, content=content)
-                                Customer().out_action(uid=uid)
+                                super().allot_leave_msg(uid=uid, content=content)
+                                super().out_action(uid=uid)
                                 break
                     elif status == 2:
                         i = 1
@@ -177,17 +172,17 @@ class Interrelation(WorkBranch):
                             if i <= self.interrelation_num:
                                 time.sleep(1)
                                 customer_content = self.Fk.text()
-                                Customer().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
+                                super().send_message_to_robot(uid=uid, cid=cid, requestText=customer_content)
                                 i += 1
                             else:
                                 remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                                 # 给机器人评价
-                                Customer().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved,
+                                super().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved,
                                                    remark=remark, satisfy_type=0, commentType="1", scoreFlag=0,
                                                    scoreExplain="", satisfaction_info=None)
                                 # 给机器人留言
-                                Customer().allot_leave_msg(uid=uid, content=content)
-                                Customer().out_action(uid=uid)
+                                super().allot_leave_msg(uid=uid, content=content)
+                                super().out_action(uid=uid)
                                 break
             else:
                 break
@@ -197,7 +192,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1, 6):
+    for i in range(1, 2):
         if i == 1:
             value = "AL"
         if i == 2:

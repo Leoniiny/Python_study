@@ -2,14 +2,6 @@
 # encoding: utf-8 -*-
 # @Function：访客端
 # 在linux 环境中运行，需要将项目 根目录 路径添加到python 的环境变量中
-import os
-import sys
-
-# root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# print("root_path的值为：%s" % root_path)
-# sys.path.append(root_path)
-
-import json, re
 import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *

@@ -10,7 +10,7 @@ fake = Faker(locale="zh_CN")
 def died_data(
         host="https://api-c.sobot.com/text",
         sysNum="cfd4681074ce4bed904928fb609fc824",
-        groupId="c360e6dfc43d4cbbb232a8ab215a535e"):
+        groupId="75e16546892a4c5fa9fe07bbf9763e3b"):
     url = host + "/chat-visit/user/init/v6"
     partnerId = "admin-ali--" + str(random.randint(10000, 99999))
     payload = f'sysNum={sysNum}&source=0&groupId={groupId}&uname={partnerId}&partnerId={partnerId}'
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     m = 0
     while True:
         if m <= 10:
-            for i in range(30):
+            for i in range(5):
                 died_data()
             time.sleep(600)
             m += 1

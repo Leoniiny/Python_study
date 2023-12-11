@@ -15,16 +15,16 @@ from sobot_online.Send_messages_to_each_other.work_branch import WorkBranch
 from sobot_online.common.file_dealing import *
 
 
-class Interrelation(WorkBranch,Customer):
-    def __init__(self):
+class Interrelation(WorkBranch, Customer):
+    def __init__(self, person_num=1, interrelation_num=2):
         super().__init__()
         self.Fk = Faker(locale="zh_CN")
         self.serviceId = super().service_menus()
         self.tid = super().get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
         super().login_workbranche(self.tid)
-        self.person_num = 2  # 进线客户数
-        self.interrelation_num = 2 # 相互交互次数
+        self.person_num = person_num  # 进线客户数
+        self.interrelation_num = interrelation_num  # 相互交互次数
 
     # 客户与客服互相发消息
     def interrelation(self):
@@ -35,22 +35,15 @@ class Interrelation(WorkBranch,Customer):
                 # 设置访客信息
                 print(f"这是第{j}个客户")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
-                source = random.choice([0,4])
+                source = random.choice([0, 1])
                 # source = 4
                 print(f"\nsource 的值为  >>>>：{source}\n\n")
-                if source == 4:
-                    channelFlag_list = super().get_child_source(channelType=1)
-                    if channelFlag_list:
-                        channelFlag = random.choice(channelFlag_list)
-                    else:
-                        channelFlag=""
+                channelFlag_list = super().get_child_source(channelType=source)
+                if channelFlag_list:
+                    channelFlag = random.choice(channelFlag_list)
                 else:
-                    channelFlag_list = super().get_child_source(channelType=source)
-                    if channelFlag_list:
-                        channelFlag = random.choice(channelFlag_list)
-                    else:
-                        channelFlag=""
-                    print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
+                    channelFlag = ""
+                print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
                 if face_num == 1:
                     img_num = random.randint(1, 30)
                     file_content = (
@@ -59,8 +52,8 @@ class Interrelation(WorkBranch,Customer):
                     face = super().uploading_images(file_content=file_content)
                 else:
                     face = ""
-                partnerid = "admin" + str(random.randint(100000, 999999))
-                uname = "客户-" + self.Fk.name() + "-" + partnerid
+                partnerid = "test" + str(random.randint(100000, 999999))
+                uname = "访客：" + self.Fk.name() + "-" + partnerid
                 uid, cid, pid = Customer().customer_info_init(partnerid=partnerid, uname=uname,
                                                               source=source, face=face,
                                                               channelFlag=channelFlag, isVip=str(isVip))
@@ -98,7 +91,7 @@ class Interrelation(WorkBranch,Customer):
                             # 客户进行满意度评价
                             satisfaction_info = super().satisfaction_message_data(uid=uid)
                             super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
-                                               commentType=commentType, satisfaction_info=satisfaction_info)
+                                            commentType=commentType, satisfaction_info=satisfaction_info)
                             print(f"\n\n客户进行满意度评价 评价成功！！！\n\n")
                             # 客户进行留言
                             super().allot_leave_msg(uid=uid, content=content)
@@ -117,8 +110,8 @@ class Interrelation(WorkBranch,Customer):
                             remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                             # 给机器人评价
                             super().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved, remark=remark,
-                                               satisfy_type=0, commentType="1", scoreFlag=0, scoreExplain="",
-                                               satisfaction_info=None)
+                                            satisfy_type=0, commentType="1", scoreFlag=0, scoreExplain="",
+                                            satisfaction_info=None)
                             # 给机器人留言
                             super().allot_leave_msg(uid=uid, content=content)
                             super().out_action(uid=uid)
@@ -139,7 +132,7 @@ class Interrelation(WorkBranch,Customer):
                                 customer_content = self.Fk.text()
                                 workbranch_content = self.Fk.paragraph()
                                 super().send_message_to_workbranch(puid=puid, uid=uid, cid=cid,
-                                                                      content=customer_content)
+                                                                   content=customer_content)
                                 super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
                                                              content=workbranch_content)
                                 i += 1
@@ -163,7 +156,7 @@ class Interrelation(WorkBranch,Customer):
                                 # 客户进行满意度评价
                                 satisfaction_info = super().satisfaction_message_data(uid=uid)
                                 super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
-                                                   commentType=commentType, satisfaction_info=satisfaction_info)
+                                                commentType=commentType, satisfaction_info=satisfaction_info)
                                 print(f"\n\n  6 --->> 1  客户进行满意度评价评价成功！！！\n\n")
                                 # 客户进行留言
                                 super().allot_leave_msg(uid=uid, content=content)
@@ -182,8 +175,8 @@ class Interrelation(WorkBranch,Customer):
                                 remark = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                                 # 给机器人评价
                                 super().comment(cid=cid, uid=uid, score=score, tag="回答错误", solved=solved,
-                                                   remark=remark, satisfy_type=0, commentType="1", scoreFlag=0,
-                                                   scoreExplain="", satisfaction_info=None)
+                                                remark=remark, satisfy_type=0, commentType="1", scoreFlag=0,
+                                                scoreExplain="", satisfaction_info=None)
                                 # 给机器人留言
                                 super().allot_leave_msg(uid=uid, content=content)
                                 super().out_action(uid=uid)
@@ -196,7 +189,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1, 2):
+    for i in range(4, 5):
         if i == 1:
             value = "AL"
         if i == 2:
@@ -208,5 +201,5 @@ if __name__ == '__main__':
         if i == 5:
             value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation()
+        obj01 = Interrelation(person_num=10, interrelation_num=5)
         obj01.interrelation()

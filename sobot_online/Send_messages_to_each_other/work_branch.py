@@ -231,8 +231,6 @@ class WorkBranch(ConsoleSetting):
         print(f"\n\n\n提交满意度评价的结果为  >>>：{json.loads(response.text)}\n\n\n\n")
 
 
-
-
 if __name__ == '__main__':
     pass
     obj = WorkBranch()

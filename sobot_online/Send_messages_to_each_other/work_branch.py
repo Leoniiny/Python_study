@@ -58,7 +58,6 @@ class WorkBranch(ConsoleSetting):
         response = self.session.post(url=url, headers=headers, data=data)
         print(response.text)
 
-
     # 发送消息到访客端
     def send_msg_to_customer(self, tid, uid, cid, content=str("工作台：随便发送点啥都行")):
         # tid = "UXpRM2TWy+f1F38hfGISwqBtjjX8YdfyDu/QQAPpy+UYW1u4KZXp90sdBegyJt+T"

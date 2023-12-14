@@ -1,4 +1,3 @@
-import json
 import time
 import requests, random
 from urllib.parse import urlencode
@@ -32,6 +31,7 @@ def died_data(
     for i in range(1, 10):
         time.sleep(0.5)
         content = fake.text() + fake.text() + fake.text() + fake.text() + fake.text() + fake.text()
+        time.sleep(30)  # 每隔30秒发送一条信息
         url = host + "/chat-web/message/user/send.action"
         data = urlencode({
             "puid": str(puid),
@@ -46,7 +46,7 @@ def died_data(
             'bno': sysNum,
             'content-type': 'application/x-www-form-urlencoded',
         }
-        response = requests.post(url, headers=headers, data=data)
+        response = requests.post(url = url, headers=headers, data=data)
         print(f"puid>>>：{puid}, uid>>>:{uid}, cid>>>:{cid}")
         print(f"访客端返回数据response.text>>>:{response.text}")
 
@@ -55,9 +55,13 @@ if __name__ == '__main__':
     pass
     m = 0
     while True:
-        if m <= 10:
+        if m <= 1:
             for i in range(5):
-                died_data()
+                died_data(
+                    host="https://test-branche1.sobot.com/text",
+                    sysNum="443af7afa23f4c87a8900f178137d09c",
+                    groupId="b754056fbeb24da090dc96181b6369d9"
+                )
             time.sleep(600)
             m += 1
         else:

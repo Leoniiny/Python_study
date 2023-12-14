@@ -32,7 +32,7 @@ class ConsoleSetting:
                 "terminalCode": ""
             }
             headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded',
             }
         else:
             url = self.host + "/basic-login/account/consoleLogin/4"

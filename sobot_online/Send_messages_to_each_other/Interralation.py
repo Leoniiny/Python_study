@@ -18,7 +18,12 @@ from sobot_online.common.file_dealing import *
 class Interrelation(WorkBranch, Customer):
     def __init__(self, person_num=1, interrelation_num=2):
         super().__init__()
-        self.Fk = Faker(locale="zh_CN")
+        if self.sb in ["AL", "TX"]:
+            self.Fk = Faker(locale="zh_CN")
+            self.vist_name = "访客"
+        else:
+            self.Fk = Faker(locale="en_GB")
+            self.vist_name = "visitor"
         self.serviceId = super().service_menus()
         self.tid = super().get_tid(self.serviceId)
         # 登录客服工作台，保持客服在线
@@ -37,13 +42,13 @@ class Interrelation(WorkBranch, Customer):
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
                 source = random.choice([0, 1])
                 # source = 4
-                print(f"\nsource 的值为  >>>>：{source}\n\n")
+                print(f"\n\nsource 的值为  >>>>：{source}\n\n")
                 channelFlag_list = super().get_child_source(channelType=source)
                 if channelFlag_list:
                     channelFlag = random.choice(channelFlag_list)
                 else:
                     channelFlag = ""
-                print(f"\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
+                print(f"\n\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
                 if face_num == 1:
                     img_num = random.randint(1, 30)
                     file_content = (
@@ -53,7 +58,7 @@ class Interrelation(WorkBranch, Customer):
                 else:
                     face = ""
                 partnerid = "test" + str(random.randint(100000, 999999))
-                uname = "访客：" + self.Fk.name() + "-" + partnerid
+                uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
                 uid, cid, pid = Customer().customer_info_init(partnerid=partnerid, uname=uname,
                                                               source=source, face=face,
                                                               channelFlag=channelFlag, isVip=str(isVip))
@@ -70,6 +75,7 @@ class Interrelation(WorkBranch, Customer):
                             customer_content = self.Fk.text()
                             workbranch_content = self.Fk.paragraph()
                             Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid, content=customer_content)
+                            time.sleep(5)
                             super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
                                                          content=workbranch_content)
                             i += 1
@@ -80,9 +86,8 @@ class Interrelation(WorkBranch, Customer):
                             # 客服进行服务总结
                             fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
                             unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid, cid=cid)
-                            print(
-                                f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n",
-                                sep="\n")
+                            print(f"\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list}"
+                                  f",unit_fieldList >>>：{unit_fieldList}\n", sep="\n")
                             super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
                                                     questionStatus=questionStatus, questionDescribe=questionDescribe,
                                                     fields_value=fields_value,
@@ -133,6 +138,7 @@ class Interrelation(WorkBranch, Customer):
                                 workbranch_content = self.Fk.paragraph()
                                 super().send_message_to_workbranch(puid=puid, uid=uid, cid=cid,
                                                                    content=customer_content)
+                                time.sleep(5)
                                 super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
                                                              content=workbranch_content)
                                 i += 1
@@ -145,8 +151,7 @@ class Interrelation(WorkBranch, Customer):
                                 unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,
                                                                                                    cid=cid)
                                 print(
-                                    f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n",
-                                    sep="\n")
+                                    f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n")
                                 super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
                                                         questionStatus=questionStatus,
                                                         questionDescribe=questionDescribe,
@@ -189,7 +194,7 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(4, 5):
+    for i in range(1, 5):
         if i == 1:
             value = "AL"
         if i == 2:

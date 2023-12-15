@@ -35,15 +35,18 @@ class Interrelation(WorkBranch, Customer):
     def interrelation(self):
         j = 0
         while True:
+            # j 确定是第几个人进线
             j += 1
             if j <= self.person_num:
-                # 设置访客信息
+                # 初始化访客进线信息
                 print(f"这是第{j}个客户")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
                 source = random.choice([0, 1])
-                # source = 4
                 print(f"\n\nsource 的值为  >>>>：{source}\n\n")
                 channelFlag_list = super().get_child_source(channelType=source)
+                if len(channelFlag_list) < 30:
+                    channel_name = self.Fk.name() + str(random.randint(100,999))
+                    super().add_channel(channelName=channel_name,channelType=source)
                 if channelFlag_list:
                     channelFlag = random.choice(channelFlag_list)
                 else:
@@ -153,8 +156,7 @@ class Interrelation(WorkBranch, Customer):
                                     super().recomment(tid=self.tid, cid=cid, uid=uid)
                                 # 客服进行服务总结
                                 fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                                unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,
-                                                                                                   cid=cid)
+                                unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,cid=cid)
                                 print(
                                     f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n")
                                 super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,

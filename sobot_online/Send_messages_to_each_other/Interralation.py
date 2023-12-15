@@ -71,11 +71,13 @@ class Interrelation(WorkBranch, Customer):
                     print(f"\n\n查询status 之后，首先走的是status == 1 的分支\n\n")
                     while True:
                         if i <= self.interrelation_num:
-                            time.sleep(1)
+                            reply_time = random.randint(1, 5)
+                            print(f"\n\nreply_time 的值为{reply_time}\n\n")
+                            time.sleep(reply_time)
                             customer_content = self.Fk.text()
                             workbranch_content = self.Fk.paragraph()
                             Customer().send_message_to_workbranch(puid=puid, uid=uid, cid=cid, content=customer_content)
-                            time.sleep(5)
+                            time.sleep(reply_time)
                             super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
                                                          content=workbranch_content)
                             i += 1
@@ -100,6 +102,7 @@ class Interrelation(WorkBranch, Customer):
                             print(f"\n\n客户进行满意度评价 评价成功！！！\n\n")
                             # 客户进行留言
                             super().allot_leave_msg(uid=uid, content=content)
+                            # 访客离线
                             super().out_action(uid=uid)
                             break
                 elif status == 2:
@@ -133,12 +136,14 @@ class Interrelation(WorkBranch, Customer):
                         print(f"\n\n查询status 之后，首先走的是status == 1 的分支\n\n")
                         while True:
                             if i <= self.interrelation_num:
-                                time.sleep(1)
+                                reply_time = random.randint(1, 5)
+                                print(f"\n\nreply_time 的值为{reply_time}\n\n")
                                 customer_content = self.Fk.text()
                                 workbranch_content = self.Fk.paragraph()
+                                time.sleep(reply_time)
                                 super().send_message_to_workbranch(puid=puid, uid=uid, cid=cid,
                                                                    content=customer_content)
-                                time.sleep(5)
+                                time.sleep(reply_time)
                                 super().send_msg_to_customer(tid=self.tid, uid=uid, cid=cid,
                                                              content=workbranch_content)
                                 i += 1
@@ -194,7 +199,11 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    for i in range(1, 5):
+    person_num = random.randint(7,15)
+    interrelation_num = random.randint(0,10)
+    print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
+    for i in range(1, 2):
+        value = "AL"
         if i == 1:
             value = "AL"
         if i == 2:
@@ -206,5 +215,5 @@ if __name__ == '__main__':
         if i == 5:
             value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=10, interrelation_num=5)
+        obj01 = Interrelation(person_num=1, interrelation_num=interrelation_num)
         obj01.interrelation()

@@ -38,7 +38,7 @@ class Customer:
         :param isVip:
         :param uname:
         :param partnerid:
-        :param source: 0web，1移动，2APP，3微信
+        :param source: 0:桌面网站,1:微信,2:APP,3:微博,4:移动网站,9：企业微信,10：微信小程序
         :param channelFlag:
         :param face:
         :return:

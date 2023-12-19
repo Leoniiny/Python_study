@@ -41,12 +41,18 @@ class Interrelation(WorkBranch, Customer):
                 # 初始化访客进线信息
                 print(f"这是第{j}个客户")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
-                source = random.choice([0, 1])
+                source = random.choice([0, 4])
                 print(f"\n\nsource 的值为  >>>>：{source}\n\n")
-                channelFlag_list = super().get_child_source(channelType=source)
-                if len(channelFlag_list) < 30:
+                if source == 4:
+                    channelFlag_list = super().get_child_source(channelType="1")
+                else:
+                    channelFlag_list = super().get_child_source(channelType=str(source))
+                if len(channelFlag_list) < 15:
                     channel_name = self.Fk.name() + str(random.randint(100,999))
-                    super().add_channel(channelName=channel_name,channelType=source)
+                    if source == 4:
+                        super().add_channel(channelName=channel_name,channelType="1")
+                    else:
+                        super().add_channel(channelName=channel_name, channelType=str(source))
                 if channelFlag_list:
                     channelFlag = random.choice(channelFlag_list)
                 else:
@@ -62,10 +68,10 @@ class Interrelation(WorkBranch, Customer):
                     face = ""
                 partnerid = "test" + str(random.randint(100000, 999999))
                 uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
-                uid, cid, pid = Customer().customer_info_init(partnerid=partnerid, uname=uname,
+                uid, cid, pid = super().customer_info_init(partnerid=partnerid, uname=uname,
                                                               source=source, face=face,
                                                               channelFlag=channelFlag, isVip=str(isVip))
-                chat_connection_rest = Customer().chat_connection(uid=uid, cid=cid)
+                chat_connection_rest = super().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
                 status = chat_connection_rest.get("status")
                 print(f"\n\n走分支前的：puid >>>>：{puid},status >>>>：{status}\n\n")

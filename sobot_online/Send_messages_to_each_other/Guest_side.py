@@ -33,7 +33,7 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd",uname="", source=0, channelFlag="", face="",isVip="0"):
+    def customer_info_init(self, partnerid: str = "nnnd",uname="", source=0, channelFlag="", face="",isVip="0",tel="",email_num=""):
         """
         :param isVip:
         :param uname:
@@ -53,8 +53,8 @@ class Customer:
                 "tranFlag": "0",
                 "groupId": "",
                 "partnerId": partnerid,
-                "tel": "",
-                "email": "",
+                "tel": tel,
+                "email": email_num,
                 "uname": uname + "--猜猜我是谁",
                 "visitTitle": "",
                 "visitUrl": "",

@@ -82,7 +82,8 @@ class ConsoleSetting:
         params = {
             "channelType": channelType,
             "current": 1,
-            "pageSize": 100
+            "pageSize": 100,
+            "pageNo": 1
         }
         headers = {
             'bno': self.bno,
@@ -134,5 +135,5 @@ if __name__ == '__main__':
     # file_content = (f"p{img_num}.jpg", open(DATA_PATH + fr"\imgs\p{img_num}.jpg", mode="rb"),'image/jpg')
     obj = ConsoleSetting()
     # obj.uploading_images(file_content=file_content)
-    # obj.get_child_source(channelType=1)
+    obj.get_child_source(channelType=1)
     # obj.add_channel(channelName="随便",channelType="1")

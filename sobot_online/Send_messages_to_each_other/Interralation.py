@@ -41,18 +41,20 @@ class Interrelation(WorkBranch, Customer):
                 # 初始化访客进线信息
                 print(f"这是第{j}个客户")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
+                email_num = self.Fk.company_email()
+                tel = self.Fk.phone_number()
                 source = random.choice([0, 4])
                 print(f"\n\nsource 的值为  >>>>：{source}\n\n")
                 if source == 4:
-                    channelFlag_list = super().get_child_source(channelType="1")
+                    channelFlag_list = super().get_child_source(channelType=1)
                 else:
-                    channelFlag_list = super().get_child_source(channelType=str(source))
-                if len(channelFlag_list) < 15:
+                    channelFlag_list = super().get_child_source(channelType=source)
+                if channelFlag_list is None or len(channelFlag_list) < 15:
                     channel_name = self.Fk.name() + str(random.randint(100,999))
                     if source == 4:
-                        super().add_channel(channelName=channel_name,channelType="1")
+                        super().add_channel(channelName=channel_name,channelType=1)
                     else:
-                        super().add_channel(channelName=channel_name, channelType=str(source))
+                        super().add_channel(channelName=channel_name, channelType=source)
                 if channelFlag_list:
                     channelFlag = random.choice(channelFlag_list)
                 else:
@@ -69,7 +71,7 @@ class Interrelation(WorkBranch, Customer):
                 partnerid = "test" + str(random.randint(100000, 999999))
                 uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
                 uid, cid, pid = super().customer_info_init(partnerid=partnerid, uname=uname,
-                                                              source=source, face=face,
+                                                              source=source, face=face,email_num=email_num,tel=tel,
                                                               channelFlag=channelFlag, isVip=str(isVip))
                 chat_connection_rest = super().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
@@ -210,7 +212,7 @@ if __name__ == '__main__':
     person_num = random.randint(7,15)
     interrelation_num = random.randint(0,10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(1, 2):
+    for i in range(5, 6):
         value = "AL"
         if i == 1:
             value = "AL"

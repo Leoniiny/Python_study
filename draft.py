@@ -1,33 +1,15 @@
-import random
-list_zz = [
-0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,
-1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,
-]
-list_0 =  []
-list_1 =[]
-list_2 = []
-m = 0
-n = 0
-o = 0
-for j in range(99):
-  for i in range(100):
-    x =random.choice(list_zz)
-    if x == 0:
-      list_0.append(x)
-    elif x == 1:
-      list_1.append(x)
-  if len(list_0) > len(list_1):
-    m += 1
-  if len(list_0) == len(list_1):
-    n += 1
-  if len(list_0) < len(list_1):
-    o += 1
-print(f"m  的值为：{m},n  的值为：{n},o  的值为：{o}")
+import requests
+
+url = "https://api-c.soboten.com/text/chat-set/rest/selectConfigInfo/4"
+params = {
+  "channelType": 1,
+  "current": 1,
+  "pageSize": 100,
+  "pageNo": 1
+}
+headers = {
+  'bno': '5105b359aa37444284f5b0660a6fed24',
+  'temp-id': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb21wYW55SWQiOiI1MTA1YjM1OWFhMzc0NDQyODRmNWIwNjYwYTZmZWQyNCIsImFnZW50SWQiOiI1YTRkMjA2NTkzNjY0Y2Y2ODUwMjdkZGQzMTkzZWY1NiIsInNlcnZpY2VFbWFpbCI6InpoaWNoaTIwQDE2My5jb20iLCJ6b25lIjoxLCJpc3MiOiJ6aGljaGkyMEAxNjMuY29tIiwiZXhwIjoxNzAzMDQxOTEyLCJ0eXBlIjoiY29uc29sZSJ9.sbpT7yToXcqsxmZLiSy8_hZY-1hrATebj0-nt5IyH4M'
+}
+response = requests.request("GET", url, headers=headers,params=params)
+print(response.text)

@@ -2,7 +2,7 @@
 # encoding: utf-8 -*-
 # @Function：管理中心
 import requests, re, json, base64,random
-from sobot_online.Send_messages_to_each_other.console_setting import ConsoleSetting
+from sobot_online.Send_messages_to_each_other.business_OnlineAgent import ConsoleSetting
 from urllib.parse import urlencode
 
 

@@ -88,7 +88,7 @@ class Customer:
         }
         response = self.session.post(url, headers=headers, data=data)
         rest = json.loads(response.text)
-        print(f"rest 的值为：{rest}")
+        # print(f"rest 的值为：{rest}")
         uid = rest["uid"]
         cid = rest["cid"]
         pid = rest["pid"]
@@ -284,7 +284,7 @@ class Customer:
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
         response = self.session.post(url=url, headers=headers, data=data)
-        print(response.text)
+        print(f"进行满意度评价 response.text>>>:{response.text}")
 
 
 if __name__ == '__main__':

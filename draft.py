@@ -1,15 +1,20 @@
+import requests,json
+from urllib.parse import urlencode
+import requests
 import requests
 
-url = "https://api-c.soboten.com/text/chat-set/rest/selectConfigInfo/4"
-params = {
-  "channelType": 1,
-  "current": 1,
-  "pageSize": 100,
-  "pageNo": 1
-}
+url = "https://api-c-grey.sobot.com/text/chat-kwb/admin/add_blacklist.action"
+data =urlencode( {
+	"sender": "OumStS1Q9ewDRdx73IY3WutAI8u3dc8Df19PIuYDz4Siaut75ESvtauhPufTnD8g",
+	"receiver": "b89d5565235fae5e64de03934fdc2509",
+	"reason": "呵呵呵",
+	"type": ""})
+
+
 headers = {
-  'bno': '5105b359aa37444284f5b0660a6fed24',
-  'temp-id': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb21wYW55SWQiOiI1MTA1YjM1OWFhMzc0NDQyODRmNWIwNjYwYTZmZWQyNCIsImFnZW50SWQiOiI1YTRkMjA2NTkzNjY0Y2Y2ODUwMjdkZGQzMTkzZWY1NiIsInNlcnZpY2VFbWFpbCI6InpoaWNoaTIwQDE2My5jb20iLCJ6b25lIjoxLCJpc3MiOiJ6aGljaGkyMEAxNjMuY29tIiwiZXhwIjoxNzAzMDQxOTEyLCJ0eXBlIjoiY29uc29sZSJ9.sbpT7yToXcqsxmZLiSy8_hZY-1hrATebj0-nt5IyH4M'
+  'bno': 'cfd4681074ce4bed904928fb609fc824',
+  'content-type': 'application/x-www-form-urlencoded',
 }
-response = requests.request("GET", url, headers=headers,params=params)
+response = requests.request("POST", url, headers=headers, data=data)
 print(response.text)
+

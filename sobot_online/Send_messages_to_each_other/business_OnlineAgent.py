@@ -1,6 +1,6 @@
 # @Time : 2023/11/25 23:06
 # @Author : 雷洋平
-# @File : console_setting.py
+# @File : business_OnlineAgent.py
 # @Software: PyCharm
 # @Function:控制台 设置
 from sobot_online.common.file_dealing import *

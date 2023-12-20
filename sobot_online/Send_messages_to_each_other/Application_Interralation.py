@@ -10,8 +10,8 @@ print("root_path的值为：%s" % root_path)
 sys.path.append(root_path)
 
 from faker import Faker
-from sobot_online.Send_messages_to_each_other.Guest_side import Customer
-from sobot_online.Send_messages_to_each_other.work_branch import WorkBranch
+from sobot_online.Send_messages_to_each_other.business_GuestSide import Customer
+from sobot_online.Send_messages_to_each_other.business_WorkBranche import WorkBranch
 from sobot_online.common.file_dealing import *
 
 
@@ -210,7 +210,7 @@ if __name__ == '__main__':
     pass
     # 修改配置文件
     person_num = random.randint(7,15)
-    interrelation_num = random.randint(0,10)
+    interrelation_num = random.randint(1,10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
     for i in range(5, 6):
         value = "AL"

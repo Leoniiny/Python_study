@@ -1,8 +1,8 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：客服工作台
-import requests, re, json, base64,random
-from sobot_online.Send_messages_to_each_other.business_OnlineAgent import ConsoleSetting
+import re, json, random
+from sobot_online.Business_layer.business_OnlineAgent import ConsoleSetting
 from urllib.parse import urlencode
 
 
@@ -229,6 +229,7 @@ class WorkBranch(ConsoleSetting):
         response = self.session.post(url=url, headers=headers, data=data)
         print(f"\n\n\n提交满意度评价的结果为  >>>：{json.loads(response.text)}\n\n\n\n")
 
+    # 访客拉黑
     def add_blacklist(self,tid,uid,reason=""):
         url = self.host + "/chat-kwb/admin/add_blacklist.action"
         data = urlencode(

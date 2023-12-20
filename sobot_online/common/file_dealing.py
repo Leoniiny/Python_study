@@ -1,8 +1,8 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：
-from sobot_online.common.utils import *
-import pandas,sys
+from sobot_online.utils.utils import *
+import pandas
 import yaml
 
 

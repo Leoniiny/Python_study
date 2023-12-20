@@ -10,12 +10,13 @@ print("root_path的值为：%s" % root_path)
 sys.path.append(root_path)
 
 from faker import Faker
-from sobot_online.Send_messages_to_each_other.business_GuestSide import Customer
-from sobot_online.Send_messages_to_each_other.business_WorkBranche import WorkBranch
+from sobot_online.Business_layer.business_GuestSide import Customer
+from sobot_online.Business_layer.business_WorkBranche import WorkBranch
+from sobot_online.Business_layer.business_CRM import CRM
 from sobot_online.common.file_dealing import *
 
 
-class Interrelation(WorkBranch, Customer):
+class Interrelation(WorkBranch, Customer,CRM):
     def __init__(self, person_num=1, interrelation_num=2):
         super().__init__()
         if self.sb in ["AL", "TX"]:
@@ -212,7 +213,7 @@ if __name__ == '__main__':
     person_num = random.randint(7,15)
     interrelation_num = random.randint(1,10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(5, 6):
+    for i in range(1, 6):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -225,5 +226,5 @@ if __name__ == '__main__':
         if i == 5:
             value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=1, interrelation_num=interrelation_num)
+        obj01 = Interrelation(person_num=1, interrelation_num=2)
         obj01.interrelation()

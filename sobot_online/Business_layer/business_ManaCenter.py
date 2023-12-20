@@ -1,9 +1,8 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：管理中心
-import requests, re, json, base64,random
-from sobot_online.Send_messages_to_each_other.business_OnlineAgent import ConsoleSetting
-from urllib.parse import urlencode
+import json
+from sobot_online.Business_layer.business_OnlineAgent import ConsoleSetting
 
 
 class MangeCenter(ConsoleSetting):

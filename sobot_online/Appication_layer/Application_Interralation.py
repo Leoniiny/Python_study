@@ -16,7 +16,7 @@ from sobot_online.Business_layer.business_CRM import CRM
 from sobot_online.common.file_dealing import *
 
 
-class Interrelation(WorkBranch, Customer,CRM):
+class Interrelation(WorkBranch, Customer):
     def __init__(self, person_num=1, interrelation_num=2):
         super().__init__()
         if self.sb in ["AL", "TX"]:
@@ -51,9 +51,9 @@ class Interrelation(WorkBranch, Customer,CRM):
                 else:
                     channelFlag_list = super().get_child_source(channelType=source)
                 if channelFlag_list is None or len(channelFlag_list) < 15:
-                    channel_name = self.Fk.name() + str(random.randint(100,999))
+                    channel_name = self.Fk.name() + str(random.randint(100, 999))
                     if source == 4:
-                        super().add_channel(channelName=channel_name,channelType=1)
+                        super().add_channel(channelName=channel_name, channelType=1)
                     else:
                         super().add_channel(channelName=channel_name, channelType=source)
                 if channelFlag_list:
@@ -72,8 +72,8 @@ class Interrelation(WorkBranch, Customer,CRM):
                 partnerid = "test" + str(random.randint(100000, 999999))
                 uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
                 uid, cid, pid = super().customer_info_init(partnerid=partnerid, uname=uname,
-                                                              source=source, face=face,email_num=email_num,tel=tel,
-                                                              channelFlag=channelFlag, isVip=str(isVip))
+                                                           source=source, face=face, email_num=email_num, tel=tel,
+                                                           channelFlag=channelFlag, isVip=str(isVip))
                 chat_connection_rest = super().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
                 status = chat_connection_rest.get("status")
@@ -165,7 +165,8 @@ class Interrelation(WorkBranch, Customer,CRM):
                                     super().recomment(tid=self.tid, cid=cid, uid=uid)
                                 # 客服进行服务总结
                                 fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                                unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,cid=cid)
+                                unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,
+                                                                                                   cid=cid)
                                 print(
                                     f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n")
                                 super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
@@ -210,10 +211,10 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    person_num = random.randint(7,15)
-    interrelation_num = random.randint(1,10)
+    person_num = random.randint(7, 15)
+    interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(1, 6):
+    for i in range(5, 6):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -227,4 +228,7 @@ if __name__ == '__main__':
             value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
         obj01 = Interrelation(person_num=1, interrelation_num=2)
-        obj01.interrelation()
+        if obj01.serviceId:
+            obj01.interrelation()
+        else:
+            pass

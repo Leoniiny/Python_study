@@ -20,6 +20,7 @@ class WorkBranch(ConsoleSetting):
             'temp-id': self.tempid
         }
         response = self.session.get(url, headers=headers)
+        print(f"response  的值：{response.text}")
         serviceId = json.loads(response.text).get("item").get("serviceId")
         print(f"serviceId  的值：{serviceId}")
         return serviceId
@@ -252,7 +253,3 @@ if __name__ == '__main__':
     pass
     obj = WorkBranch()
     obj.service_menus()
-    # mix_tid = obj.login_mix_workbranche()
-    # print(f"\n\n {mix_tid}\n\n")
-    # obj.V6_summary_list()
-    # obj.get_templates()

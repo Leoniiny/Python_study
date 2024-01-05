@@ -48,8 +48,13 @@ class ConsoleSetting:
                 'Content-Type': 'application/json',
             }
         response = self.session.post(url, headers=headers, data=data)
-        self.tempid = json.loads(response.text).get("item")
-        # print(f"self.tempid >>>  ：{self.tempid}")
+        # print(f"response >>>  ：{response.text}")
+        try:
+            self.tempid = json.loads(response.text).get("item")
+            # print(f"self.tempid >>>  ：{self.tempid}")
+        except Exception as e:
+            print(f"异常原因为 >>>  ：{e}")
+            self.tempid = None
 
     # 上传图片
     def uploading_images(self, file_content=None):

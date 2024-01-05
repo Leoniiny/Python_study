@@ -33,8 +33,11 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def customer_info_init(self, partnerid: str = "nnnd",uname="", source=0, channelFlag="", face="",isVip="0",tel="",email_num=""):
+    def customer_info_init(self, partnerid: str = "nnnd",uname="",
+                           source=0, channelFlag="", face="",isVip="0",tel="",email_num=""):
         """
+        :param email_num:
+        :param tel:
         :param isVip:
         :param uname:
         :param partnerid:

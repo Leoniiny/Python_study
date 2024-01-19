@@ -207,6 +207,8 @@ class Interrelation(WorkBranch, Customer):
                 break
 
 
+
+
 if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
@@ -214,7 +216,7 @@ if __name__ == '__main__':
     person_num = random.randint(7, 15)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(5, 6):
+    for i in range(1, 3):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -227,7 +229,7 @@ if __name__ == '__main__':
         if i == 5:
             value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=1, interrelation_num=2)
+        obj01 = Interrelation(person_num=person_num, interrelation_num=interrelation_num)
         if obj01.serviceId:
             obj01.interrelation()
         else:

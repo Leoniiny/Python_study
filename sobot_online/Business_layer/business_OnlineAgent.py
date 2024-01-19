@@ -23,6 +23,8 @@ class ConsoleSetting:
         self.bno = config_file["SYSNUM"]
         self.sb = config_file["Sysbol"]
         self.session = requests.session()
+        # 关闭多余的链接 用来解决  Max retries exceeded with url
+        self.session.keep_alive = False
         if self.sb == "HK":
             url = self.host + "/basic-login/serviceLogin/4"
             data = {
@@ -47,9 +49,9 @@ class ConsoleSetting:
             headers = {
                 'Content-Type': 'application/json',
             }
-        response = self.session.post(url, headers=headers, data=data)
-        # print(f"response >>>  ：{response.text}")
         try:
+            response = self.session.post(url, headers=headers, data=data)
+            # print(f"response >>>  ：{response.text}")
             self.tempid = json.loads(response.text).get("item")
             # print(f"self.tempid >>>  ：{self.tempid}")
         except Exception as e:

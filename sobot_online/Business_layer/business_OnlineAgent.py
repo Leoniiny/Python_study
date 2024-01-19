@@ -134,6 +134,39 @@ class ConsoleSetting:
         response = self.session.post(url, headers=headers, data=data)
         print(f"\n\n>>>得到的渠道id 为：{json.loads(response.text).get('item').get('channelFlag')}<<<<\n\n")
 
+    # 查询智能路由条数
+    def get_all_route_list(self,srStatus=1,srId_list=None):
+        url = self.host  + f"/chat-set/smartRoute/getAllRouteList/4?srStatus={srStatus}"
+        headers = {
+            'bno': self.bno,
+            'temp-id':self.tempid
+        }
+        response = self.session.get(url, headers=headers)
+        print(response.text)
+        try:
+            srId_list = [srId_info.get("srId") for srId_info in json.loads(response.text).get("items")]
+            print(f"get_all_route_list  >>>>：{srId_list}")
+            return srId_list
+        except Exception as e:
+            print(e)
+            return srId_list
+
+    def modify_route_status(self,srId=None,srStatus=0):
+        url = self.host  + f"/chat-set/smartRoute/modifyRouteStatus/4"
+        data = {
+                   'srId':srId,
+                    'srStatus':srStatus
+        }
+        headers = {
+            'bno': self.bno,
+            'cache-control': 'no-cache',
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid,
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        response = self.session.post( url, headers=headers, data=data)
+        print(response.text)
+
 
 if __name__ == '__main__':
     pass
@@ -142,5 +175,11 @@ if __name__ == '__main__':
     # file_content = (f"p{img_num}.jpg", open(DATA_PATH + fr"\imgs\p{img_num}.jpg", mode="rb"),'image/jpg')
     obj = ConsoleSetting()
     # obj.uploading_images(file_content=file_content)
-    obj.get_child_source(channelType=1)
+    # obj.get_child_source(channelType=1)
     # obj.add_channel(channelName="随便",channelType="1")
+    srId_list = obj.get_all_route_list()
+    try:
+        for i in range(len(srId_list)):
+            obj.modify_route_status(srId_list[i])
+    except Exception:
+        print(f"srId_list  的值为{srId_list}")

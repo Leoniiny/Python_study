@@ -252,4 +252,6 @@ class WorkBranch(ConsoleSetting):
 if __name__ == '__main__':
     pass
     obj = WorkBranch()
-    obj.service_menus()
+    serviceId = obj.service_menus()
+    tid = obj.get_tid(serviceId)
+    obj.service_out(tid)

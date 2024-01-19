@@ -71,9 +71,17 @@ class Interrelation(WorkBranch, Customer):
                     face = ""
                 partnerid = "test" + str(random.randint(100000, 999999))
                 uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
+                # 确定客户信息初始化
                 uid, cid, pid = super().customer_info_init(partnerid=partnerid, uname=uname,
                                                            source=source, face=face, email_num=email_num, tel=tel,
                                                            channelFlag=channelFlag, isVip=str(isVip))
+                # 关闭智能路由
+                srId_list = super().get_all_route_list()
+                try:
+                    for i in range(len(srId_list)):
+                        super().modify_route_status(srId_list[i])
+                except Exception:
+                    print(f"srId_list  的值为{srId_list}")
                 chat_connection_rest = super().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
                 status = chat_connection_rest.get("status")
@@ -208,7 +216,6 @@ class Interrelation(WorkBranch, Customer):
 
 
 
-
 if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
@@ -216,7 +223,7 @@ if __name__ == '__main__':
     person_num = random.randint(7, 15)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(1, 3):
+    for i in range(5, 6):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -229,7 +236,7 @@ if __name__ == '__main__':
         if i == 5:
             value = "US"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=person_num, interrelation_num=interrelation_num)
+        obj01 = Interrelation(person_num=1, interrelation_num=1)
         if obj01.serviceId:
             obj01.interrelation()
         else:

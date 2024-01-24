@@ -82,6 +82,7 @@ class Interrelation(WorkBranch, Customer):
                         super().modify_route_status(srId_list[i])
                 except Exception:
                     print(f"srId_list  的值为{srId_list}")
+                # 访客进线
                 chat_connection_rest = super().chat_connection(uid=uid, cid=cid)
                 puid = chat_connection_rest.get("puid")
                 status = chat_connection_rest.get("status")
@@ -212,8 +213,10 @@ class Interrelation(WorkBranch, Customer):
                                 super().out_action(uid=uid)
                                 break
             else:
+                # 工作台离线
+                super().service_out(uid = self.tid)
+                time.sleep(15)
                 break
-
 
 
 if __name__ == '__main__':
@@ -223,7 +226,7 @@ if __name__ == '__main__':
     person_num = random.randint(7, 15)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(5, 6):
+    for i in range(6, 7):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -235,6 +238,8 @@ if __name__ == '__main__':
             value = "HK"
         if i == 5:
             value = "US"
+        if i == 6:
+            value = "TS"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
         obj01 = Interrelation(person_num=1, interrelation_num=1)
         if obj01.serviceId:

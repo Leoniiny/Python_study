@@ -84,7 +84,7 @@ class WorkBranch(ConsoleSetting):
         response = self.session.post(url, headers=headers, data=payload)
         print(f"工作台返回数据response.text>>>:{response.text}")
 
-    # 调用离线接口
+    # 调用客服离线接口
     def service_out(self, uid):
         url = self.host + "/chat-kwb/admin/out.action"
         data = {
@@ -94,7 +94,7 @@ class WorkBranch(ConsoleSetting):
             "Content - Type": "application / x - www - form - urlencoded"
         }
         response = self.session.post(url, headers=headers, data=data)
-        print(f"response 的值为：{response.text}")
+        print(f"调用客服离线接口 的值为：{response.text}")
 
     # 邀请评价
     def recomment(self, tid, cid, uid):
@@ -109,7 +109,7 @@ class WorkBranch(ConsoleSetting):
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         response = self.session.post(url=url, headers=headers, data=data)
-        print(response.text)
+        print(f"\n邀请评价 的值为：{response.text}\n")
 
     # V1版本提交服务总结
     # A、获取服务总结列表

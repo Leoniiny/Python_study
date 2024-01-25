@@ -2,6 +2,9 @@
 # encoding: utf-8 -*-
 # @Function：客服工作台
 import re, json, random
+
+import requests
+
 from sobot_online.Business_layer.business_OnlineAgent import ConsoleSetting
 from urllib.parse import urlencode
 
@@ -87,13 +90,23 @@ class WorkBranch(ConsoleSetting):
     # 调用客服离线接口
     def service_out(self, uid):
         url = self.host + "/chat-kwb/admin/out.action"
+        headers = {
+            "Content-Type": "application / x - www - form - urlencoded"
+        }
         data = {
             "uid": uid
         }
-        headers = {
-            "Content - Type": "application / x - www - form - urlencoded"
-        }
-        response = self.session.post(url, headers=headers, data=data)
+        if self.sb == "TS":
+            url = self.host2 + "/chat-kwb/admin/out.action"
+            headers = {
+                "Content-Type": "application/json"
+            }
+            data =json.dumps( {
+                "uid": uid
+            })
+            response = self.session.post(url, headers=headers, json=data)
+        else:
+            response = self.session.post(url, headers=headers, data=data)
         print(f"调用客服离线接口 的值为：{response.text}")
 
     # 邀请评价
@@ -254,4 +267,4 @@ if __name__ == '__main__':
     obj = WorkBranch()
     serviceId = obj.service_menus()
     tid = obj.get_tid(serviceId)
-    obj.service_out(tid)
+    obj.service_out(uid=tid)

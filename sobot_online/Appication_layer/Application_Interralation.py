@@ -19,7 +19,7 @@ from sobot_online.common.file_dealing import *
 class Interrelation(WorkBranch, Customer):
     def __init__(self, person_num=1, interrelation_num=2):
         super().__init__()
-        if self.sb in ["AL", "TX"]:
+        if self.sb in ["AL", "TX","TS"]:
             self.Fk = Faker(locale="zh_CN")
             self.vist_name = "访客"
         else:

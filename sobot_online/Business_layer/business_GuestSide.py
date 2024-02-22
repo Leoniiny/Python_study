@@ -5,7 +5,8 @@
 import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
-
+from faker import Faker
+fake = Faker(locale="zh")
 
 class Customer:
     def __init__(self):
@@ -58,7 +59,7 @@ class Customer:
                 "partnerId": partnerid,
                 "tel": tel,
                 "email": email_num,
-                "uname": uname + "--猜猜我是谁",
+                "uname": uname + fake.name(),
                 "visitTitle": "",
                 "visitUrl": "",
                 "face": face,
@@ -293,14 +294,6 @@ class Customer:
 if __name__ == '__main__':
     pass
     obj = Customer()
-    # # uid, cid = obj.customer_info_init()
-    # # rest = obj.chat_connection(uid=uid, cid=cid)
-    # # puid = rest.get("puid")
-    # # status = rest.get("status")
-    # # print(f"puid >>>>：{puid}")
-    # # print(f"status >>>>：{status}")
-    # # obj.send_message_to_workbranch(puid, uid=uid, cid=cid)
-    # obj.allot_leave_msg(uid="3cddfeb0e813a53aa8092b692bd8412e", groupId="e1536b360f61457789b1d3338f01c5ae")
-    # config_detail = load_yaml_file(
-    # obj.satisfaction_message_data(uid="7d3e78b4b34d46d7b8e1ef3c4b71b5a1")
-    obj.customer_info_init(source=8, channelFlag="")
+    for i in range(10):
+        uid, cid,pid = obj.customer_info_init(partnerid=str(i*1000))
+        obj.allot_leave_msg(uid=uid)

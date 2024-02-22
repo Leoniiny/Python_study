@@ -24,6 +24,9 @@ class ConsoleSetting:
         self.sb = config_file["Sysbol"]
         self.session = requests.session()
         # 关闭多余的链接 用来解决  Max retries exceeded with url
+        # 增加重试连接次数：
+        requests.DEFAULT = 5
+        # 关闭多余的链接：
         self.session.keep_alive = False
         if self.sb == "HK":
             url = self.host + "/basic-login/serviceLogin/4"

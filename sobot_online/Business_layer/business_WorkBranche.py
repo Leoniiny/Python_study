@@ -44,7 +44,7 @@ class WorkBranch(ConsoleSetting):
         return str(online_tid)
 
     # 登录在线客服工作台
-    def login_workbranche(self, tid, st="1"):
+    def login_workbranche(self, tid=None, st="1"):
         url = self.host + "/chat-kwb/admin/aci.action"
         data = {
             "uid": tid,
@@ -267,4 +267,4 @@ if __name__ == '__main__':
     obj = WorkBranch()
     serviceId = obj.service_menus()
     tid = obj.get_tid(serviceId)
-    obj.service_out(uid=tid)
+    # obj.service_out(uid=tid)

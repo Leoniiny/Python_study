@@ -215,7 +215,7 @@ class Interrelation(WorkBranch, Customer):
             else:
                 # 工作台离线
                 super().service_out(uid = self.tid)
-                time.sleep(15)
+                time.sleep(5)
                 break
 
 
@@ -223,25 +223,25 @@ if __name__ == '__main__':
     # 跑代码前先看看测试环境，然后数据量尽量不好超过150，会出现锁死现象
     pass
     # 修改配置文件
-    person_num = random.randint(7, 15)
+    person_num = random.randint(4, 11)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(6, 7):
+    for i in range(1, 6):
         value = "AL"
         if i == 1:
             value = "AL"
         if i == 2:
             value = "TX"
-        if i == 3:
-            value = "XJP"
-        if i == 4:
-            value = "HK"
-        if i == 5:
-            value = "US"
+        # if i == 3:
+        #     value = "XJP"
+        # if i == 4:
+        #     value = "HK"
+        # if i == 5:
+        #     value = "US"
         if i == 6:
             value = "TS"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=1, interrelation_num=1)
+        obj01 = Interrelation(person_num=2, interrelation_num=4)
         if obj01.serviceId:
             obj01.interrelation()
         else:

@@ -10,9 +10,9 @@ print("root_path的值为：%s" % root_path)
 sys.path.append(root_path)
 
 from faker import Faker
-from sobot_online.Business_layer.business_GuestSide import Customer
-from sobot_online.Business_layer.business_WorkBranche import WorkBranch
-from sobot_online.Business_layer.business_CRM import CRM
+from sobot_online.Bs_layer.bs_GuestSide import Customer
+from sobot_online.Bs_layer.bs_WorkBranche import WorkBranch
+from sobot_online.Bs_layer.bs_CRM import CRM
 from sobot_online.common.file_dealing import *
 
 
@@ -40,7 +40,7 @@ class Interrelation(WorkBranch, Customer):
             j += 1
             if j <= self.person_num:
                 # 初始化访客进线信息
-                print(f"这是第{j}个客户")
+                print(f"这是第{j}个客户;当前运行的是域名是：{self.host}")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
                 email_num = self.Fk.company_email()
                 tel = self.Fk.phone_number()
@@ -215,6 +215,7 @@ class Interrelation(WorkBranch, Customer):
             else:
                 # 工作台离线
                 super().service_out(uid = self.tid)
+                print(f"当前运行的是域名是：{self.host}")
                 time.sleep(5)
                 break
 
@@ -226,23 +227,23 @@ if __name__ == '__main__':
     person_num = random.randint(4, 11)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(1, 6):
+    for i in range(1, 7):
         value = "AL"
         if i == 1:
             value = "AL"
         if i == 2:
             value = "TX"
-        # if i == 3:
-        #     value = "XJP"
-        # if i == 4:
-        #     value = "HK"
-        # if i == 5:
-        #     value = "US"
+        if i == 3:
+            value = "XJP"
+        if i == 4:
+            value = "HK"
+        if i == 5:
+            value = "US"
         if i == 6:
             value = "TS"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
         obj01 = Interrelation(person_num=2, interrelation_num=4)
-        if obj01.serviceId:
+        if obj01.tempid:
             obj01.interrelation()
         else:
             pass

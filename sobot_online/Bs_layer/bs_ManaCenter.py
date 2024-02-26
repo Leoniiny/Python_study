@@ -2,7 +2,7 @@
 # encoding: utf-8 -*-
 # @Function：管理中心
 import json
-from sobot_online.Business_layer.business_OnlineAgent import ConsoleSetting
+from sobot_online.Bs_layer.bs_OnlineAgent import ConsoleSetting
 
 
 class MangeCenter(ConsoleSetting):

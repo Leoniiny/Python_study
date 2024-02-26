@@ -2,6 +2,8 @@
 # encoding: utf-8 -*-
 # @Function：访客端
 # 在linux 环境中运行，需要将项目 根目录 路径添加到python 的环境变量中
+import time
+
 import requests
 from urllib.parse import urlencode
 from sobot_online.common.file_dealing import *
@@ -294,6 +296,8 @@ class Customer:
 if __name__ == '__main__':
     pass
     obj = Customer()
-    for i in range(10):
+    for i in range(3876,3878):
         uid, cid,pid = obj.customer_info_init(partnerid=str(i*1000))
-        obj.allot_leave_msg(uid=uid)
+        for j in range(2):
+            time.sleep(1)
+            obj.allot_leave_msg(uid=uid,content="验证用户多次留言："+str(j))

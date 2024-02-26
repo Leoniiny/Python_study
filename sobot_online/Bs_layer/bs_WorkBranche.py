@@ -5,7 +5,7 @@ import re, json, random
 
 import requests
 
-from sobot_online.Business_layer.business_OnlineAgent import ConsoleSetting
+from sobot_online.Bs_layer.bs_OnlineAgent import ConsoleSetting
 from urllib.parse import urlencode
 
 

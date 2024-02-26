@@ -1,7 +1,7 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：CRM相关业务
-from sobot_online.Business_layer.business_OnlineAgent import ConsoleSetting
+from sobot_online.Bs_layer.bs_OnlineAgent import ConsoleSetting
 import json
 
 

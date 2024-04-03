@@ -98,8 +98,9 @@ class Customer:
         uid = rest["uid"]
         cid = rest["cid"]
         pid = rest["pid"]
-        print(f"uid>>>：{uid}, cid>>>：{cid}, pid>>>：{pid}source>>>：{source},channelFlag 的值为：{channelFlag}")
-        return uid, cid,pid
+        userId = rest["userId"]
+        print(f"uid>>>：{uid}，cid>>>：{cid}，pid>>>：{pid}，source>>>：{source}，userId>>>：{userId}，channelFlag 的值为：{channelFlag}")
+        return uid, cid,pid,userId
 
     # 3.1、与机器人发送消息
     def send_message_to_robot(self, uid, cid, requestText, robotFlag="1"):
@@ -297,7 +298,7 @@ if __name__ == '__main__':
     pass
     obj = Customer()
     for i in range(3876,3878):
-        uid, cid,pid = obj.customer_info_init(partnerid=str(i*1000))
+        uid, cid,pid,userid = obj.customer_info_init(partnerid=str(i*1000))
         for j in range(2):
             time.sleep(1)
             obj.allot_leave_msg(uid=uid,content="验证用户多次留言："+str(j))

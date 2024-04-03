@@ -25,7 +25,7 @@ class WorkBranch(ConsoleSetting):
         response = self.session.get(url, headers=headers)
         print(f"response  的值：{response.text}")
         serviceId = json.loads(response.text).get("item").get("serviceId")
-        print(f"serviceId  的值：{serviceId}")
+        print(f"获取客服ID  的值：{serviceId}")
         return serviceId
 
     # 获取工作台tid
@@ -241,7 +241,7 @@ class WorkBranch(ConsoleSetting):
                 }
             )
         response = self.session.post(url=url, headers=headers, data=data)
-        print(f"\n\n\n提交满意度评价的结果为  >>>：{json.loads(response.text)}\n\n\n\n")
+        print(f"\n提交满意度评价的结果为  >>>：{json.loads(response.text)}\n")
 
     # 访客拉黑
     def add_blacklist(self,tid,uid,reason=""):
@@ -259,7 +259,7 @@ class WorkBranch(ConsoleSetting):
             'content-type': 'application/x-www-form-urlencoded',
         }
         response = self.session.post(url, headers=headers, data=data)
-        print(f"add_blacklist response.text 的值为>>>：{response.text}")
+        print(f"add_blacklist response.text 的值为>>>：{response.text}\n")
 
 
 if __name__ == '__main__':

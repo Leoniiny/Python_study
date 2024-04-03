@@ -72,7 +72,7 @@ class Interrelation(WorkBranch, Customer):
                 partnerid = "test" + str(random.randint(100000, 999999))
                 uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
                 # 确定客户信息初始化
-                uid, cid, pid = super().customer_info_init(partnerid=partnerid, uname=uname,
+                uid, cid, pid,userId = super().customer_info_init(partnerid=partnerid, uname=uname,
                                                            source=source, face=face, email_num=email_num, tel=tel,
                                                            channelFlag=channelFlag, isVip=str(isVip))
                 # 关闭智能路由
@@ -92,7 +92,8 @@ class Interrelation(WorkBranch, Customer):
                     print(f"\n\n查询status 之后，首先走的是status == 1 的分支\n\n")
                     while True:
                         if i <= self.interrelation_num:
-                            reply_time = random.randint(1, 5)
+                            # reply_time = random.randint(1, 5)
+                            reply_time = 1
                             print(f"\n\nreply_time 的值为{reply_time}\n\n")
                             time.sleep(reply_time)
                             customer_content = self.Fk.text()
@@ -157,7 +158,8 @@ class Interrelation(WorkBranch, Customer):
                         print(f"\n\n查询status 之后，首先走的是status == 1 的分支\n\n")
                         while True:
                             if i <= self.interrelation_num:
-                                reply_time = random.randint(1, 5)
+                                # reply_time = random.randint(1, 5)
+                                reply_time = 1
                                 print(f"\n\nreply_time 的值为{reply_time}\n\n")
                                 customer_content = self.Fk.text()
                                 workbranch_content = self.Fk.paragraph()
@@ -227,7 +229,7 @@ if __name__ == '__main__':
     person_num = random.randint(4, 11)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(1, 7):
+    for i in range(6, 7):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -242,8 +244,8 @@ if __name__ == '__main__':
         if i == 6:
             value = "TS"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=2, interrelation_num=4)
-        if obj01.tempid:
+        obj01 = Interrelation(person_num=300, interrelation_num=2)
+        if obj01.tempid is not None:
             obj01.interrelation()
         else:
             pass

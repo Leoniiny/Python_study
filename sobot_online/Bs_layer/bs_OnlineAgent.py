@@ -12,56 +12,6 @@ from sobot_online.Bs_layer.bs_login import Login
 class ConsoleSetting(Login):
     def __init__(self):
         super().__init__()
-        # config_detail = load_yaml_file(filepath=r"/config_file/operation_config.yml")["config"]
-        # config_file = load_yaml_file(filepath=r"/config_file/service_data.yml")[f"{config_detail}"]
-        # loginPwd = config_file["PWD"]
-        # loginUser = config_file["EMAIL"]
-        # self.host = config_file["HOST"]
-        # try:
-        #     self.host2 = config_file["HOST2"]
-        #     print(f"\nself.host2的值为：{self.host2}\n")
-        # except Exception as e:
-        #     print(f"e 的值为{e}")
-        # self.bno = config_file["SYSNUM"]
-        # self.sb = config_file["Sysbol"]
-        # self.session = requests.session()
-        # # 关闭多余的链接 用来解决  Max retries exceeded with url
-        # # 增加重试连接次数：
-        # requests.DEFAULT = 5
-        # # 关闭多余的链接：
-        # self.session.keep_alive = False
-        # if self.sb == "HK":
-        #     url = self.host + "/basic-login/serviceLogin/4"
-        #     data = {
-        #         "loginUser": loginUser,
-        #         "loginPwd": loginPwd,
-        #         "randomKey": "",
-        #         "loginFlag": "1",
-        #         "terminalCode": ""
-        #     }
-        #     headers = {
-        #         'Content-Type': 'application/x-www-form-urlencoded',
-        #     }
-        # else:
-        #     url = self.host + "/basic-login/account/consoleLogin/4"
-        #     data = json.dumps({
-        #         "loginUser": loginUser,
-        #         "loginPwd": str(loginPwd),
-        #         "randomKey": "",
-        #         "loginFlag": "1",
-        #         "terminalCode": ""
-        #     })
-        #     headers = {
-        #         'Content-Type': 'application/json',
-        #     }
-        # try:
-        #     response = self.session.post(url, headers=headers, data=data)
-        #     # print(f"response >>>  ：{response.text}")
-        #     self.tempid = json.loads(response.text).get("item")
-        #     # print(f"self.tempid >>>  ：{self.tempid}")
-        # except Exception as e:
-        #     print(f"异常原因为 >>>  ：{e}")
-        #     self.tempid = None
 
     # 上传图片
     def uploading_images(self, file_content=None):
@@ -85,7 +35,7 @@ class ConsoleSetting(Login):
             return img_url
 
     # 获取PC\h5 的所有子渠道
-    def get_child_source(self, channelType=1):
+    def get_child_source(self, channelType=0):
         """
         :param channelType: 0web，1移动
         :return:
@@ -115,7 +65,7 @@ class ConsoleSetting(Login):
             return channelFlag_list
 
     # 新增渠道
-    def add_channel(self,channelName,channelType):
+    def add_channel(self,channelName,channelType=0):
         '''
         :param channelName:
         :param channelType: 0：桌面网站；1：移动网站

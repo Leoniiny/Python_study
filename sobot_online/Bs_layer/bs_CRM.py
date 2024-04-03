@@ -3,9 +3,10 @@
 # @Function：CRM相关业务
 from sobot_online.Bs_layer.bs_OnlineAgent import ConsoleSetting
 import json
+from sobot_online.Bs_layer.bs_login import Login
 
 
-class CRM(ConsoleSetting):
+class CRM(Login):
     def __init__(self):
         super().__init__()
 
@@ -33,9 +34,11 @@ class CRM(ConsoleSetting):
         }
         response = self.session.get(url, headers=headers, params=params)
         if json.loads(response.text).get("items"):
-            userid = json.loads(response.text).get("items")[0].get('userId')
+            print(f"get_blacklist  的值为>>> ：{json.loads(response.text).get('items')}")
+            userid = json.loads(response.text).get("items")[-1].get('userId')
             return userid
         else:
+            print("黑名单不存在")
             return userid
 
     def remove_blacklist(self,userid=None):
@@ -56,6 +59,6 @@ class CRM(ConsoleSetting):
 if __name__ == '__main__':
     pass
     obj = CRM()
-    print(obj.get_blacklist())
-    obj.remove_blacklist("031e5a802e1644eab12b45b90916687b")
+    userid = obj.get_blacklist()
+    obj.remove_blacklist(userid)
 

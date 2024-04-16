@@ -55,6 +55,21 @@ class CRM(Login):
             response = self.session.post(url, headers=headers, data=data)
             print(f"remove_blacklist response.text 的值为>>>：{response.text}")
 
+    def del_label(self):
+        url = self.host + "/crm-user-service/userLabel/remove/cd551799f627416c883b8b3faa42ffef"
+        data = {
+
+        }
+        headers = {
+            'bno': self.bno,
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid,
+        }
+
+        response = requests.request("POST", url, headers=headers, data=data)
+
+        print(response.text)
+
 
 if __name__ == '__main__':
     pass

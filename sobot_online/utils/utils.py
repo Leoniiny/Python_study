@@ -53,8 +53,8 @@ def get_today_zero():
 
 
 ABS_PATH = os.path.abspath(__file__)  # 获取当前文件的绝对路径
-COMMON_PATH = os.path.dirname(ABS_PATH)  # 获取本项目所在的目录
-Projection_PATH = os.path.dirname(COMMON_PATH)
+COMMON_PATH = os.path.dirname(ABS_PATH)  # py文件所在的目录
+Projection_PATH = os.path.dirname(COMMON_PATH)   # 获取项目的根目录
 DATA_PATH = Projection_PATH + r"/data"
 
 if __name__ == '__main__':

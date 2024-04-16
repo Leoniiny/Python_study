@@ -3,13 +3,15 @@
 # @File : bs_OnlineAgent.py
 # @Software: PyCharm
 # @Function:控制台 设置
-from sobot_online.common.file_dealing import *
 import requests, re, json
 from urllib.parse import urlencode
 from sobot_online.Bs_layer.bs_login import Login
+from faker import Faker
 
 
 class ConsoleSetting(Login):
+    fake = Faker(locale="zh_CN")
+
     def __init__(self):
         super().__init__()
 
@@ -64,13 +66,13 @@ class ConsoleSetting(Login):
             print(f'\njson.loads(response.text)["list"] 的值为》》》：{json.loads(response.text)["list"]}\n')
             return channelFlag_list
 
-    # 新增渠道
-    def add_channel(self,channelName,channelType=0):
-        '''
+    def add_channel(self, channelName="新增渠道:"+fake.name(), channelType=0):
+        """
+        新增渠道
         :param channelName:
         :param channelType: 0：桌面网站；1：移动网站
         :return:
-        '''
+        """
         url = self.host + "/chat-set/rest/insertConfigInfo/4"
         data = urlencode(
             {
@@ -90,11 +92,11 @@ class ConsoleSetting(Login):
         print(f"\n\n>>>得到的渠道id 为：{json.loads(response.text).get('item').get('channelFlag')}<<<<\n\n")
 
     # 查询智能路由条数
-    def get_all_route_list(self,srStatus=1,srId_list=None):
-        url = self.host  + f"/chat-set/smartRoute/getAllRouteList/4?srStatus={srStatus}"
+    def get_all_route_list(self, srStatus=1, srId_list=None):
+        url = self.host + f"/chat-set/smartRoute/getAllRouteList/4?srStatus={srStatus}"
         headers = {
             'bno': self.bno,
-            'temp-id':self.tempid
+            'temp-id': self.tempid
         }
         response = self.session.get(url, headers=headers)
         print(response.text)
@@ -106,11 +108,11 @@ class ConsoleSetting(Login):
             print(e)
             return srId_list
 
-    def modify_route_status(self,srId=None,srStatus=0):
-        url = self.host  + f"/chat-set/smartRoute/modifyRouteStatus/4"
+    def modify_route_status(self, srId=None, srStatus=0):
+        url = self.host + f"/chat-set/smartRoute/modifyRouteStatus/4"
         data = {
-                   'srId':srId,
-                    'srStatus':srStatus
+            'srId': srId,
+            'srStatus': srStatus
         }
         headers = {
             'bno': self.bno,
@@ -119,7 +121,59 @@ class ConsoleSetting(Login):
             'temp-id': self.tempid,
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         }
-        response = self.session.post( url, headers=headers, data=data)
+        response = self.session.post(url, headers=headers, data=data)
+        print(response.text)
+
+    def add_quick_menu(self, menuName="菜单名称：" + fake.name(), exhibit=1, menuType=0,
+                       menuPicUrl="https://img.sobot.com/console/common/res/openModal.png",
+                       msgText=fake.text()):
+        """
+        添加快捷菜单
+        :param menuName:
+        :param exhibit:
+        :param menuType:
+        :param menuPicUrl:
+        :param msgText:
+        :return:
+        """
+        url = self.host + f"/chat-set/v6/menuConfig/addCusMenuConfig"
+        json_data = {
+            'menuName': menuName,
+            'exhibit': exhibit,
+            "menuType": menuType,
+            "menuPicUrl": menuPicUrl,
+            "msgText": msgText
+        }
+        headers = {
+            'bno': self.bno,
+            'cache-control': 'no-cache',
+            'content-type': 'application/json;charset=UTF-8',
+            'temp-id': self.tempid,
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        response = self.session.post(url, headers=headers, json=json_data)
+        print(response.text)
+
+    def add_quick_menu_sche(self, schemeName="添加方案" + fake.name(), sortNo=0):
+        """
+        添加快捷菜单方案
+        :param schemeName:
+        :param sortNo:
+        :return:
+        """
+        url = self.host + f"/chat-set/v6/menuConfig/addCusMenuPlanConfig"
+        json_data = {
+            "schemeName": schemeName,
+            "sortNo": sortNo
+        }
+        headers = {
+            'bno': self.bno,
+            'cache-control': 'no-cache',
+            'content-type': 'application/json;charset=UTF-8',
+            'temp-id': self.tempid,
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        response = self.session.post(url, headers=headers, json=json_data)
         print(response.text)
 
 
@@ -131,10 +185,11 @@ if __name__ == '__main__':
     obj = ConsoleSetting()
     # obj.uploading_images(file_content=file_content)
     # obj.get_child_source(channelType=1)
-    # obj.add_channel(channelName="随便",channelType="1")
-    srId_list = obj.get_all_route_list()
-    try:
-        for i in range(len(srId_list)):
-            obj.modify_route_status(srId_list[i])
-    except Exception:
-        print(f"srId_list  的值为{srId_list}")
+    for i in range(180):
+        obj.add_channel(channelName="新增移动网站" + str(i + 1), channelType=1)
+    # srId_list = obj.get_all_route_list()
+    # try:
+    #     for i in range(len(srId_list)):
+    #         obj.modify_route_status(srId_list[i])
+    # except Exception:
+    #     print(f"srId_list  的值为{srId_list}")

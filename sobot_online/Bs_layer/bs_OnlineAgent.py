@@ -15,8 +15,12 @@ class ConsoleSetting(Login):
     def __init__(self):
         super().__init__()
 
-    # 上传图片
     def uploading_images(self, file_content=None):
+        """
+        上传图片
+        :param file_content:
+        :return:
+        """
         url = self.host + "/chat-web/webchat/expressionUpload"
         data = {
             "pid": self.bno,
@@ -36,10 +40,10 @@ class ConsoleSetting(Login):
             print(f"\n response 的结果为：{json.loads(response.text)}；\n\ne 的返回值为：{e}；\n")
             return img_url
 
-    # 获取PC\h5 的所有子渠道
     def get_child_source(self, channelType=0):
         """
-        :param channelType: 0web，1移动
+        获取PC\h5 的所有子渠道
+        :param channelType:
         :return:
         """
         url = self.host + "/chat-set/rest/selectConfigInfo/4"
@@ -66,7 +70,7 @@ class ConsoleSetting(Login):
             print(f'\njson.loads(response.text)["list"] 的值为》》》：{json.loads(response.text)["list"]}\n')
             return channelFlag_list
 
-    def add_channel(self, channelName="新增渠道:"+fake.name(), channelType=0):
+    def add_channel(self, channelName="新增渠道:" + fake.name(), channelType=0):
         """
         新增渠道
         :param channelName:
@@ -91,8 +95,13 @@ class ConsoleSetting(Login):
         response = self.session.post(url, headers=headers, data=data)
         print(f"\n\n>>>得到的渠道id 为：{json.loads(response.text).get('item').get('channelFlag')}<<<<\n\n")
 
-    # 查询智能路由条数
     def get_all_route_list(self, srStatus=1, srId_list=None):
+        """
+        查询智能路由条数
+        :param srStatus:
+        :param srId_list:
+        :return:
+        """
         url = self.host + f"/chat-set/smartRoute/getAllRouteList/4?srStatus={srStatus}"
         headers = {
             'bno': self.bno,
@@ -109,6 +118,12 @@ class ConsoleSetting(Login):
             return srId_list
 
     def modify_route_status(self, srId=None, srStatus=0):
+        """
+        修改智能路由状态
+        :param srId:
+        :param srStatus:
+        :return:
+        """
         url = self.host + f"/chat-set/smartRoute/modifyRouteStatus/4"
         data = {
             'srId': srId,
@@ -176,20 +191,29 @@ class ConsoleSetting(Login):
         response = self.session.post(url, headers=headers, json=json_data)
         print(response.text)
 
+    def del_quick_menu_sche(self, schemeId="95bc63d52bde427ca2beac423d65577c"):
+        """
+        删除快捷菜单方案
+        :param schemeId:
+        """
+        url = self.host + f"/chat-set/v6/menuConfig/delCusMenuPlanConfigById"
+        json_data = {
+            "id": schemeId
+        }
+        headers = {
+            'bno': self.bno,
+            'cache-control': 'no-cache',
+            'content-type': 'application/json;charset=UTF-8',
+            'temp-id': self.tempid,
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/'
+        }
+        del_quick_menu_sche_response = self.session.post(url, headers=headers, json=json_data)
+        print(del_quick_menu_sche_response.text)
+
 
 if __name__ == '__main__':
     pass
-    # img_num = random.randint(1,31)
-    # print(f"img_num 的值为：{img_num}")
-    # file_content = (f"p{img_num}.jpg", open(DATA_PATH + fr"\imgs\p{img_num}.jpg", mode="rb"),'image/jpg')
     obj = ConsoleSetting()
-    # obj.uploading_images(file_content=file_content)
-    # obj.get_child_source(channelType=1)
-    for i in range(180):
-        obj.add_channel(channelName="新增移动网站" + str(i + 1), channelType=1)
-    # srId_list = obj.get_all_route_list()
-    # try:
-    #     for i in range(len(srId_list)):
-    #         obj.modify_route_status(srId_list[i])
-    # except Exception:
-    #     print(f"srId_list  的值为{srId_list}")
+    for i in range(11):
+        obj.add_quick_menu_sche(schemeName="新增方案"+str(i+1))
+    # obj.del_quick_menu_sche()

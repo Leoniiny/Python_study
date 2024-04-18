@@ -20,7 +20,7 @@ class MangeCenter(ConsoleSetting):
             try:
                 score_ten = [template.get('id') for template in json.loads(response.text).get("items") if template.get('scoreFlag') == 0]
                 score_five = [template.get('id') for template in json.loads(response.text).get("items") if template.get('scoreFlag') == 1]
-                print(f"\nscore_ten >>>：{score_ten},score_five >>>：{score_five}\n")
+                print(f"\nscore_ten >>>：{score_ten}\nscore_five >>>：{score_five}\n")
                 return score_ten,score_five
             except Exception as e:
                 print(e)

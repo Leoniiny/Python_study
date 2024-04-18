@@ -2,9 +2,6 @@
 # encoding: utf-8 -*-
 # @Function：客服工作台
 import re, json, random
-
-import requests
-
 from sobot_online.Bs_layer.bs_OnlineAgent import ConsoleSetting
 from urllib.parse import urlencode
 
@@ -24,9 +21,9 @@ class WorkBranch(ConsoleSetting):
         }
         response = self.session.get(url, headers=headers)
         print(f"response  的值：{response.text}")
-        serviceId = json.loads(response.text).get("item").get("serviceId")
-        print(f"获取客服ID  的值：{serviceId}")
-        return serviceId
+        service_id = json.loads(response.text).get("item").get("serviceId")
+        print(f"获取客服ID  的值：{service_id}")
+        return service_id
 
     # 获取工作台tid
     def get_tid(self, serviceId):

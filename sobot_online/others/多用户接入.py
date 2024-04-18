@@ -3,7 +3,7 @@ import requests, random
 from urllib.parse import urlencode
 from faker import Faker
 fake = Faker(locale="zh_CN")
-
+from sobot_online.Bs_layer.bs_WorkBranche import WorkBranch
 
 class Chat:
     def __init__(self):
@@ -52,11 +52,11 @@ class Chat:
                 'content-type': 'application/x-www-form-urlencoded',
             }
             response = requests.post(url=url, headers=headers, data=data)
-            print(f"puid>>>：{puid}, uid>>>:{uid}, cid>>>:{cid}")
             print(f"访客端返回数据response.text>>>:{response.text}")
+        return uid, cid, puid
 
     @staticmethod
-    def service_out(host, uid):
+    def customer_out(host, uid):
         """
         客服离线
         :param host:
@@ -77,8 +77,8 @@ if __name__ == '__main__':
     obj = Chat()
     for i in range(11):
         obj.chat(
-            host="https://test.sobot.com/",
-            sysNum="443af7afa23f4c87a8900f178137d09c",
-            groupId="5782519df06c4affb4ae07f4c0053df8",
-            # partnerId=""
+            host="https://sg-grey.sobot.io/",
+            sysNum="826683f48d7244ada08a67bb37b26cf3",
+            groupId="6cb5969f26a44b46b60b2f6c15534744",
+            partnerId="mm" + str(i)
         )

@@ -14,7 +14,6 @@ class Login:
         loginPwd = config_file["PWD"]
         loginUser = config_file["EMAIL"]
         self.host = config_file["HOST"]
-
         try:
             self.host2 = config_file["HOST2"]
             print(f"\nself.host2的值为：{self.host2}\n")

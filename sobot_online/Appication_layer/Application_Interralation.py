@@ -229,7 +229,7 @@ if __name__ == '__main__':
     person_num = random.randint(4, 11)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(6, 7):
+    for i in range(1, 2):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -244,7 +244,7 @@ if __name__ == '__main__':
         if i == 6:
             value = "TS"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=300, interrelation_num=2)
+        obj01 = Interrelation(person_num=3, interrelation_num=2)
         if obj01.tempid is not None:
             obj01.interrelation()
         else:

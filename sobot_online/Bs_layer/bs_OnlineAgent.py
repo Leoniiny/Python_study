@@ -63,7 +63,7 @@ class ConsoleSetting(Login):
             channelFlag_list = [child_source_info.get("channelFlag") for child_source_info in
                                 json.loads(response.text)["list"]]
             print(f"\nchannelFlag_list 的值为》》》：{channelFlag_list}\n\n")
-            return channelFlag_list
+            return sorted(channelFlag_list)
         except Exception as e:
             channelFlag_list = []
             print(f"\ne 的值为{e}\n")
@@ -169,7 +169,7 @@ class ConsoleSetting(Login):
         response = self.session.post(url, headers=headers, json=json_data)
         print(response.text)
 
-    def add_quick_menu_sche(self, schemeName="添加方案" + fake.name(), sortNo=0):
+    def add_quick_menu_sche(self, schemeName="添加方案：" + fake.name(), sortNo=0):
         """
         添加快捷菜单方案
         :param schemeName:
@@ -210,10 +210,62 @@ class ConsoleSetting(Login):
         del_quick_menu_sche_response = self.session.post(url, headers=headers, json=json_data)
         print(del_quick_menu_sche_response.text)
 
+    def service_list_today(self, serviceStatusParam='online', keyword="", sortKey='', sortWay='',
+                           page=1, size=15, searchWay=2, groupIdsParam=''):
+        """
+        查询在线客服
+        :param serviceStatusParam: 客服状态
+        :param keyword:
+        :param sortKey:
+        :param sortWay:
+        :param page:
+        :param size:
+        :param searchWay:
+        :param groupIdsParam:
+        :return:
+        """
+        url = self.host + f"/chat-statistics/monitor/serviceListToday"
+        headers = {
+            'bno': self.bno,
+            'temp-id': self.tempid
+        }
+        params = {
+            'serviceStatusParam': serviceStatusParam,
+            'keyword': keyword,
+            'sortKey': sortKey,
+            'sortWay': sortWay,
+            'page': page,
+            'size': size,
+            'searchWay': searchWay,
+            'groupIdsParam': groupIdsParam,
+        }
+        response = self.session.get(url, headers=headers, params=params)
+        if json.loads(response.text).get('items'):
+            service_online_list = [serviceid.get('staffId') for serviceid in json.loads(response.text).get('items')]
+            print(f'service_online_list>>>:{service_online_list}')
+            return service_online_list
+        else:
+            return None
+
+    def batch_offline_admin(self,adminIds='58832ae6f2434253be65ca18031f5ec8'):
+        url = self.host + f"/chat-web/data/batchOfflineAdmin.action"
+        json_data = {
+            "adminIds": adminIds
+        }
+        headers = {
+            'bno': self.bno,
+            'cache-control': 'no-cache',
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid,
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        response = self.session.post(url, headers=headers, data=json_data)
+        print(response.text)
+
 
 if __name__ == '__main__':
     pass
     obj = ConsoleSetting()
-    for i in range(11):
-        obj.add_quick_menu_sche(schemeName="新增方案"+str(i+1))
-    # obj.del_quick_menu_sche()
+    channelid_list = obj.get_child_source(channelType=1)
+    print(channelid_list)
+

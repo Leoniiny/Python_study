@@ -9,8 +9,8 @@ class Chat:
     def __init__(self):
         pass
 
-    @staticmethod
-    def chat(host="https://api-c.sobot.com/text",
+    @classmethod
+    def chat(cls,host="https://api-c.sobot.com/text",
              sysNum="cfd4681074ce4bed904928fb609fc824",
              groupId="75e16546892a4c5fa9fe07bbf9763e3b",
              partnerId=None):
@@ -33,7 +33,7 @@ class Chat:
         response1 = requests.request("POST", url, headers=headers, data=payload)
         print(f"response1   >>>>{response1.text}")
 
-        for i in range(1, 2):
+        for i in range(1, 3):
             time.sleep(0.5)
             content = fake.text() + fake.text() + fake.text() + fake.text() + fake.text() + fake.text()
             # time.sleep(30)  # 每隔30秒发送一条信息给客服
@@ -55,10 +55,10 @@ class Chat:
             print(f"访客端返回数据response.text>>>:{response.text}")
         return uid, cid, puid
 
-    @staticmethod
-    def customer_out(host, uid):
+    @classmethod
+    def customer_out(cls,host, uid):
         """
-        客服离线
+        客户离线
         :param host:
         :param uid:
         :return:
@@ -75,10 +75,11 @@ class Chat:
 if __name__ == '__main__':
     pass
     obj = Chat()
-    for i in range(11):
+
+    for i in range(22,33):
         obj.chat(
-            host="https://sg-grey.sobot.io/",
+            host="https://sg-grey.sobot.io",
             sysNum="826683f48d7244ada08a67bb37b26cf3",
-            groupId="6cb5969f26a44b46b60b2f6c15534744",
+            groupId="285b3628fb28424aa5716ccf409306cf",
             partnerId="mm" + str(i)
         )

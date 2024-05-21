@@ -2,10 +2,10 @@
 # encoding: utf-8 -*-
 # @Function：管理中心
 import json
-from sobot_online.Bs_layer.bs_OnlineAgent import ConsoleSetting
+from sobot_online.Bs_layer.bs_login import *
 
 
-class MangeCenter(ConsoleSetting):
+class MangeCenter(Login):
     def __init__(self):
         super().__init__()
 

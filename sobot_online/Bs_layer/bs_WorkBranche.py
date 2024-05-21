@@ -129,7 +129,7 @@ class WorkBranch(ConsoleSetting):
             "tid": tid
         }
         headers = {
-            'bNo': self.bno,
+            # 'bNo': self.bno,
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         response = self.session.post(url=url, headers=headers, data=data)
@@ -264,4 +264,6 @@ if __name__ == '__main__':
     obj = WorkBranch()
     serviceId = obj.service_menus()
     tid = obj.get_tid(serviceId)
-    # obj.service_out(uid=tid)
+    unit_infos_list = obj.get_unit_infos(tid)
+    print(tid,unit_infos_list,sep="\n")
+

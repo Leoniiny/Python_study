@@ -61,11 +61,13 @@ class Customer:
                 "partnerId": partnerid,
                 "tel": tel,
                 "email": email_num,
-                "uname": uname + fake.name(),
+                # "uname": uname + fake.name(),
+                "uname": uname,
                 "visitTitle": "",
                 "visitUrl": "",
                 "face": face,
-                "realname": uname + "--真实姓名",
+                # "realname": uname + "--真实姓名",
+                "realname": 'realname'+uname,
                 "weibo": "",
                 "weixin": "",
                 "qq": "",
@@ -192,7 +194,7 @@ class Customer:
             "token": ""
         }
         headers = {
-            'bno': '913d909e3a194598ba61cf904b5dc12a',
+            'bno': self.bno,
             'content-type': 'application/x-www-form-urlencoded'
         }
         response = self.session.post(url, headers=headers, data=data)

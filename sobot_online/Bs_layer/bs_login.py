@@ -38,6 +38,7 @@ class Login:
             }
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'Connection': 'close'  # 设置为关闭长连接
             }
         else:
             url = self.host + "/basic-login/account/consoleLogin/4"

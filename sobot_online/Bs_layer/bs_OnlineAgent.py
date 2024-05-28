@@ -266,6 +266,6 @@ class ConsoleSetting(Login):
 if __name__ == '__main__':
     pass
     obj = ConsoleSetting()
-    channelid_list = obj.get_child_source(channelType=1)
+    channelid_list = obj.get_child_source(channelType=0)
     print(channelid_list)
 

@@ -9,7 +9,7 @@ class Merge_leavMsg(Customer):
         super().__init__()
 
     def leave_msg(self, partnerid=None, source=0, content='aaa', uname='',channelFlag=''):
-        info_group = super().customer_info_init(partnerid=partnerid, source=source, uname=uname,channelFlag=channelFlag)
+        info_group = super().v2_customer_info_init(partnerid=partnerid, source=source, uname=uname, channelFlag=channelFlag)
         uid = info_group[0]
         print(f"uid的值为：{uid}")
         super().allot_leave_msg(uid, content=content)
@@ -18,8 +18,8 @@ class Merge_leavMsg(Customer):
 
 if __name__ == '__main__':
     obj = Merge_leavMsg()
-    for i in range(30, 31):
-        partnerid = 'leavmsg' + str(i)
+    for i in range(551, 700):
+        partnerid = 'HKleavemsg-' + str(i)
         uname = '客户' + str(i)
         for j in range(19, 21):
             for k in range(1,3):

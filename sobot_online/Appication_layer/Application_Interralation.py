@@ -72,9 +72,9 @@ class Interrelation(WorkBranch, Customer):
                 partnerid = "test" + str(random.randint(100000, 999999))
                 uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
                 # 确定客户信息初始化
-                uid, cid, pid,userId = super().customer_info_init(partnerid=partnerid, uname=uname,
-                                                           source=source, face=face, email_num=email_num, tel=tel,
-                                                           channelFlag=channelFlag, isVip=str(isVip))
+                uid, cid, pid,userId = super().v2_customer_info_init(partnerid=partnerid, uname=uname,
+                                                                     source=source, face=face, email_num=email_num, tel=tel,
+                                                                     channelFlag=channelFlag, isVip=str(isVip))
                 # 关闭智能路由
                 srId_list = super().get_all_route_list()
                 try:

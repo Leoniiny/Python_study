@@ -1,0 +1,3 @@
+window.parent.postMessage({
+        name: 'zc_dock_info'
+      }, '*')

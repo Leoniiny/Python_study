@@ -39,7 +39,7 @@ class Customer:
 
     # 2、获取访客信息配置，获取cid，uid
     def v2_customer_info_init(self, partnerid: str = "nnnd", uname="",
-                              source=0, channelFlag="", face="", isVip="0", tel="", email_num=""):
+                              source=0, channelFlag="", face="", isVip="0", tel="", email_num="",vipLevel=''):
         """
         :param email_num:
         :param tel:
@@ -85,7 +85,7 @@ class Customer:
                 "summaryParams": "",
                 "channelFlag": channelFlag,
                 "isVip": isVip,
-                "vipLevel": "",
+                "vipLevel": vipLevel,
                 "userLabel": "",
                 "xst": "",
                 "isJs": "0",

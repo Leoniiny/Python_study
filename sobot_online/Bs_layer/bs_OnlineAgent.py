@@ -40,35 +40,36 @@ class ConsoleSetting(Login):
             print(f"\n response 的结果为：{json.loads(response.text)}；\n\ne 的返回值为：{e}；\n")
             return img_url
 
-    def get_child_source(self, channelType=0):
+    def get_child_source(self, channelType=0, current=1, pageSize=1000, pageNo=1):
         """
         获取PC\h5 的所有子渠道
+        :param pageNo:
+        :param pageSize:
+        :param current:
         :param channelType:
         :return:
         """
         url = self.host + "/chat-set/rest/selectConfigInfo/4"
         params = {
             "channelType": channelType,
-            "current": 1,
-            "pageSize": 100,
-            "pageNo": 1
+            "current": current,
+            "pageSize": pageSize,
+            "pageNo": pageNo
         }
         headers = {
             'bno': self.bno,
             'temp-id': self.tempid
         }
         response = self.session.get(url=url, headers=headers, params=params)
-        print(f"\n response 的值为》》》：{response.text}\n\n")
         try:
-            channelFlag_list = [child_source_info.get("channelFlag") for child_source_info in
-                                json.loads(response.text)["list"]]
-            print(f"\nchannelFlag_list 的值为》》》：{channelFlag_list}\n\n")
-            return sorted(channelFlag_list)
+            channel_info = json.loads(response.text)["list"]
+            print(f"\nchannel_info 的值为》》》：{channel_info}\n\n")
+            return channel_info
         except Exception as e:
-            channelFlag_list = []
+            channel_info = []
             print(f"\ne 的值为{e}\n")
             print(f'\njson.loads(response.text)["list"] 的值为》》》：{json.loads(response.text)["list"]}\n')
-            return channelFlag_list
+            return channel_info
 
     def add_channel(self, channelName="新增渠道:" + fake.name(), channelType=0):
         """
@@ -94,6 +95,27 @@ class ConsoleSetting(Login):
         }
         response = self.session.post(url, headers=headers, data=data)
         print(f"\n\n>>>得到的渠道id 为：{json.loads(response.text).get('item').get('channelFlag')}<<<<\n\n")
+
+    def modify_channel_info(self, configId, channel_id,channelName, channelScene=0, operateFlag=0, channelType=0,
+                            channelMark=None, managerType=1, isTraceFlag=0):
+        url = self.host + "/chat-set/rest/updateConfigInSettings/4"
+        data = {
+            "channelScene": channelScene,
+            "operateFlag": operateFlag,
+            "channelType": channelType,
+            "configId": configId,
+            "id": channel_id,
+            "channelName": channelName,
+            "channelMark": channelMark,
+            "managerType": managerType,
+            "isTraceFlag": isTraceFlag
+        }
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url, headers=headers, data=data)
+        print(response.text)
 
     def get_all_route_list(self, srStatus=1, srId_list=None):
         """
@@ -211,9 +233,10 @@ class ConsoleSetting(Login):
         print(del_quick_menu_sche_response.text)
 
     def service_list_today(self, serviceStatusParam='online', keyword="", sortKey='', sortWay='',
-                           page=1, size=15, searchWay=2, groupIdsParam=''):
+                           page=1, size=15, searchWay=2, groupIdsParam='', service_online_list=None):
         """
         查询在线客服
+        :param service_online_list:
         :param serviceStatusParam: 客服状态
         :param keyword:
         :param sortKey:
@@ -245,9 +268,9 @@ class ConsoleSetting(Login):
             print(f'service_online_list>>>:{service_online_list}')
             return service_online_list
         else:
-            return None
+            return service_online_list
 
-    def batch_offline_admin(self,adminIds='58832ae6f2434253be65ca18031f5ec8'):
+    def batch_offline_admin(self, adminIds='58832ae6f2434253be65ca18031f5ec8'):
         url = self.host + f"/chat-web/data/batchOfflineAdmin.action"
         json_data = {
             "adminIds": adminIds
@@ -266,6 +289,17 @@ class ConsoleSetting(Login):
 if __name__ == '__main__':
     pass
     obj = ConsoleSetting()
-    channelid_list = obj.get_child_source(channelType=0)
-    print(channelid_list)
+    channelType=0
+    channelid_info_list = obj.get_child_source(channelType=channelType)
+    channelid_flag = [channelid.get('channelFlag') for channelid in channelid_info_list]
+    print(f"channelid_flag>>>：{sorted(channelid_flag)}")
+
+    # # 修改渠道信息
+    # channelid_configId = [channelid.get('configId') for channelid in channelid_info_list]
+    # channel_id = [channelid.get('id') for channelid in channelid_info_list]
+    # for i in range(len(channelid_flag)-1):
+    #     channelidflag = channelid_flag[i]
+    #     configId = channelid_configId[i]
+    #     channel_id = channelid_configId[i]
+    #     obj.modify_channel_info(configId=configId, channel_id=channel_id,channelName='移动网站-'+str(channelidflag),channelType=channelType)
 

@@ -1,0 +1,13 @@
+window.parent.postMessage({
+  cid: '',
+  uid: '',
+  msgType: 26,
+  miniPage: {
+    headimg: "https://img.sobot.com/console/common/face/admin.png",
+    name: "小程序名字",
+    title: "小程序标题",
+    pagepath: "/pages/index/index",
+    thumbMediaId:"nI3DlJZsXd7h0JVZ-LklyzjWtZY4Q-lNAacBe50Chl0k9Zs5PR_p2_jV2na2o3_P" , // 小程序的 media_id
+    thumbUrl:"https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1667994205,255365672&fm=5",
+  }
+}, '*');

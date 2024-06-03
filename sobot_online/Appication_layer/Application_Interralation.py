@@ -27,6 +27,10 @@ class Interrelation(WorkBranch, Customer):
             self.vist_name = "visitor"
         self.serviceId = super().service_menus()
         self.tid = super().get_tid(self.serviceId)
+        service_online_list = super().service_list_today()
+        if service_online_list:
+            for serviceid in service_online_list:
+                super().batch_offline_admin(adminIds=serviceid)
         # 登录客服工作台，保持客服在线
         super().login_workbranche(self.tid)
         self.person_num = person_num  # 进线客户数
@@ -46,21 +50,22 @@ class Interrelation(WorkBranch, Customer):
                 tel = self.Fk.phone_number()
                 source = random.choice([0, 4])
                 print(f"\n\nsource 的值为  >>>>：{source}\n\n")
+                channelFlag = ''
                 if source == 4:
-                    channelFlag_list = super().get_child_source(channelType=1)
+                    channelFlag_info_list = super().get_child_source(channelType=1)
                 else:
-                    channelFlag_list = super().get_child_source(channelType=source)
-                if channelFlag_list is None or len(channelFlag_list) < 15:
-                    channel_name = self.Fk.name() + str(random.randint(100, 999))
-                    if source == 4:
-                        super().add_channel(channelName=channel_name, channelType=1)
-                    else:
-                        super().add_channel(channelName=channel_name, channelType=source)
-                if channelFlag_list:
-                    channelFlag = random.choice(channelFlag_list)
-                else:
-                    channelFlag = ""
-                print(f"\n\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
+                    channelFlag_info_list = super().get_child_source(channelType=source)
+                if channelFlag_info_list:
+                    channelFlag_list = [channel_info.get('channelFlag') for channel_info in channelFlag_info_list]
+                    if len(channelFlag_list) < 15:
+                        channel_name = self.Fk.name() + str(random.randint(100, 999))
+                        if source == 4:
+                            super().add_channel(channelName=channel_name, channelType=1)
+                        else:
+                            super().add_channel(channelName=channel_name, channelType=source)
+                    if channelFlag_list:
+                        channelFlag = random.choice(channelFlag_list)
+                        print(f"\n\nchannelFlag 的值为  >>>>：{channelFlag}\n\n")
                 if face_num == 1:
                     img_num = random.randint(1, 30)
                     file_content = (
@@ -229,7 +234,7 @@ if __name__ == '__main__':
     person_num = random.randint(4, 11)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(1, 2):
+    for i in range(7, 8):
         value = "AL"
         if i == 1:
             value = "AL"
@@ -243,6 +248,8 @@ if __name__ == '__main__':
             value = "US"
         if i == 6:
             value = "TS"
+        if i == 7:
+            value = "ALG"
         renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
         obj01 = Interrelation(person_num=3, interrelation_num=2)
         if obj01.tempid is not None:

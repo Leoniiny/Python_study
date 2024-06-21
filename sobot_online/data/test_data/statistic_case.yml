@@ -1,0 +1,10 @@
+data:
+  -
+    searchWay: 3
+    source: 0
+    channelFlag: 0_6
+    channelName:
+      -
+        channelType: 0
+        channelFlag: 6
+        subChannelName: 桌面网站-6

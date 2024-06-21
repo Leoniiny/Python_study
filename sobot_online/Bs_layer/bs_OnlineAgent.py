@@ -6,7 +6,9 @@
 import requests, re, json
 from urllib.parse import urlencode
 from sobot_online.Bs_layer.bs_login import Login
+from sobot_online.common.file_dealing import *
 from faker import Faker
+import json
 
 
 class ConsoleSetting(Login):
@@ -96,7 +98,7 @@ class ConsoleSetting(Login):
         response = self.session.post(url, headers=headers, data=data)
         print(f"\n\n>>>得到的渠道id 为：{json.loads(response.text).get('item').get('channelFlag')}<<<<\n\n")
 
-    def modify_channel_info(self, configId, channel_id,channelName, channelScene=0, operateFlag=0, channelType=0,
+    def modify_channel_info(self, configId, channel_id, channelName, channelScene=0, operateFlag=0, channelType=0,
                             channelMark=None, managerType=1, isTraceFlag=0):
         url = self.host + "/chat-set/rest/updateConfigInSettings/4"
         data = {
@@ -285,21 +287,118 @@ class ConsoleSetting(Login):
         response = self.session.post(url, headers=headers, data=json_data)
         print(response.text)
 
+    def get_session_statistics_page(self, searchWay=3, startDate="2024-06-17 00:00:00", endDate="2024-06-17 23:59:00",
+                                    source=None, channelFlag=None, page=1, size=15,
+                                    channelName='[{"channelType":"0","channelFlag":"1","subChannelName":"默认桌面网站"}]',
+                                    robotIdsParam=None, departIdsParam=None, allViewFlag=None, groupIdsParam=None,
+                                    staffIdsParam=None, summaryWay=None):
+        url = self.host + "/chat-statistics/newSessionStatistics/getSessionStatisticsPage"
+        data = {
+            "searchWay": searchWay,
+            "startDate": startDate,
+            "endDate": endDate,
+            "source": source,
+            'channelFlag': channelFlag,
+            "page": page,
+            "size": size,
+        }
+        if searchWay == 3:
+            over_data = {
+                "channelName": channelName
+            }
+            data.update(over_data)
+        if searchWay in [1, 2]:
+            over_data = {
+                'robotIdsParam': robotIdsParam,
+                'departIdsParam': departIdsParam,
+                'allViewFlag': allViewFlag,
+                'groupIdsParam': groupIdsParam,
+                'staffIdsParam': staffIdsParam
+            }
+            data.update(over_data)
+            # urlencode(data)
+        if summaryWay:
+            over_data2 = {
+                "summaryWay": summaryWay
+            }
+            data.update(over_data2)
+        print(f"data>>>：{data}")
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url, headers=headers, data=data)
+        print(f"接口返回code信息>>>：{json.loads(response.text).get('retMsg')}")
+        # print(f"接口返回信息>>>：{json.loads(response.text)}")
+
+    def leavemsg_list(self, status=0, leaveMsgStartTime="1718380800000", leaveMsgEndTime="1718985540000", uname=None, tel=None,
+                      leaveMsgId=None, leaveMsgContent=None, leaveMsgContentReverseFiltration=None, allotStatus=None,
+                      cusGroupIds=None, allotStartTime=None, allotEndTime=None, dealStartTime=None, dealEndTime=None,
+                      vipType=None, leaveMsgReason=None, allotAdminIds=None, currentAdminIds=None, dealAdminIds=None,
+                      sortKey="msgTime", sortValue="desc", type_type=None, page=1, size=15):
+        url = self.host + "/chat-statistics/leaveMsg/list/4"
+        payload = {
+            "status": status,
+            "leaveMsgStartTime": leaveMsgStartTime,
+            "leaveMsgEndTime": leaveMsgEndTime,
+            "uname": uname,
+            "tel": tel,
+            "leaveMsgId": leaveMsgId,
+            "leaveMsgContent": leaveMsgContent,
+            "leaveMsgContentReverseFiltration": leaveMsgContentReverseFiltration,
+            "allotStatus": allotStatus,
+            "cusGroupIds": cusGroupIds,
+            "allotStartTime": allotStartTime,
+            "allotEndTime": allotEndTime,
+            "dealStartTime": dealStartTime,
+            "dealEndTime": dealEndTime,
+            "vipType": vipType,
+            "leaveMsgReason": leaveMsgReason,
+            "allotAdminIds": allotAdminIds,
+            "currentAdminIds": currentAdminIds,
+            "dealAdminIds": dealAdminIds,
+            "sortKey": sortKey,
+            "sortValue": sortValue,
+            "type": type_type,
+            "page": page,
+            "size": size
+        }
+
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url, headers=headers, data=payload)
+        # print(response.text)
+        return json.loads(response.text)
+
 
 if __name__ == '__main__':
     pass
     obj = ConsoleSetting()
-    channelType=0
-    channelid_info_list = obj.get_child_source(channelType=channelType)
-    channelid_flag = [channelid.get('channelFlag') for channelid in channelid_info_list]
-    print(f"channelid_flag>>>：{sorted(channelid_flag)}")
+    # obj.get_session_statistics_page(channelFlag="0_1",channelName='[{"channelType":"0","channelFlag":"1","subChannelName":"默认桌面网站"}]')
+    # obj.get_session_statistics_page()
 
+    # channelType = 0
+    # channelid_info_list = obj.get_child_source(channelType=channelType)
+    # channelid_flag = [channelid.get('channelFlag') for channelid in channelid_info_list]
+    # print(f"channelid_flag>>>：{sorted(channelid_flag)}")
+    #
     # # 修改渠道信息
     # channelid_configId = [channelid.get('configId') for channelid in channelid_info_list]
     # channel_id = [channelid.get('id') for channelid in channelid_info_list]
-    # for i in range(len(channelid_flag)-1):
+    # for i in range(len(channelid_flag) - 1):
     #     channelidflag = channelid_flag[i]
     #     configId = channelid_configId[i]
     #     channel_id = channelid_configId[i]
-    #     obj.modify_channel_info(configId=configId, channel_id=channel_id,channelName='移动网站-'+str(channelidflag),channelType=channelType)
+    #     obj.modify_channel_info(configId=configId, channel_id=channel_id, channelName='桌面网站-' + str(channelidflag),
+    #                             channelType=channelType)
 
+    # srId_list = obj.get_all_route_list()
+    # for srId in srId_list:
+    #     obj.modify_route_status(srId = srId)
+
+    # test_data = load_yaml_file(filepath=r"/data/test_data/statistic_case.yml")["data"]
+    # for dic in test_data:
+    #     obj.get_session_statistics_page(**dic)
+    rest = obj.leavemsg_list()

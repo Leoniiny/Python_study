@@ -27,11 +27,12 @@ class Login:
         requests.DEFAULT = 5
         # 关闭多余的链接：
         self.session.keep_alive = False
+        password = base64_secret(loginPwd,self.bno)
         if self.sb == "HK":
             url = self.host + "/basic-login/serviceLogin/4"
             data = {
                 "loginUser": loginUser,
-                "loginPwd": loginPwd,
+                "loginPwd": password,
                 "randomKey": "",
                 "loginFlag": "1",
                 "terminalCode": ""
@@ -44,7 +45,7 @@ class Login:
             url = self.host + "/basic-login/account/consoleLogin/4"
             data = json.dumps({
                 "loginUser": loginUser,
-                "loginPwd": str(loginPwd),
+                "loginPwd": str(password),
                 "randomKey": "",
                 "loginFlag": "1",
                 "terminalCode": ""
@@ -56,9 +57,10 @@ class Login:
             response = self.session.post(url, headers=headers, data=data)
             # print(f"response >>>  ：{response.text}")
             item_value= json.loads(response.text).get("item")
-            # print(f"self.tempid >>>  ：{self.tempid}")
+            # print(f"item_value >>>  ：{item_value}")
             if len(item_value) > 100:
                 self.tempid = item_value
+                # print(f"self.tempid >>>  ：{self.tempid}")
             else:
                 self.tempid = None
         except Exception as e:

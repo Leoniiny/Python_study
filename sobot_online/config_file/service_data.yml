@@ -2,7 +2,7 @@ HK:
   Sysbol: HK
   SYSNUM: 913d909e3a194598ba61cf904b5dc12a
   EMAIL: kf_admin3@hk.com
-  PWD: THlwMTIzNDU2
+  PWD: Lyp123456
   HOST: http://hk.sobot.com
   HOST2: http://hk.sobot.com
 
@@ -10,7 +10,7 @@ TX:
   Sysbol: TX
   SYSNUM: 5105b359aa37444284f5b0660a6fed24
   EMAIL: zc_ten01@ten.com
-  PWD: THlwMTIzNDU2
+  PWD: Lyp123456
   HOST: https://api-c.soboten.com/text
   HOST2: https://www.soboten.com
 
@@ -18,7 +18,7 @@ AL:
   Sysbol: AL
   SYSNUM: cfd4681074ce4bed904928fb609fc824
   EMAIL: aliyqijiancjb04@163.com
-  PWD: YWxpMTIzNDU2
+  PWD: ali123456
   HOST: https://api-c.sobot.com/text
   HOST2: https://www.sobot.com
 
@@ -26,7 +26,7 @@ XJP:
   Sysbol: XJP
   SYSNUM: 826683f48d7244ada08a67bb37b26cf3
   EMAIL: kf_admin3@sg.com
-  PWD: THlwMTIzNDU2
+  PWD: Lyp123456
   HOST: https://sg.sobot.com
   HOST2: https://sg.sobot.com
 
@@ -34,7 +34,7 @@ US:
   Sysbol: US
   SYSNUM: 3837cca3bda44f88b5a065c72c0ba62d
   EMAIL: 11@qq.com
-  PWD: THlwMTIzNDU2
+  PWD: Lyp123456
   HOST: https://us.sobot.com
   HOST2: https://us.sobot.com
 
@@ -42,7 +42,7 @@ TS:
   Sysbol: TS
   SYSNUM: 443af7afa23f4c87a8900f178137d09c
   EMAIL: ceshiqijianxb01@qq.com
-  PWD: THlwMTIzNDU2
+  PWD: Lyp123456
   HOST: https://test.sobot.com
   HOST2: https://test-branche1.sobot.com/text
 
@@ -50,6 +50,6 @@ ALG:
   Sysbol: AL
   SYSNUM: cfd4681074ce4bed904928fb609fc824
   EMAIL: aliyqijiancjb04@163.com
-  PWD: YWxpMTIzNDU2
+  PWD: ali123456
   HOST: https://api-c-grey.sobot.com/text
   HOST2: https://www.sobot.com

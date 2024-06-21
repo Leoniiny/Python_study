@@ -41,6 +41,7 @@ def base64_secret(pwd: str, companyid: str):
     base64_encoding = str(base64.b64encode(raw_pwd.encode("utf-8")))
     # 将转换成字符串的base64编码结果截取自己想要的结果
     new_pwd = base64_encoding[2:14]
+    # print(new_pwd)
     return new_pwd
 
 
@@ -50,7 +51,6 @@ def get_today_zero():
     local_time_zero = local.replace(hour=0, minute=0, second=0)
     now_time = datetime.datetime.now()
     return local_time_zero, now_time
-
 
 ABS_PATH = os.path.abspath(__file__)  # 获取当前文件的绝对路径
 COMMON_PATH = os.path.dirname(ABS_PATH)  # py文件所在的目录
@@ -68,3 +68,4 @@ if __name__ == '__main__':
     # print( time2)
     # print(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     print(DATA_PATH)
+    base64_secret("Lyp123456","443af7afa23f4c87a8900f178137d09c")

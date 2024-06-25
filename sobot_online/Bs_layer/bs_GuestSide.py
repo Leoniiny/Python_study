@@ -386,6 +386,9 @@ if __name__ == '__main__':
     #     for j in range(2):
     #         time.sleep(1)
     #         obj.allot_leave_msg(uid=uid, content="验证用户多次留言：" + str(j))
-    rest = obj.v6_guest_info_init()
-    cid = json.loads(rest).get('cid')
-    print(f'cid>>>:{cid}')
+
+    for i in range(1):
+        partnerid = "guest"+str(random.randint(1111111, 999999999))
+        rest = obj.v6_guest_info_init(partnerId=partnerid)
+        schemeName = json.loads(rest).get('schemeName')
+        print(f'schemeName>>>:{schemeName}')

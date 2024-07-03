@@ -1,11 +1,8 @@
-import threading
-import time
-import requests, random
+import requests
 from urllib.parse import urlencode
 from faker import Faker
+from sobot_online.common.file_dealing import *
 fake = Faker(locale="zh_CN")
-from sobot_online.Bs_layer.bs_WorkBranche import WorkBranch
-from threading import Thread
 
 
 class Chat:
@@ -24,7 +21,6 @@ class Chat:
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'}
         response = requests.request("POST", url, headers=headers, data=payload)
-        # print(response.text)
         uid = response.json()["uid"]
         cid = response.json()["cid"]
         puid = response.json()["puid"]
@@ -36,7 +32,7 @@ class Chat:
         response1 = requests.request("POST", url, headers=headers, data=payload)
         print(f"response1   >>>>{response1.text}")
 
-        for i in range(1, 803):
+        for i in range(1, 5):
             time.sleep(0.5)
             content = fake.text() + fake.text()
             # time.sleep(30)  # 每隔30秒发送一条信息给客服
@@ -78,18 +74,14 @@ class Chat:
 if __name__ == '__main__':
     pass
     obj = Chat()
+    env = "ALG"
+    customer_detail = load_yaml_file(filepath=r"/config_file/customer_env.yml")[f"{env}"]
+    print(f"customer_detail>>>：{customer_detail}")
+    for i in range(10,23):
+        obj.chat(
+            host=customer_detail.get('host'),
+            sysNum=customer_detail.get('sysNum'),
+            groupId=customer_detail.get('groupId'),
+            partnerId="receive" + str(i)
+        )
 
-    # for i in range(2,3):
-    #     obj.chat(
-    #         # host="https://sg-grey.sobot.io",
-    #         # sysNum="826683f48d7244ada08a67bb37b26cf3",
-    #         # groupId="285b3628fb28424aa5716ccf409306cf",
-    #         partnerId="msgover" + str(i)
-    #     )
-
-    t1 = threading.Thread(target=Chat().chat,args=("https://api-c.soboten.com/text","5105b359aa37444284f5b0660a6fed24","c0ea210d47a945fbb125deddd245d602",'msgover1'))
-    t2 = threading.Thread(target=obj.chat,args=("https://sg.sobot.com","826683f48d7244ada08a67bb37b26cf3","636b94224bb04b87ba1da42a16e278ea",'msgover1'))
-    t3 = threading.Thread(target=obj.chat,args=("https://us.sobot.com","3837cca3bda44f88b5a065c72c0ba62d","0564047dd77945718aba3671fbfce50f",'msgover1'))
-    t1.start()
-    t2.start()
-    t3.start()

@@ -46,8 +46,6 @@ class Interrelation(WorkBranch, Customer):
                 # 初始化访客进线信息
                 print(f"这是第{j}个客户;当前运行的是域名是：{self.host}")
                 face_num = isVip = questionStatus = score = solved = commentType = j % 2
-                email_num = self.Fk.company_email()
-                tel = self.Fk.phone_number()
                 source = random.choice([0, 4])
                 print(f"\n\nsource 的值为  >>>>：{source}\n\n")
                 channelFlag = ''
@@ -74,8 +72,11 @@ class Interrelation(WorkBranch, Customer):
                     face = super().uploading_images(file_content=file_content)
                 else:
                     face = ""
-                partnerid = "test" + str(random.randint(100000, 999999))
+                # partnerid = "test" + str(random.randint(100000, 999999))
+                partnerid = "satis" + str(random.randint(10, 99))
                 uname = self.vist_name + "：" + self.Fk.name() + "-" + partnerid
+                email_num = self.Fk.company_email()
+                tel = self.Fk.phone_number()
                 # 确定客户信息初始化
                 uid, cid, pid,userId = super().v2_customer_info_init(partnerid=partnerid, uname=uname,
                                                                      source=source, face=face, email_num=email_num, tel=tel,
@@ -234,25 +235,25 @@ if __name__ == '__main__':
     person_num = random.randint(4, 11)
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
-    for i in range(7, 8):
-        value = "AL"
-        if i == 1:
-            value = "AL"
-        if i == 2:
-            value = "TX"
-        if i == 3:
-            value = "XJP"
-        if i == 4:
-            value = "HK"
-        if i == 5:
-            value = "US"
-        if i == 6:
-            value = "TS"
-        if i == 7:
-            value = "ALG"
-        renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-        obj01 = Interrelation(person_num=3, interrelation_num=2)
-        if obj01.tempid is not None:
-            obj01.interrelation()
-        else:
-            pass
+    value = "TS"
+    # for i in range(4, 5):
+    #     if i == 1:
+    #         value = "AL"
+    #     if i == 2:
+    #         value = "TX"
+    #     if i == 3:
+    #         value = "XJP"
+    #     if i == 4:
+    #         value = "HK"
+    #     if i == 5:
+    #         value = "US"
+    #     if i == 6:
+    #         value = "TS"
+    #     if i == 7:
+    #         value = "ALG"
+    renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
+    obj01 = Interrelation(person_num=10, interrelation_num=2)
+    if obj01.tempid is not None:
+        obj01.interrelation()
+    else:
+        pass

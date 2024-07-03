@@ -1,0 +1,14 @@
+TS:
+  host: https://api-c-test.sobot.com/text
+  sysNum: 443af7afa23f4c87a8900f178137d09c
+  groupId: 02aef73af7374cddae8dc639f71b8f24
+
+ALG:
+  host: https://api-c-grey.sobot.com/text
+  sysNum: cfd4681074ce4bed904928fb609fc824
+  groupId: c7366a469ac5483cabdb03dc40513107
+
+HK:
+  host: https://hk.sobot.com
+  sysNum: 913d909e3a194598ba61cf904b5dc12a
+  groupId: 135cbdc489f9412881ae97781bc0999a

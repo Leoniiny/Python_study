@@ -38,7 +38,7 @@ class Customer:
         print(response.text)
 
     # 2、获取访客信息配置，获取cid，uid
-    def v2_customer_info_init(self, partnerid: str = "nnnd", uname="",
+    def v2_customer_info_init(self, partnerid: str = "nnnd11", uname="",
                               source=0, channelFlag="", face="", isVip="0", tel="", email_num="",vipLevel=''):
         """
         :param email_num:
@@ -141,38 +141,39 @@ class Customer:
     def chat_connection(self, uid, cid, groupId=None):
         url = self.host + "/chat-web/user/chatconnect.action"
         data = {
-            "sysNum": self.bno,
-            "uid": uid,
-            "cid": cid,
-            "chooseAdminId": "",
-            "tranFlag": "0",
-            "current": "false",
-            "groupId": groupId,
-            "keyword": "",
-            "keywordId": "",
-            "queueFlag": "",
-            "transferType": "0",
-            "transferAction": "",
-            "adminHelloWord": "",
-            "activeTransfer": "1",
-            "unknownQuestion": "",
-            "docId": "",
-            "answerMsgId": "",
-            "ruleId": "",
-            "flowType": "",
-            "flowCompanyId": "",
-            "flowGroupId": ""
-        }
+                "sysNum": self.bno,
+                "uid": uid,
+                "cid": cid,
+                "chooseAdminId": "",
+                "tranFlag": "0",
+                "current": "false",
+                "groupId": groupId,
+                "keyword": "",
+                "keywordId": "",
+                "queueFlag": "",
+                "transferType": "0",
+                "transferAction": "",
+                "adminHelloWord": "",
+                "activeTransfer": "1",
+                "unknownQuestion": "",
+                "docId": "",
+                "answerMsgId": "",
+                "ruleId": "",
+                "flowType": "",
+                "flowCompanyId": "",
+                "flowGroupId": ""
+            }
         headers = {
             'bno': self.bno,
-            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Content-Type': "application/x-www-form-urlencoded; charset=UTF-8",
         }
         response = self.session.post(url, headers=headers, data=data)
-        puid = json.loads(response.text).get("puid")
-        status = json.loads(response.text).get("status")
-        print(f"chat_connection   中的 response.text>>>：{response.text}")
-        print(f"chat_connection   中的 puid>>>：{puid}")
-        print(f"chat_connection   中的 status>>>：{status}")
+        # puid = json.loads(response.text).get("puid")
+        # status = json.loads(response.text).get("status")
+        # print(f"chat_connection   中的 response.text>>>：{response.text}")
+        # print(f"chat_connection   中的 puid>>>：{puid}")
+        # print(f"chat_connection   中的 status>>>：{status}")
+        # print(f"177行：response.text>>>：{response.text}")
         rest = json.loads(response.text)
         return rest
 
@@ -381,14 +382,6 @@ class Customer:
 if __name__ == '__main__':
     pass
     obj = Customer()
-    # for i in range(3876, 3878):
-    #     uid, cid, pid, userid = obj.customer_info_init(partnerid=str(i * 1000))
-    #     for j in range(2):
-    #         time.sleep(1)
-    #         obj.allot_leave_msg(uid=uid, content="验证用户多次留言：" + str(j))
+    uid, cid, pid, userId = obj.v2_customer_info_init()
+    obj.chat_connection(cid=cid,uid=uid)
 
-    for i in range(1):
-        partnerid = "guest"+str(random.randint(1111111, 999999999))
-        rest = obj.v6_guest_info_init(partnerId=partnerid)
-        schemeName = json.loads(rest).get('schemeName')
-        print(f'schemeName>>>:{schemeName}')

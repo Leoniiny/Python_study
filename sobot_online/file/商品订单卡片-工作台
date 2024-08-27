@@ -5,7 +5,7 @@ window.parent.postMessage({
         miniPage:JSON.stringify({
 	"cardId": "1",
 	"cardStyle": "1",
-	"cardType": "1",
+	"cardType": "0",
 	"cardTrigger": "2",
 	"isCustomerIdentity": "0",
 	"cardGuide": "1234567890123567890123456789012345678901234567890",

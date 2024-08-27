@@ -331,7 +331,8 @@ class ConsoleSetting(Login):
         print(f"接口返回code信息>>>：{json.loads(response.text).get('retMsg')}")
         # print(f"接口返回信息>>>：{json.loads(response.text)}")
 
-    def leavemsg_list(self, status=0, leaveMsgStartTime="1718380800000", leaveMsgEndTime="1718985540000", uname=None, tel=None,
+    def leavemsg_list(self, status=0, leaveMsgStartTime="1718380800000", leaveMsgEndTime="1718985540000", uname=None,
+                      tel=None,
                       leaveMsgId=None, leaveMsgContent=None, leaveMsgContentReverseFiltration=None, allotStatus=None,
                       cusGroupIds=None, allotStartTime=None, allotEndTime=None, dealStartTime=None, dealEndTime=None,
                       vipType=None, leaveMsgReason=None, allotAdminIds=None, currentAdminIds=None, dealAdminIds=None,
@@ -372,33 +373,109 @@ class ConsoleSetting(Login):
         # print(response.text)
         return json.loads(response.text)
 
+    def update_scheme(self, schemeid, status=0, editType="1"):
+        '''
+        开启|关闭接待方案
+        :param schemeid:
+        :param status:删除：9
+        :param editType:删除：2
+        :return:
+        '''
+        url = self.host + "/chat-set/reception/updateScheme"
+        data = {
+            "id": schemeid,
+            "status": status,
+            "editType": editType
+        }
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url, headers=headers, data=data)
+        print(response.text)
+
+    def get_scheme_list(self, status=1, scheme_name="", page=1, pageSize=999999):
+        url = self.host + "/chat-set/reception/getSchemeList"
+        params = {
+            "status": status,
+            "name": scheme_name,
+            "page": page,
+            "pageSize": pageSize
+        }
+        headers = {
+            'temp-id': self.tempid
+        }
+        response = self.session.get(url=url, headers=headers, params=params)
+        return json.loads(response.text)
+
+    def query_skill_group_list(self, queryContent=None, departIdsEquals=None, allVisibleFlag=None, pageNo=1,
+                               pageSize=20):
+        """
+        查询技能组
+        :param queryContent:
+        :param departIdsEquals:
+        :param allVisibleFlag:
+        :param pageNo:
+        :param pageSize:
+        :return:
+        """
+        url = self.host + "/basic-public/group/queryCusGroupByDepart"
+        params = {
+            'pageNo': pageNo,
+            'pageSize': pageSize,
+            'allVisibleFlag': allVisibleFlag,
+            'departIdsEquals': departIdsEquals,
+            'queryContent': queryContent
+        }
+        headers = {
+            'temp-id': self.tempid
+        }
+        response = self.session.get(url=url, headers=headers, params=params)
+        print(response.text)
+        return json.loads(response.text)
+
+    def del_skill_group(self, groupId):
+        """
+        删除技能组
+        :param groupId:
+        :return:
+        """
+        url = self.host + "/chat-set/deleteGroupInfo/4"
+        payload = {
+            "groupId": groupId
+        }
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url=url, headers=headers, data=payload)
+        print(response.text)
+
+    def update_setting_method(self,settingMethod=1,templateId=""):
+        """
+        会话设置-满意度评价
+        :param settingMethod:
+        :param templateId:
+        :return:
+        """
+        url = self.host + "/chat-satisfaction/saticfaction/updateSettingMethod"
+        data = {
+            "settingMethod": settingMethod,
+            "templateId": templateId
+        }
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url=url, headers=headers, data=data)
+        print(response.text)
+
 
 if __name__ == '__main__':
     pass
     obj = ConsoleSetting()
-    # obj.get_session_statistics_page(channelFlag="0_1",channelName='[{"channelType":"0","channelFlag":"1","subChannelName":"默认桌面网站"}]')
-    # obj.get_session_statistics_page()
-
-    # channelType = 0
-    # channelid_info_list = obj.get_child_source(channelType=channelType)
-    # channelid_flag = [channelid.get('channelFlag') for channelid in channelid_info_list]
-    # print(f"channelid_flag>>>：{sorted(channelid_flag)}")
-    #
-    # # 修改渠道信息
-    # channelid_configId = [channelid.get('configId') for channelid in channelid_info_list]
-    # channel_id = [channelid.get('id') for channelid in channelid_info_list]
-    # for i in range(len(channelid_flag) - 1):
-    #     channelidflag = channelid_flag[i]
-    #     configId = channelid_configId[i]
-    #     channel_id = channelid_configId[i]
-    #     obj.modify_channel_info(configId=configId, channel_id=channel_id, channelName='桌面网站-' + str(channelidflag),
-    #                             channelType=channelType)
-
-    # srId_list = obj.get_all_route_list()
-    # for srId in srId_list:
-    #     obj.modify_route_status(srId = srId)
-
-    # test_data = load_yaml_file(filepath=r"/data/test_data/statistic_case.yml")["data"]
-    # for dic in test_data:
-    #     obj.get_session_statistics_page(**dic)
-    rest = obj.leavemsg_list()
+    sche_list =obj.get_scheme_list(status=0)
+    print(f"sche_list>>>：\n\n{sche_list}")
+    for i in sche_list["items"]:
+        print(i["id"])
+        obj.update_scheme(schemeid=i["id"], status=9,editType="2")

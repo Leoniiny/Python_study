@@ -32,10 +32,12 @@ class Chat:
         response1 = requests.request("POST", url, headers=headers, data=payload)
         print(f"response1   >>>>{response1.text}")
 
-        for i in range(1, 5):
+        for i in range(1, 10):
             time.sleep(0.5)
-            content = fake.text() + fake.text()
+            content = f"同一个访客第3次进线，消息：{i}"
+            # content = f"这是第{i}次，访客端发送信息content>>>"+fake.text()
             # time.sleep(30)  # 每隔30秒发送一条信息给客服
+            # time.sleep(4)
             url = host + "/chat-web/message/user/send.action"
             data = urlencode({
                 "puid": str(puid),
@@ -74,14 +76,16 @@ class Chat:
 if __name__ == '__main__':
     pass
     obj = Chat()
-    env = "ALG"
+    env = "HK"
     customer_detail = load_yaml_file(filepath=r"/config_file/customer_env.yml")[f"{env}"]
     print(f"customer_detail>>>：{customer_detail}")
-    for i in range(10,23):
-        obj.chat(
+    for i in range(10,11):
+        rest = obj.chat(
             host=customer_detail.get('host'),
             sysNum=customer_detail.get('sysNum'),
-            groupId=customer_detail.get('groupId'),
-            partnerId="receive" + str(i)
+            groupId='135cbdc489f9412881ae97781bc0999a',
+            # groupId=customer_detail.get('groupId'),
+            partnerId="many-" + str(i)
         )
+        print(f"rest>>>：{rest}")
 

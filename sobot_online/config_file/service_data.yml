@@ -53,3 +53,11 @@ ALG:
   PWD: ali123456
   HOST: https://api-c-grey.sobot.com/text
   HOST2: https://www.sobot.com
+
+XJPG:
+  Sysbol: XJP
+  SYSNUM: 826683f48d7244ada08a67bb37b26cf3
+  EMAIL: kf_admin3@sg.com
+  PWD: Lyp123456
+  HOST: https://sg-grey.sobot.io
+  HOST2: https://sg-grey.sobot.io

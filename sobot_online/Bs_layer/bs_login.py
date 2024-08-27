@@ -55,9 +55,7 @@ class Login:
             }
         try:
             response = self.session.post(url, headers=headers, data=data)
-            # print(f"response >>>  ：{response.text}")
             item_value= json.loads(response.text).get("item")
-            # print(f"item_value >>>  ：{item_value}")
             if len(item_value) > 100:
                 self.tempid = item_value
                 # print(f"self.tempid >>>  ：{self.tempid}")

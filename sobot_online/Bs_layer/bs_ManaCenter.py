@@ -61,4 +61,4 @@ if __name__ == '__main__':
     obj = MangeCenter()
     for i in range(2,101):
         ruleTitle = "无效数据"+str(i)
-        obj.segment(ruleTitle=ruleTitle)
+        obj.save_seg_ruler(ruleTitle=ruleTitle)

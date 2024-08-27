@@ -12,14 +12,13 @@ sys.path.append(root_path)
 from faker import Faker
 from sobot_online.Bs_layer.bs_GuestSide import Customer
 from sobot_online.Bs_layer.bs_WorkBranche import WorkBranch
-from sobot_online.Bs_layer.bs_CRM import CRM
 from sobot_online.common.file_dealing import *
 
 
 class Interrelation(WorkBranch, Customer):
     def __init__(self, person_num=1, interrelation_num=2):
         super().__init__()
-        if self.sb in ["AL", "TX","TS"]:
+        if self.sb in ["AL", "TX", "TS"]:
             self.Fk = Faker(locale="zh_CN")
             self.vist_name = "访客"
         else:
@@ -27,10 +26,13 @@ class Interrelation(WorkBranch, Customer):
             self.vist_name = "visitor"
         self.serviceId = super().service_menus()
         self.tid = super().get_tid(self.serviceId)
+
+        # 如果有其他客服在线，就强制下线
         service_online_list = super().service_list_today()
         if service_online_list:
             for serviceid in service_online_list:
                 super().batch_offline_admin(adminIds=serviceid)
+
         # 登录客服工作台，保持客服在线
         super().login_workbranche(self.tid)
         self.person_num = person_num  # 进线客户数
@@ -78,9 +80,10 @@ class Interrelation(WorkBranch, Customer):
                 email_num = self.Fk.company_email()
                 tel = self.Fk.phone_number()
                 # 确定客户信息初始化
-                uid, cid, pid,userId = super().v2_customer_info_init(partnerid=partnerid, uname=uname,
-                                                                     source=source, face=face, email_num=email_num, tel=tel,
-                                                                     channelFlag=channelFlag, isVip=str(isVip))
+                uid, cid, pid, userId = super().v2_customer_info_init(partnerid=partnerid, uname=uname,
+                                                                      source=source, face=face, email_num=email_num,
+                                                                      tel=tel,
+                                                                      channelFlag=channelFlag, isVip=str(isVip))
                 # 关闭智能路由
                 srId_list = super().get_all_route_list()
                 try:
@@ -113,22 +116,26 @@ class Interrelation(WorkBranch, Customer):
                             # 客服邀请评价： commentType == 0 为客服邀请评价
                             if commentType == 0:
                                 super().recomment(tid=self.tid, cid=cid, uid=uid)
-                            # 客服进行服务总结
-                            fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                            unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid, cid=cid)
-                            print(f"\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list}"
-                                  f",unit_fieldList >>>：{unit_fieldList}\n", sep="\n")
-                            super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
-                                                    questionStatus=questionStatus, questionDescribe=questionDescribe,
-                                                    fields_value=fields_value,
-                                                    unit_info=unit_info, unit_body_list=unit_body_list,
-                                                    unit_fieldList=unit_fieldList)
-                            # 客户进行满意度评价
-                            satisfaction_info = super().satisfaction_message_data(uid=uid)
-                            super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
-                                            commentType=commentType, satisfaction_info=satisfaction_info)
-                            print(f"\n\n客户进行满意度评价 评价成功！！！\n\n")
+                            if j % 2 == 1:
+                                # 客服进行服务总结
+                                fields_value = questionDescribe = self.Fk.paragraph() + self.Fk.paragraph()
+                                unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,
+                                                                                                   cid=cid)
+                                print(f"\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list}"
+                                      f",unit_fieldList >>>：{unit_fieldList}\n", sep="\n")
+                                super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
+                                                        questionStatus=questionStatus,
+                                                        questionDescribe=questionDescribe,
+                                                        fields_value=fields_value,
+                                                        unit_info=unit_info, unit_body_list=unit_body_list,
+                                                        unit_fieldList=unit_fieldList)
+                                # 客户进行满意度评价
+                                satisfaction_info = super().satisfaction_message_data(uid=uid)
+                                super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
+                                                commentType=commentType, satisfaction_info=satisfaction_info)
+                                print(f"\n\n客户进行满意度评价 评价成功！！！\n\n")
                             # 客户进行留言
+                            content = self.Fk.paragraph()
                             super().allot_leave_msg(uid=uid, content=content)
                             # 访客离线
                             super().out_action(uid=uid)
@@ -180,24 +187,26 @@ class Interrelation(WorkBranch, Customer):
                                 # 客服邀请评价： commentType == 0 为客服邀请评价
                                 if commentType == 0:
                                     super().recomment(tid=self.tid, cid=cid, uid=uid)
-                                # 客服进行服务总结
-                                fields_value = questionDescribe = content = self.Fk.paragraph() + self.Fk.paragraph() + self.Fk.paragraph()
-                                unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,
-                                                                                                   cid=cid)
-                                print(
-                                    f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n")
-                                super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
-                                                        questionStatus=questionStatus,
-                                                        questionDescribe=questionDescribe,
-                                                        fields_value=fields_value,
-                                                        unit_info=unit_info, unit_body_list=unit_body_list,
-                                                        unit_fieldList=unit_fieldList)
-                                # 客户进行满意度评价
-                                satisfaction_info = super().satisfaction_message_data(uid=uid)
-                                super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
-                                                commentType=commentType, satisfaction_info=satisfaction_info)
-                                print(f"\n\n  6 --->> 1  客户进行满意度评价评价成功！！！\n\n")
+                                if j % 2 == 1:
+                                    # 客服进行服务总结
+                                    fields_value = questionDescribe = self.Fk.paragraph() + self.Fk.paragraph()
+                                    unit_info, unit_body_list, unit_fieldList = super().get_unifo_body(tid=self.tid,
+                                                                                                       cid=cid)
+                                    print(
+                                        f"\n\n获取业务单元列表 unit_info >>>：{unit_info}，unit_body_list >>>：{unit_body_list},unit_fieldList >>>：{unit_fieldList}\n\n")
+                                    super().submmit_summary(tid=self.tid, uid=uid, cid=cid, pid=pid,
+                                                            questionStatus=questionStatus,
+                                                            questionDescribe=questionDescribe,
+                                                            fields_value=fields_value,
+                                                            unit_info=unit_info, unit_body_list=unit_body_list,
+                                                            unit_fieldList=unit_fieldList)
+                                    # 客户进行满意度评价
+                                    satisfaction_info = super().satisfaction_message_data(uid=uid)
+                                    super().comment(cid=cid, uid=uid, solved=solved, remark=self.Fk.text(),
+                                                    commentType=commentType, satisfaction_info=satisfaction_info)
+                                    print(f"\n\n  6 --->> 1  客户进行满意度评价评价成功！！！\n\n")
                                 # 客户进行留言
+                                content = self.Fk.paragraph()
                                 super().allot_leave_msg(uid=uid, content=content)
                                 super().out_action(uid=uid)
                                 break
@@ -222,7 +231,7 @@ class Interrelation(WorkBranch, Customer):
                                 break
             else:
                 # 工作台离线
-                super().service_out(uid = self.tid)
+                super().service_out(uid=self.tid)
                 print(f"当前运行的是域名是：{self.host}")
                 time.sleep(5)
                 break
@@ -236,7 +245,8 @@ if __name__ == '__main__':
     interrelation_num = random.randint(1, 10)
     print(f"\n\nperson_num >>>：{person_num},interrelation_num >>>：{interrelation_num},\n\n")
     value = "TS"
-    # for i in range(4, 5):
+    renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
+    # for i in range(1, 7):
     #     if i == 1:
     #         value = "AL"
     #     if i == 2:
@@ -251,8 +261,8 @@ if __name__ == '__main__':
     #         value = "TS"
     #     if i == 7:
     #         value = "ALG"
-    renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
-    obj01 = Interrelation(person_num=10, interrelation_num=2)
+    #     renewal_yaml(file_path=r'''/config_file/operation_config.yml''', key="config", value=value)
+    obj01 = Interrelation(person_num=4, interrelation_num=2)
     if obj01.tempid is not None:
         obj01.interrelation()
     else:

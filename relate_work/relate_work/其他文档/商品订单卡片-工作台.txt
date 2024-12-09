@@ -5,12 +5,16 @@ window.parent.postMessage({
         miniPage:JSON.stringify({
 	"cardId": "1",
 	"cardStyle": "1",
-	"cardType": "0",
-	"cardTrigger": "2",
+	"cardType": "1",
+	"cardTrigger": "2", //仅发送机器人（0）、仅发送人工（不传入参数则默认为1）、机器人和人工都发送（2）
 	"isCustomerIdentity": "0",
 	"cardGuide": "1234567890123567890123456789012345678901234567890",
 	"cardImg": "https://img.sobot.com/chatres/137647808eba49b8ab81b4cf0b8e8c9d/msg/20230628/4eef15f80e3a8e25448365cef0d31b0f/aece05e116d24ac99ced073e5ed95eed.png",
 	"cardDesc": "通用卡片-超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述超长描述",
+    "ticketPartnerField":{
+	    "test01":"测试字段1-1",
+	    "test02":"测试字段1-2"
+	},
 	"customField": {
 		"自定义字段1": "自定义字段1",
 		"自定义字段2": "自定义字段2",

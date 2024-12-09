@@ -4,7 +4,6 @@
 from sobot_online.Bs_layer.bs_GuestSide import *
 from faker import Faker
 from sobot_online.Bs_layer.bs_OnlineAgent import *
-
 fake = Faker(locale="zh")
 
 
@@ -20,18 +19,21 @@ class Merge_leavMsg(Customer):
         super().out_action(uid)
 
 
+
+
+
 if __name__ == '__main__':
     obj = Merge_leavMsg()
-    for i in range(1, 5):
-        partnerid = "testleave"+str(random.randint(1111111, 999999999))
-        content = f'这个客户{partnerid}的留言'
+    for i in range(257, 1101):
+        partnerid = "sg_live_leave"+str(random.randint(1111111, 999999999))
+        content = f'第{i}条，留言轮询。明辉的数据--这个客户{partnerid}的留言'
         obj.leave_msg(partnerid=partnerid, source=0, content=content)
-    rest = ConsoleSetting().leavemsg_list()
-    if rest.get('items'):
-        currentAdminName_list =[]
-        for i in range(1, 5):
-            currentAdminName_list.append(rest.get('items')[i-1].get('currentAdminName'))
-        print(currentAdminName_list)
+    # rest =LeaveMsg().unprocessed_leavemsg_list()
+    # if rest.get('items'):
+    #     currentAdminName_list =[]
+    #     for i in range(1, 5):
+    #         currentAdminName_list.append(rest.get('items')[i-1].get('currentAdminName'))
+    #     print(f"currentAdminName_list: {currentAdminName_list}")
 
 
     # for i in range(16, 21):

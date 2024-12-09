@@ -20,7 +20,8 @@ def translate_str_to_dic(string: str):
 
 if __name__ == '__main__':
     pass
-    str =  "'status=0&leaveMsgStartTime=1723737600000&leaveMsgEndTime=1724342340000&uname=&tel=&leaveMsgId=&leaveMsgContent=&leaveMsgContentReverseFiltration=&allotStatus=&cusGroupIds=&allotStartTime=&allotEndTime=&dealStartTime=&dealEndTime=&vipType=&leaveMsgReason=&allotAdminIds=&currentAdminIds=&dealAdminIds=&sortKey=msgTime&sortValue=desc&type=&page=1&size=15'"
+    str =  'sysNum={self.sysNum}&uid={uid}&cid={cid}&chooseAdminId=&tranFlag=0&current=false&groupId={self.groupId}'
+
 
 
 

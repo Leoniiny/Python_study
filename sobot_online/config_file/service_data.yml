@@ -22,7 +22,7 @@ AL:
   HOST: https://api-c.sobot.com/text
   HOST2: https://www.sobot.com
 
-XJP:
+SG:
   Sysbol: XJP
   SYSNUM: 826683f48d7244ada08a67bb37b26cf3
   EMAIL: kf_admin3@sg.com
@@ -43,8 +43,8 @@ TS:
   SYSNUM: 443af7afa23f4c87a8900f178137d09c
   EMAIL: ceshiqijianxb01@qq.com
   PWD: Lyp123456
-  HOST: https://test.sobot.com
-  HOST2: https://test-branche1.sobot.com/text
+  HOST: https://api-c-test.sobot.com/text
+  HOST2: https://api-c-test.sobot.com/text
 
 ALG:
   Sysbol: AL
@@ -54,10 +54,26 @@ ALG:
   HOST: https://api-c-grey.sobot.com/text
   HOST2: https://www.sobot.com
 
-XJPG:
+SGG:
   Sysbol: XJP
   SYSNUM: 826683f48d7244ada08a67bb37b26cf3
   EMAIL: kf_admin3@sg.com
   PWD: Lyp123456
   HOST: https://sg-grey.sobot.io
   HOST2: https://sg-grey.sobot.io
+
+
+TS1:
+  Sysbol: TS
+  SYSNUM: 8d8a61706066470f98a1ba02d6b6d7a5
+  EMAIL: ceshiqijian08@163.com
+  PWD: Lyp123456
+  HOST: https://api-c-test.sobot.com/text
+  HOST2: https://api-c-test.sobot.com/text
+
+ALX:
+  Sysbol: TS
+  SYSNUM: 8d8a61706066470f98a1ba02d6b6d7a5
+  host: https://api-c.sobot.com/text
+  sysNum: eda7c5d88244444c919756648ff2e79f
+  groupId: 90cd4e4d90e44a69aae22d82dbd64ea5

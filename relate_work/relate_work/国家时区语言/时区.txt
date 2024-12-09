@@ -1,0 +1,347 @@
+# !/usr/bin python3                                 
+# encoding: utf-8 -*-
+# @Function：
+# 时区
+timezone_list = [
+    {
+        "timezone": "-12:00",
+        "timezoneId": "Etc/GMT+11",
+        "timezoneValue": "GMT-11:00 国际日期线西"
+    },
+    {
+        "timezone": "-11:00",
+        "timezoneId": "Pacific/Midway",
+        "timezoneValue": "GMT-11:00 中途岛"
+    },
+    {
+        "timezone": "-11:00",
+        "timezoneId": "US/Samoa",
+        "timezoneValue": "GMT-11:00 美属萨摩亚"
+    },
+    {
+        "timezone": "-10:00",
+        "timezoneId": "US/Hawaii",
+        "timezoneValue": "GMT-10:00 夏威夷"
+    },
+    {
+        "timezone": "-09:00",
+        "timezoneId": "US/Alaska",
+        "timezoneValue": "GMT-08:00 阿拉斯加"
+    },
+    {
+        "timezone": "-08:00",
+        "timezoneId": "America/Los_Angeles",
+        "timezoneValue": "GMT-07:00 太平洋时间（美国和加拿大）"
+    },
+    {
+        "timezone": "-07:00",
+        "timezoneId": "America/Phoenix",
+        "timezoneValue": "GMT-07:00 亚利桑那"
+    },
+    {
+        "timezone": "-08:00",
+        "timezoneId": "America/Tijuana",
+        "timezoneValue": "GMT-07:00 蒂华纳"
+    },
+    {
+        "timezone": "-06:00",
+        "timezoneId": "America/Guatemala",
+        "timezoneValue": "GMT-06:00 中美洲"
+    },
+    {
+        "timezone": "-05:00",
+        "timezoneId": "America/Bogota",
+        "timezoneValue": "GMT-05:00 波哥大"
+    },
+    {
+        "timezone": "-06:00",
+        "timezoneId": "America/Mexico_City",
+        "timezoneValue": "GMT-05:00 墨西哥城"
+    },
+    {
+        "timezone": "-06:00",
+        "timezoneId": "America/Monterrey",
+        "timezoneValue": "GMT-05:00 蒙特雷"
+    },
+    {
+        "timezone": "-04:00",
+        "timezoneId": "America/Caracas",
+        "timezoneValue": "GMT-04:00 加拉加斯"
+    },
+    {
+        "timezone": "-05:00",
+        "timezoneId": "America/Indiana/Indianapolis",
+        "timezoneValue": "GMT-04:00 印地安那州（东部）"
+    },
+    {
+        "timezone": "-04:00",
+        "timezoneId": "America/La_Paz",
+        "timezoneValue": "GMT-04:00 拉巴斯"
+    },
+    {
+        "timezone": "-05:00",
+        "timezoneId": "America/New_York",
+        "timezoneValue": "GMT-04:00 东部时间（美国和加拿大）"
+    },
+    {
+        "timezone": "-04:00",
+        "timezoneId": "America/Halifax",
+        "timezoneValue": "GMT-03:00 大西洋时间（加拿大）"
+    },
+    {
+        "timezone": "-03:00",
+        "timezoneId": "America/Santiago",
+        "timezoneValue": "GMT-03:00 圣地亚哥"
+    },
+    {
+        "timezone": "-03:00",
+        "timezoneId": "America/Sao_Paulo",
+        "timezoneValue": "GMT-03:00 巴西利亚"
+    },
+    {
+        "timezone": "-03:30",
+        "timezoneId": "America/St_Johns",
+        "timezoneValue": "GMT-02:30 纽芬兰"
+    },
+    {
+        "timezone": "-02:00",
+        "timezoneId": "Etc/GMT+1",
+        "timezoneValue": "GMT-01:00 中大西洋"
+    },
+    {
+        "timezone": "-01:00",
+        "timezoneId": "Atlantic/Azores",
+        "timezoneValue": "GMT+00:00 亚速尔群岛"
+    },
+    {
+        "timezone": "+00:00",
+        "timezoneId": "Atlantic/Reykjavik",
+        "timezoneValue": "GMT+00:00 蒙罗维亚"
+    },
+    {
+        "timezone": "+00:00",
+        "timezoneId": "Europe/Lisbon",
+        "timezoneValue": "GMT+01:00 里斯本"
+    },
+    {
+        "timezone": "+00:00",
+        "timezoneId": "Europe/London",
+        "timezoneValue": "GMT+01:00 伦敦"
+    },
+    {
+        "timezone": "+02:00",
+        "timezoneId": "Africa/Cairo",
+        "timezoneValue": "GMT+02:00 开罗"
+    },
+    {
+        "timezone": "+02:00",
+        "timezoneId": "Africa/Harare",
+        "timezoneValue": "GMT+02:00 哈拉雷"
+    },
+    {
+        "timezone": "+01:00",
+        "timezoneId": "Europe/Bratislava",
+        "timezoneValue": "GMT+02:00 布拉迪斯拉发"
+    },
+    {
+        "timezone": "+01:00",
+        "timezoneId": "Europe/Brussels",
+        "timezoneValue": "GMT+02:00 布鲁塞尔"
+    },
+    {
+        "timezone": "+03:00",
+        "timezoneId": "Asia/Baghdad",
+        "timezoneValue": "GMT+03:00 巴格达"
+    },
+    {
+        "timezone": "+03:00",
+        "timezoneId": "Asia/Kuwait",
+        "timezoneValue": "GMT+03:00 科威特"
+    },
+    {
+        "timezone": "+02:00",
+        "timezoneId": "Europe/Athens",
+        "timezoneValue": "GMT+03:00 雅典"
+    },
+    {
+        "timezone": "+02:00",
+        "timezoneId": "Europe/Bucharest",
+        "timezoneValue": "GMT+03:00 布加勒斯特"
+    },
+    {
+        "timezone": "+03:00",
+        "timezoneId": "Europe/Istanbul",
+        "timezoneValue": "GMT+03:00 伊斯坦布尔"
+    },
+    {
+        "timezone": "+03:00",
+        "timezoneId": "Europe/Minsk",
+        "timezoneValue": "GMT+03:00 明斯克"
+    },
+    {
+        "timezone": "+03:30",
+        "timezoneId": "Asia/Tehran",
+        "timezoneValue": "GMT+03:30 德黑兰"
+    },
+    {
+        "timezone": "+04:00",
+        "timezoneId": "Asia/Baku",
+        "timezoneValue": "GMT+04:00 巴库"
+    },
+    {
+        "timezone": "+04:00",
+        "timezoneId": "Asia/Dubai",
+        "timezoneValue": "GMT+04:00 阿布扎比"
+    },
+    {
+        "timezone": "+04:00",
+        "timezoneId": "Asia/Muscat",
+        "timezoneValue": "GMT+04:00 马斯喀特"
+    },
+    {
+        "timezone": "+04:00",
+        "timezoneId": "Europe/Samara",
+        "timezoneValue": "GMT+04:00 萨马拉"
+    },
+    {
+        "timezone": "+04:30",
+        "timezoneId": "Asia/Kabul",
+        "timezoneValue": "GMT+04:30 喀布尔"
+    },
+    {
+        "timezone": "+05:00",
+        "timezoneId": "Asia/Karachi",
+        "timezoneValue": "GMT+05:00 卡拉奇"
+    },
+    {
+        "timezone": "+05:00",
+        "timezoneId": "Asia/Yekaterinburg",
+        "timezoneValue": "GMT+05:00 叶卡捷琳堡"
+    },
+    {
+        "timezone": "+05:30",
+        "timezoneId": "Asia/Kolkata",
+        "timezoneValue": "GMT+05:30 加尔各答"
+    },
+    {
+        "timezone": "+05:45",
+        "timezoneId": "Asia/Kathmandu",
+        "timezoneValue": "GMT+05:45 加德满都"
+    },
+    {
+        "timezone": "+06:00",
+        "timezoneId": "Asia/Almaty",
+        "timezoneValue": "GMT+06:00 阿拉木图"
+    },
+    {
+        "timezone": "+06:30",
+        "timezoneId": "Asia/Yangon",
+        "timezoneValue": "GMT+06:30 仰光"
+    },
+    {
+        "timezone": "+07:00",
+        "timezoneId": "Asia/Bangkok",
+        "timezoneValue": "GMT+07:00 曼谷"
+    },
+    {
+        "timezone": "+07:00",
+        "timezoneId": "Asia/Jakarta",
+        "timezoneValue": "GMT+07:00 雅加达"
+    },
+    {
+        "timezone": "+08:00",
+        "timezoneId": "Asia/Hong_Kong",
+        "timezoneValue": "GMT+08:00 香港"
+    },
+    {
+        "timezone": "+08:00",
+        "timezoneId": "Asia/Irkutsk",
+        "timezoneValue": "GMT+08:00 伊尔库茨克"
+    },
+    {
+        "timezone": "+08:00",
+        "timezoneId": "Asia/Manila",
+        "timezoneValue": "GMT+08:00 马尼拉"
+    },
+    {
+        "timezone": "+08:00",
+        "timezoneId": "Asia/Shanghai",
+        "timezoneValue": "GMT+08:00 北京"
+    },
+    {
+        "timezone": "+08:00",
+        "timezoneId": "Asia/Singapore",
+        "timezoneValue": "GMT+08:00 新加坡"
+    },
+    {
+        "timezone": "+08:00",
+        "timezoneId": "Asia/Taipei",
+        "timezoneValue": "GMT+08:00 台北"
+    },
+    {
+        "timezone": "+08:00",
+        "timezoneId": "Asia/Ulaanbaatar",
+        "timezoneValue": "GMT+08:00 乌兰巴托"
+    },
+    {
+        "timezone": "+09:00",
+        "timezoneId": "Asia/Seoul",
+        "timezoneValue": "GMT+09:00 首尔"
+    },
+    {
+        "timezone": "+09:00",
+        "timezoneId": "Asia/Tokyo",
+        "timezoneValue": "GMT+09:00 东京"
+    },
+    {
+        "timezone": "+09:30",
+        "timezoneId": "Australia/Darwin",
+        "timezoneValue": "GMT+09:30 达尔文"
+    },
+    {
+        "timezone": "+10:00",
+        "timezoneId": "Australia/Brisbane",
+        "timezoneValue": "GMT+10:00 布里斯班"
+    },
+    {
+        "timezone": "+10:30",
+        "timezoneId": "Australia/Adelaide",
+        "timezoneValue": "GMT+10:30 阿德莱德"
+    },
+    {
+        "timezone": "+11:00",
+        "timezoneId": "Australia/Hobart",
+        "timezoneValue": "GMT+11:00 霍巴特"
+    },
+    {
+        "timezone": "+11:00",
+        "timezoneId": "Australia/Melbourne",
+        "timezoneValue": "GMT+11:00 墨尔本"
+    },
+    {
+        "timezone": "+12:00",
+        "timezoneId": "Asia/Kamchatka",
+        "timezoneValue": "GMT+12:00 堪察加"
+    },
+    {
+        "timezone": "+12:00",
+        "timezoneId": "Pacific/Fiji",
+        "timezoneValue": "GMT+12:00 斐济"
+    },
+    {
+        "timezone": "+13:00",
+        "timezoneId": "Pacific/Apia",
+        "timezoneValue": "GMT+13:00 萨摩亚"
+    },
+    {
+        "timezone": "+13:00",
+        "timezoneId": "Pacific/Auckland",
+        "timezoneValue": "GMT+13:00 奥克兰"
+    },
+    {
+        "timezone": "+13:00",
+        "timezoneId": "Pacific/Tongatapu",
+        "timezoneValue": "GMT+13:00 努库阿洛法"
+    }
+]
+

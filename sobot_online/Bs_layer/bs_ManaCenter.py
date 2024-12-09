@@ -10,6 +10,10 @@ class MangeCenter(Login):
         super().__init__()
 
     def get_satis_templates(self):
+        """
+        获取满意度评价模板
+        :return:
+        """
         url = self.host + "/chat-satisfaction/saticfaction/getTemplateList"
         headers = {
             'bNo': self.bno,

@@ -42,11 +42,26 @@ class RulesEngine(Login):
         response = self.session.post( url, headers=headers, json=json_data)
         return response.text
 
+    # 删除画布
+    def delete_canvas(self, canvas_id='1767086735490211840'):
+        url = self.host + "/logi-canvas/canvas/delCanvas"
+        json_data = {
+            "id": canvas_id
+        }
+        headers = {
+            'bno': self.bno,
+            'content-type': 'application/json;charset=UTF-8',
+            'temp-id': self.tempid
+        }
+        response = self.session.post( url, headers=headers, json=json_data)
+        print(f"删除画布结果：{response.text}")
+        return response.text
 
 if __name__ == '__main__':
     obj = RulesEngine()
-    rest = obj.get_canvas_list()
+    rest = obj.get_canvas_list(status=0)
     if json.loads(rest).get('items'):
         canvas_id_list = [canvas_id_info.get('id') for canvas_id_info in json.loads(rest).get('items')]
         for canvas_id in canvas_id_list:
             obj.update_canvas(canvas_id=canvas_id)
+            # obj.delete_canvas(canvas_id=canvas_id)

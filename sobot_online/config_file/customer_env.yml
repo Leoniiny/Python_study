@@ -6,22 +6,22 @@ TS:
 TS1:
   host: https://api-c-test.sobot.com/text
   sysNum: 8d8a61706066470f98a1ba02d6b6d7a5
-  groupId: 868776b169ac4dd29e037946b1972c98
+  groupId: 02be7ae5136e484ea7998409c0381e2e
 
 ALG:
   host: https://api-c-grey.sobot.com/text
   sysNum: cfd4681074ce4bed904928fb609fc824
-  groupId: c7366a469ac5483cabdb03dc40513107
+  groupId: 75e16546892a4c5fa9fe07bbf9763e3b
 
 AL:
   host: https://api-c.sobot.com/text
   sysNum: cfd4681074ce4bed904928fb609fc824
-  groupId: c7366a469ac5483cabdb03dc40513107
+  groupId: 75e16546892a4c5fa9fe07bbf9763e3b
 
 HK:
   host: https://hk.sobot.com
   sysNum: 913d909e3a194598ba61cf904b5dc12a
-  groupId: 135cbdc489f9412881ae97781bc0999a
+  groupId: 18634c519b134cce9cd3a663297ba9e9
 
 TXG:
   host: https://api-c-grey.soboten.com/text
@@ -47,3 +47,18 @@ SGG:
   host: https://sg-grey.sobot.io
   sysNum: 826683f48d7244ada08a67bb37b26cf3
   groupId: 636b94224bb04b87ba1da42a16e278ea
+
+ALX:
+  host: https://api-c.sobot.com/text
+  sysNum: eda7c5d88244444c919756648ff2e79f
+  groupId: 90cd4e4d90e44a69aae22d82dbd64ea5
+
+HKQ:
+  host: https://hk.sobot.com
+  sysNum: 5fb7495819ee4b7dbba8ec41ae3af49e
+  groupId: 939fdc5b177f441eabc6036a98820f08
+
+HKH:
+  host: https://hk.sobot.com
+  sysNum: 5345fc5157614949b6dea8620b8d5714
+  groupId: ""

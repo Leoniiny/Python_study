@@ -46,7 +46,7 @@ def base64_secret(pwd: str, companyid: str):
 
 
 def get_today_zero():
-    utc = arrow.utcnow()  # 获取现在的utc时间
+    utc = arrow.utcnow()  # 获取世界标准时间
     local = utc.to('local')  # 将utc时间转换为本地时间
     local_time_zero = local.replace(hour=0, minute=0, second=0)
     now_time = datetime.datetime.now()

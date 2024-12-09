@@ -2,17 +2,17 @@
 # @Author : 雷洋平
 # @File : bs_OnlineAgent.py
 # @Software: PyCharm
-# @Function:控制台 设置
+# @Function:在线客服 控制台
 import requests, re, json
 from urllib.parse import urlencode
 from sobot_online.Bs_layer.bs_login import Login
 from sobot_online.common.file_dealing import *
 from faker import Faker
 import json
-
+fake = Faker(locale="zh_CN")
 
 class ConsoleSetting(Login):
-    fake = Faker(locale="zh_CN")
+
 
     def __init__(self):
         super().__init__()
@@ -42,6 +42,7 @@ class ConsoleSetting(Login):
             print(f"\n response 的结果为：{json.loads(response.text)}；\n\ne 的返回值为：{e}；\n")
             return img_url
 
+class Channel(Login):
     def get_child_source(self, channelType=0, current=1, pageSize=1000, pageNo=1):
         """
         获取PC\h5 的所有子渠道
@@ -117,8 +118,9 @@ class ConsoleSetting(Login):
             'temp-id': self.tempid
         }
         response = self.session.post(url, headers=headers, data=data)
-        print(response.text)
+        print(f"\n\n>>>修改渠道信息为：{json.loads(response.text)}<<<\n\n")
 
+class SmartRoute(Login):
     def get_all_route_list(self, srStatus=1, srId_list=None):
         """
         查询智能路由条数
@@ -163,6 +165,7 @@ class ConsoleSetting(Login):
         response = self.session.post(url, headers=headers, data=data)
         print(response.text)
 
+class QuickMenu(Login):
     def add_quick_menu(self, menuName="菜单名称：" + fake.name(), exhibit=1, menuType=0,
                        menuPicUrl="https://img.sobot.com/console/common/res/openModal.png",
                        msgText=fake.text()):
@@ -191,7 +194,7 @@ class ConsoleSetting(Login):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         }
         response = self.session.post(url, headers=headers, json=json_data)
-        print(response.text)
+        print(f"新增快捷菜单结果为：{json.loads(response.text)}")
 
     def add_quick_menu_sche(self, schemeName="添加方案：" + fake.name(), sortNo=0):
         """
@@ -213,7 +216,7 @@ class ConsoleSetting(Login):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         }
         response = self.session.post(url, headers=headers, json=json_data)
-        print(response.text)
+        print(f"新增快捷菜单方案结果为：{json.loads(response.text)}")
 
     def del_quick_menu_sche(self, schemeId="95bc63d52bde427ca2beac423d65577c"):
         """
@@ -232,8 +235,55 @@ class ConsoleSetting(Login):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/'
         }
         del_quick_menu_sche_response = self.session.post(url, headers=headers, json=json_data)
-        print(del_quick_menu_sche_response.text)
+        print(f"删除快捷菜单方案结果为：{json.loads(del_quick_menu_sche_response.text)}")
 
+    def update_scheme(self, schemeid, status=0, editType="1"):
+        '''
+        开启|关闭接待方案
+        :param schemeid:
+        :param status:删除：9
+        :param editType:删除：2
+        :return:
+        '''
+        url = self.host + "/chat-set/reception/updateScheme"
+        data = {
+            "id": schemeid,
+            "status": status,
+            "editType": editType
+        }
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded',
+            'temp-id': self.tempid
+        }
+        response = self.session.post(url, headers=headers, data=data)
+        print(response.text)
+
+    def get_scheme_list(self, status=1, scheme_name="", page=1, pageSize=999999):
+        """
+        查询接待方案
+        :param status:是否开启。0：关闭；1：开启
+        :param scheme_name:方案名称
+        :param page:
+        :param pageSize:
+        :return:
+        """
+        url = self.host + "/chat-set/reception/getSchemeList"
+        params = {
+            "status": status,
+            "name": scheme_name,
+            "page": page,
+            "pageSize": pageSize
+        }
+        headers = {
+            'temp-id': self.tempid
+        }
+        response = self.session.get(url=url, headers=headers, params=params)
+        return json.loads(response.text)
+
+
+class Service(Login):
+    def __init__(self):
+        super().__init__()
     def service_list_today(self, serviceStatusParam='online', keyword="", sortKey='', sortWay='',
                            page=1, size=15, searchWay=2, groupIdsParam='', service_online_list=None):
         """
@@ -267,12 +317,17 @@ class ConsoleSetting(Login):
         response = self.session.get(url, headers=headers, params=params)
         if json.loads(response.text).get('items'):
             service_online_list = [serviceid.get('staffId') for serviceid in json.loads(response.text).get('items')]
-            print(f'service_online_list>>>:{service_online_list}')
+            print(f'\n\n查询在线客服 service_online_list>>>:{service_online_list}\n\n')
             return service_online_list
         else:
             return service_online_list
 
     def batch_offline_admin(self, adminIds='58832ae6f2434253be65ca18031f5ec8'):
+        """
+        客服下线
+        :param adminIds: 客服id
+        :return:
+        """
         url = self.host + f"/chat-web/data/batchOfflineAdmin.action"
         json_data = {
             "adminIds": adminIds
@@ -285,13 +340,33 @@ class ConsoleSetting(Login):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         }
         response = self.session.post(url, headers=headers, data=json_data)
-        print(response.text)
+        print(f"\n\n批量下线客服结果为：{json.loads(response.text)}\n\n")
 
+
+class Statistics(Login):
     def get_session_statistics_page(self, searchWay=3, startDate="2024-06-17 00:00:00", endDate="2024-06-17 23:59:00",
                                     source=None, channelFlag=None, page=1, size=15,
                                     channelName='[{"channelType":"0","channelFlag":"1","subChannelName":"默认桌面网站"}]',
                                     robotIdsParam=None, departIdsParam=None, allViewFlag=None, groupIdsParam=None,
                                     staffIdsParam=None, summaryWay=None):
+        """
+        会话统计
+        :param searchWay:
+        :param startDate:
+        :param endDate:
+        :param source:
+        :param channelFlag:
+        :param page:
+        :param size:
+        :param channelName:
+        :param robotIdsParam:
+        :param departIdsParam:
+        :param allViewFlag:
+        :param groupIdsParam:
+        :param staffIdsParam:
+        :param summaryWay:
+        :return:
+        """
         url = self.host + "/chat-statistics/newSessionStatistics/getSessionStatisticsPage"
         data = {
             "searchWay": searchWay,
@@ -329,14 +404,43 @@ class ConsoleSetting(Login):
         }
         response = self.session.post(url, headers=headers, data=data)
         print(f"接口返回code信息>>>：{json.loads(response.text).get('retMsg')}")
-        # print(f"接口返回信息>>>：{json.loads(response.text)}")
 
-    def leavemsg_list(self, status=0, leaveMsgStartTime="1718380800000", leaveMsgEndTime="1718985540000", uname=None,
-                      tel=None,
-                      leaveMsgId=None, leaveMsgContent=None, leaveMsgContentReverseFiltration=None, allotStatus=None,
-                      cusGroupIds=None, allotStartTime=None, allotEndTime=None, dealStartTime=None, dealEndTime=None,
-                      vipType=None, leaveMsgReason=None, allotAdminIds=None, currentAdminIds=None, dealAdminIds=None,
-                      sortKey="msgTime", sortValue="desc", type_type=None, page=1, size=15):
+
+class LeaveMsg(Login):
+    def unprocessed_leavemsg_list(self, status=0, leaveMsgStartTime="1718380800000", leaveMsgEndTime="1718985540000", uname=None,
+                                  tel=None,
+                                  leaveMsgId=None, leaveMsgContent=None, leaveMsgContentReverseFiltration=None, allotStatus=None,
+                                  cusGroupIds=None, allotStartTime=None, allotEndTime=None, dealStartTime=None, dealEndTime=None,
+                                  vipType=None, leaveMsgReason=None, allotAdminIds=None, currentAdminIds=None, dealAdminIds=None,
+                                  sortKey="msgTime", sortValue="desc", type_type=None, page=1, size=15):
+        """
+        留言列表
+        :param status:
+        :param leaveMsgStartTime:
+        :param leaveMsgEndTime:
+        :param uname:
+        :param tel:
+        :param leaveMsgId:
+        :param leaveMsgContent:
+        :param leaveMsgContentReverseFiltration:
+        :param allotStatus:
+        :param cusGroupIds:
+        :param allotStartTime:
+        :param allotEndTime:
+        :param dealStartTime:
+        :param dealEndTime:
+        :param vipType:
+        :param leaveMsgReason:
+        :param allotAdminIds:
+        :param currentAdminIds:
+        :param dealAdminIds:
+        :param sortKey:
+        :param sortValue:
+        :param type_type:
+        :param page:
+        :param size:
+        :return:
+        """
         url = self.host + "/chat-statistics/leaveMsg/list/4"
         payload = {
             "status": status,
@@ -373,41 +477,7 @@ class ConsoleSetting(Login):
         # print(response.text)
         return json.loads(response.text)
 
-    def update_scheme(self, schemeid, status=0, editType="1"):
-        '''
-        开启|关闭接待方案
-        :param schemeid:
-        :param status:删除：9
-        :param editType:删除：2
-        :return:
-        '''
-        url = self.host + "/chat-set/reception/updateScheme"
-        data = {
-            "id": schemeid,
-            "status": status,
-            "editType": editType
-        }
-        headers = {
-            'content-type': 'application/x-www-form-urlencoded',
-            'temp-id': self.tempid
-        }
-        response = self.session.post(url, headers=headers, data=data)
-        print(response.text)
-
-    def get_scheme_list(self, status=1, scheme_name="", page=1, pageSize=999999):
-        url = self.host + "/chat-set/reception/getSchemeList"
-        params = {
-            "status": status,
-            "name": scheme_name,
-            "page": page,
-            "pageSize": pageSize
-        }
-        headers = {
-            'temp-id': self.tempid
-        }
-        response = self.session.get(url=url, headers=headers, params=params)
-        return json.loads(response.text)
-
+class SkillGroup(Login):
     def query_skill_group_list(self, queryContent=None, departIdsEquals=None, allVisibleFlag=None, pageNo=1,
                                pageSize=20):
         """
@@ -451,9 +521,10 @@ class ConsoleSetting(Login):
         response = self.session.post(url=url, headers=headers, data=payload)
         print(response.text)
 
+class SessionSettings(Login):
     def update_setting_method(self,settingMethod=1,templateId=""):
         """
-        会话设置-满意度评价
+        会话设置-满意度评价设置
         :param settingMethod:
         :param templateId:
         :return:
@@ -474,8 +545,10 @@ class ConsoleSetting(Login):
 if __name__ == '__main__':
     pass
     obj = ConsoleSetting()
-    sche_list =obj.get_scheme_list(status=0)
+    obj1 = Service()
+    obj2 = QuickMenu()
+    sche_list =obj2.get_scheme_list(status=0)
     print(f"sche_list>>>：\n\n{sche_list}")
     for i in sche_list["items"]:
         print(i["id"])
-        obj.update_scheme(schemeid=i["id"], status=9,editType="2")
+        obj2.update_scheme(schemeid=i["id"], status=9,editType="2")

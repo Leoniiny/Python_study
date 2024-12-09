@@ -98,7 +98,7 @@ class Customer:
         }
         response = self.session.post(url, headers=headers, data=data)
         rest = json.loads(response.text)
-        # print(f"rest 的值为：{rest}")
+        print(f"rest 的值为：{rest}")
         uid = rest["uid"]
         cid = rest["cid"]
         pid = rest["pid"]
@@ -375,13 +375,14 @@ class Customer:
             'content-type': 'application/x-www-form-urlencoded',
         }
         response = self.session.post(url, headers=headers, data=data)
-        # print(response.text)
+        print(f"V6访客端初始化 返回结果为>>>：\n{response.text}")
         return response.text
 
 
 if __name__ == '__main__':
     pass
     obj = Customer()
-    uid, cid, pid, userId = obj.v2_customer_info_init()
-    obj.chat_connection(cid=cid,uid=uid)
+    # uid, cid, pid, userId = obj.v2_customer_info_init()
+    # obj.chat_connection(cid=cid,uid=uid)
+    obj.v6_guest_info_init()
 

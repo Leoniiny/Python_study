@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 from faker import Faker
 from sobot_online.common.file_dealing import *
 fk = Faker(locale='zh_CN')
+
 class MultiUserChat():
     def __init__(self,filepath = r"/config_file/customer_env.yml",env="AL"):
         super().__init__()
@@ -16,13 +17,14 @@ class MultiUserChat():
         self.env = env
         self.session = requests.session()
         self.time = get_current_timestamp(digits=10)
+        self.agentid = customer_detail.get('agentid')
 
     def user_enter(self,chat_num =1,worker_id = None):
         url = self.host + "/chat-visit/user/init.action"
         name_id = str(random.randint(10000, 99999))
         partnerId = f"{self.env}-{name_id}"
-        uname = f"Nickname:{self.env}-{name_id}"
-        payload = f'sysNum={self.sysNum}&source=0&groupId={self.groupId}&uname={uname}&partnerId={partnerId}'
+        uname = f"Nickname-:{self.env}-{name_id}"
+        payload = f'sysNum={self.sysNum}&source=0&groupId={self.groupId}&uname={uname}&partnerId={partnerId},agentid={self.agentid}'
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'}
         init_rest =self.session.post( url, headers=headers, data=payload).json()
@@ -34,10 +36,11 @@ class MultiUserChat():
             "sysNum": f"{self.sysNum}",
             "uid": f"{uid}",
             "cid": f"{cid}",
-            "chooseAdminId": "",
+            "chooseAdminId": self.agentid,
             "tranFlag": "0",
             "current": "false",
             "groupId": f"{self.groupId}"
+
 }
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'}
@@ -66,36 +69,37 @@ class MultiUserChat():
             print(f"这是第{i}次，访客端返回数据 user_send >>>：{user_send}")
 
 
-            # if worker_id is not None:
-            #     url =self.host +  "/chat-kwb/message/send.action"
-            #     worker_context = fk.text(max_nb_chars=150).encode("utf-8")
-            #     msgId = uid + str(self.time)
-            #     data = {
-            #         "tid": worker_id,
-            #         "cid": cid,
-            #         "uid": uid,
-            #         "msgType": "0",
-            #         "content": worker_context,
-            #         "objMsgType": "",
-            #         "docId": "",
-            #         "replyId": "",
-            #         "fileName": "",
-            #         "msgId": msgId,
-            #         "title": "",
-            #         "answerId": "",
-            #         "resend": ""
-            #     }
-            #     headers = {'content-type': 'application/x-www-form-urlencoded'}
-            #     worker_send = self.session.post(url = url, headers=headers, data=data).json()
-            #     print(f"客服端返回数据worker_send>>>：{worker_send}")
+            if worker_id is not None:
+                url =self.host +  "/chat-kwb/message/send.action"
+                worker_context = fk.text(max_nb_chars=150).encode("utf-8")
+                msgId = uid + str(self.time)
+                data = {
+                    "tid": worker_id,
+                    "cid": cid,
+                    "uid": uid,
+                    "msgType": "0",
+                    "content": worker_context,
+                    "objMsgType": "",
+                    "docId": "",
+                    "replyId": "",
+                    "fileName": "",
+                    "msgId": msgId,
+                    "title": "",
+                    "answerId": "",
+                    "resend": ""
+                }
+                headers = {'content-type': 'application/x-www-form-urlencoded'}
+                worker_send = self.session.post(url = url, headers=headers, data=data).json()
+                print(f"客服端返回数据worker_send>>>：{worker_send}")
 
 
 
 if __name__ == '__main__':
     multi_user = MultiUserChat(
-        env="HKQ"
+        env="AL"
     )
-    for i in range(1,301):
+    for i in range(1,2):
+        print(f"----------------------------------------------------------------------------------第{i}轮----------------------------------------------------------------------------------")
         multi_user.user_enter(
 
                               )

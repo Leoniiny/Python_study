@@ -17,6 +17,7 @@ AL:
   host: https://api-c.sobot.com/text
   sysNum: cfd4681074ce4bed904928fb609fc824
   groupId: 75e16546892a4c5fa9fe07bbf9763e3b
+  agentid : e690882e9de544399c9737d5f4d34ed1
 
 HK:
   host: https://hk.sobot.com
@@ -62,3 +63,13 @@ HKH:
   host: https://hk.sobot.com
   sysNum: 5345fc5157614949b6dea8620b8d5714
   groupId: ""
+
+SGH:
+  host: https://sg-grey.sobot.io
+  sysNum: 79019b72a92a4bd69e7bf1caa6546e09
+  groupId: ""
+
+SGQC:
+  host: https://sg-grey.sobot.io
+  sysNum: 4a2501d209fe404480f6526ac9565f75
+  groupId: "3dce2effa8944b339a28d19cc31bd68b"

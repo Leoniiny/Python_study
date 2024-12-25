@@ -1,21 +1,31 @@
 # !/usr/bin python3                                 
 # encoding: utf-8 -*-
 # @Function：
-import pytest
-from sobot_online.common.file_dealing import *
 
+import requests
+from bs4 import BeautifulSoup
 
-class Test_GetSessionStatisticsPage:
-    test_data = load_yaml_file(filepath=r"/data/test_data/statistic_case.yml")["data"]
+def get_sz300_info():
+    url = "http://quote.eastmoney.com/sh600519.html"  # 沪深300指数的URL
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+    }
 
-    @pytest.mark.parametrize("case_num,expect,searchWay, startDate, endDate,source,page, size, channelFlag, "
-                             "robotIdsParam, departIdsParam,allViewFlag, groupIdsParam, staffIdsParam,summaryWay", test_data)
-    def test_get_session_statistics_page(self, case_num,expect,searchWay=3, startDate="2024-06-17 00:00:00", endDate="2024-06-17 23:59:00",
-                                    source="",page=1, size=15, channelFlag="", robotIdsParam="", departIdsParam="",
-                                    allViewFlag="", groupIdsParam="", staffIdsParam="",summaryWay=""):
-        self.test_get_session_statistics_page(searchWay, startDate, endDate,source,page, size, channelFlag,
-                             robotIdsParam, departIdsParam,allViewFlag, groupIdsParam, staffIdsParam,summaryWay)
-        pytest.assume(expect == "成功")
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-if __name__ == '__main__':
-    pytest.main(["-vs", __file__])
+        # 查找涨跌数和涨跌率
+        change = soup.find('div', class_='zs').find_all('span')[1].text  # 涨跌数
+        change_rate = soup.find('div', class_='zs').find_all('span')[2].text  # 涨跌率
+
+        return change, change_rate
+    else:
+        print("Failed to retrieve data")
+        return None, None
+
+change, change_rate = get_sz300_info()
+if change and change_rate:
+    print(f"沪深300指数涨跌数: {change}")
+    print(f"沪深300指数涨跌率: {change_rate}")
+
